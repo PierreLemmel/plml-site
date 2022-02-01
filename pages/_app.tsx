@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AppProps } from 'next/app';
-import { Head } from 'next/document';
 
 import '../styles/index.css'
+import Head from 'next/head';
 
 const App = ({ Component, pageProps }: AppProps) => {
    
