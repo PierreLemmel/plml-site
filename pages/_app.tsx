@@ -12,7 +12,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             <link rel="icon" href="favicon.ico" />
         </Head>
-        <div className="m-0 w-screen h-screen bg-slate-900 text-gray-300 overflow-x-hidden">
+        <div className="m-0 w-screen h-screen">
             <Component {...pageProps} />
         </div>
     </>

@@ -16,3 +16,17 @@
 .centered-col {
     @apply flex flex-col items-center justify-center
 }
+
+.full {
+    @apply w-full h-full;
+}
+
+@font-face {
+    font-family: 'Aesthetic Notes';
+    src: url("/fonts/Aesthetic Notes.otf") format('opentype');
+}
+
+@font-face {
+    font-family: 'BebasNeue';
+    src: url("/fonts/BebasNeue-Regular.ttf") format('truetype');
+}
