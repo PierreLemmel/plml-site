@@ -1,32 +1,51 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
-import { spring } from "../../services/animation";
+import { useRef, useState } from "react";
 import { translatePctX } from "../../services/helpers";
 
 const Banneer = () => {
 
-    const [folded, setFolded] = useState<boolean>(true);
+    const [lastState, setLastState] = useState<"pierreLemmel"|"peleMele">("peleMele");
+    const [state, setState] = useState<"folded"|"pierreLemmel"|"peleMele">("peleMele");
 
-    return <Link href="">
+    const displayPierreLemmelParts = (state === "pierreLemmel" || state === "folded");
+    const displayPeleMeleParts = (state === "peleMele" || state === "folded");
+
+    return <Link href="./">
         <div
-            className="w-full font-handwritten text-10xl leading-tight center-child py-4 hover:cursor-pointer"
+            className={`
+                w-full center-child
+                font-handwritten 2xl:text-10xl xl:text-8xl text-7xl leading-tight
+                hover:cursor-pointer
+            `}
+            onMouseEnter={() => {
+                const nextState = lastState === "pierreLemmel" ? "peleMele" : "pierreLemmel";
+
+                setState(nextState);
+                setLastState(nextState);
+            }}
+            onMouseLeave={() => setState("folded")}
         >
-            <div
+            <motion.div
+                initial="folded"
+                animate={state}
                 className="centered-row"
-                onMouseOver={() => setFolded(false)}
-                onMouseLeave={() => setFolded(true)}
+                
             >
                 <div>p</div>
-                <motion.div
-                    animate={folded ? {
-                        letterSpacing: '-0.25em',
-                        marginRight: 0,
-                        opacity: 0,
-                    }: {
-                        letterSpacing: 0,
-                        marginRight: '0.25em',
-                        opacity: 1,
+                {/* Pierre Lemmel */}
+                {displayPierreLemmelParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.25em',
+                            marginRight: 0,
+                            opacity: 0,
+                        },
+                        "pierreLemmel":{
+                            letterSpacing: 0,
+                            marginRight: '0.25em',
+                            opacity: 1,
+                        }
                     }}
                     transition={{
                         duration: 0.9,
@@ -35,16 +54,40 @@ const Banneer = () => {
                     }}
                 >
                     ierre
-                </motion.div>
+                </motion.div>}
+                {/* Pèle-mêle */}
+                {displayPeleMeleParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.25em',
+                            opacity: 0,
+                        },
+                        "peleMele":{
+                            letterSpacing: 0,
+                            opacity: 1,
+                        }
+                    }}
+                    transition={{
+                        duration: 0.9,
+                        type: 'spring',
+                        damping: 8.9
+                    }}
+                >
+                    è
+                </motion.div>}
 
                 <div>l</div>
-                <motion.div
-                    animate={folded ? {
-                        letterSpacing: '-0.25em',
-                        opacity: 0,
-                    } : {
-                        letterSpacing: 0,
-                        opacity: 1,
+                {/* Pierre Lemmel */}
+                {displayPierreLemmelParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.25em',
+                            opacity: 0,
+                        },
+                        "pierreLemmel":{
+                            letterSpacing: 0,
+                            opacity: 1,
+                        }
                     }}
                     transition={{
                         duration: 0.9,
@@ -53,16 +96,40 @@ const Banneer = () => {
                     }}
                 >
                     e
-                </motion.div>
+                </motion.div>}
+                {/* Pèle-mêle */}
+                {displayPeleMeleParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.25em',
+                            opacity: 0,
+                        },
+                        "peleMele":{
+                            letterSpacing: 0,
+                            opacity: 1,
+                        }
+                    }}
+                    transition={{
+                        duration: 0.9,
+                        type: 'spring',
+                        damping: 8.9
+                    }}
+                >
+                    e-
+                </motion.div>}
 
                 <div>m</div>
-                <motion.div
-                    animate={folded ? {
-                        letterSpacing: '-0.40em',
-                        opacity: 0,
-                    } : {
-                        letterSpacing: 0,
-                        opacity: 1,
+                {/* Pierre Lemmel */}
+                {displayPierreLemmelParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.40em',
+                            opacity: 0,
+                        },
+                        "pierreLemmel":{
+                            letterSpacing: 0,
+                            opacity: 1,    
+                        }
                     }}
                     transition={{
                         duration: 0.9,
@@ -71,15 +138,41 @@ const Banneer = () => {
                     }}
                 >
                     m
-                </motion.div>
+                </motion.div>}
+                {/* Pèle-mêle: 'ê' */}
+                {displayPeleMeleParts && <motion.div
+                    variants={{
+                        "folded":{
+                            transform: translatePctX(100),
+                            letterSpacing: '-0.25em',
+                            opacity: 0,
+                        },
+                        "peleMele":{
+                            transform: translatePctX(0),
+                            letterSpacing: '0em',
+                            opacity: 1,
+                        }
+                    }}
+                    transition={{
+                        duration: 1.3,
+                        type: 'spring',
+                        damping: 8.9
+                    }}
+                >
+                    ê
+                </motion.div>}
 
-                <motion.div
-                    animate={folded ? {
-                        transform: translatePctX(100),
-                        opacity: 0,
-                    }: {
-                        transform: translatePctX(0),
-                        opacity: 1,
+                {/* Pierre Lemmel */}
+                {displayPierreLemmelParts && <motion.div
+                    variants={{
+                        "folded":{
+                            transform: translatePctX(100),
+                            opacity: 0,
+                        },
+                        "pierreLemmel":{
+                            transform: translatePctX(0),
+                            opacity: 1,    
+                        }
                     }}
                     transition={{
                         duration: 0.9,
@@ -88,13 +181,20 @@ const Banneer = () => {
                     }}
                 >
                     e
-                </motion.div>
+                </motion.div>}
 
+                {/* l */}
                 <motion.div
-                    animate={folded ? {
-                        transform: translatePctX(-190),
-                    }: {
-                        transform: translatePctX(0),
+                    variants={{
+                        "folded":{
+                            transform: translatePctX(-190)
+                        },
+                        "pierreLemmel":{
+                            transform: translatePctX(0)
+                        },
+                        "peleMele":{
+                            transform: translatePctX(0)
+                        }
                     }}
                     transition={{
                         duration: 0.9,
@@ -105,7 +205,28 @@ const Banneer = () => {
                     l
                 </motion.div>
 
-            </div>
+                {/* Pèle-mêle */}
+                {displayPeleMeleParts && <motion.div
+                    variants={{
+                        "folded":{
+                            letterSpacing: '-0.25em',
+                            opacity: 0,
+                        },
+                        "peleMele":{
+                            letterSpacing: 0,
+                            opacity: 1,
+                        }
+                    }}
+                    transition={{
+                        duration: 0.9,
+                        type: 'spring',
+                        damping: 8.9
+                    }}
+                >
+                    e
+                </motion.div>}
+
+            </motion.div>
             
         </div>
     </Link>

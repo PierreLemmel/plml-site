@@ -2,7 +2,10 @@ import Link from "next/link";
 
 const MainMenu = () => {
 
-    return <div className="w-full py-4 text-xl centered-row">
+    return <div className={`
+        w-full
+        text-xl centered-row
+    `}>
         <MenuItem label="Accueil" href="/"/>
         <MenuItem label="Blog" href="blog" />
         <MenuItem label="Spectacles" href="spectacles" />

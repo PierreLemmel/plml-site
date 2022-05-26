@@ -61,3 +61,7 @@ export function scale(factor: number|string) {
 export function rotate3d(deg: number) {
     return `rotate3d(0, 1, 0, ${deg}deg)`
 }
+
+export function px(nb: number) {
+    return `${nb}px`;
+}
