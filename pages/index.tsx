@@ -5,13 +5,18 @@ import BlogLayout from '../components/Layout/blog-layout';
 
 export async function getServerSideProps() {
 
-    const auth = await google.auth.getClient({ scopes: [
+    const auth = new google.auth.GoogleAuth({ scopes: [
         'https://www.googleapis.com/auth/spreadsheets.readonly',
         'https://www.googleapis.com/auth/documents.readonly',
     ]});
 
+    auth.jsonContent = {
+        "private_key": process.env["GCLOUD_PRIVATE_KEY"],
+        "client_email": process.env["GCLOUD_CLIENT_EMAIL"],
+    }
+
     const sheets = google.sheets({ version: 'v4', auth });
-    const docs = google.docs({ version: 'v1', auth });
+    const docs = google.docs({ version: 'v1', auth});
 
 
     const range = `Database!B2:B2`;
