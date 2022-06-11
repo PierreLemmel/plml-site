@@ -39,7 +39,7 @@ module.exports = {
     },
     fontFamily: {
       handwritten: ['Aesthetic Notes', 'sans-serif'],
-      sans: ['BebasNeue', 'sans-serif']
+      menu: ['BebasNeue', 'sans-serif']
     }
   }
 }

@@ -5,12 +5,13 @@ const MainMenu = () => {
     return <div className={`
         w-full
         text-xl centered-row
+        font-menu
     `}>
         <MenuItem label="Accueil" href="/"/>
         <MenuItem label="Blog" href="blog" />
         <MenuItem label="Spectacles" href="spectacles" />
         <MenuItem label="Textes" href="textes" />
-        <MenuItem label="A propos" href="apropos" />
+        <MenuItem label="A propos" href="a-propos" />
     </div>
 }
 
