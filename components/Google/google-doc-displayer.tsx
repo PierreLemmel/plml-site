@@ -1,8 +1,8 @@
 import { docs_v1 } from 'googleapis';
 import { CSSProperties, useState} from 'react';
-
 import { RiCloseLine } from 'react-icons/ri';
 import Icon from '../UI/Icon';
+
 
 export interface GoogleDocDisplayerProps {
     readonly document: docs_v1.Schema$Document;
@@ -17,93 +17,93 @@ const GoogleDocDisplayer = (props: GoogleDocDisplayerProps) => {
         inlineObjects
     } = props.document;
 
-    const paragraphs = body.content
-        .map<Paragraph>(elt => {
+    const blocks = body.content
+        .filter(elt => elt.paragraph !== undefined)
+        .map<BlockContent>(elt => {
 
+            const isTextBlock = elt.paragraph.elements.every(pe => {
+                return pe.inlineObjectElement === undefined;
+            })
 
-            return {
-                elements: elt.paragraph?.elements.map(pe => {
+            if (isTextBlock) {
+                let blockType: BlockType = "Paragraph";
+                switch (elt.paragraph.paragraphStyle?.namedStyleType) {
+                    case 'TITLE':
+                        blockType = 'Title';
+                        break;
+                    case 'HEADING_1':
+                        blockType = 'Heading1';
+                        break;
+                    case 'HEADING_2':
+                        blockType = 'Heading2';
+                        break;
+                    case 'HEADING_3':
+                        blockType = 'Heading3';
+                        break;
+                }
 
-                    if (pe.textRun) {
+                const elements = elt.paragraph.elements.map(pe => {
 
-                        const {
-                            content,
-                            textStyle
-                        } = pe.textRun;
-            
-                        return {
-                            type: "Paragraph",
-                            content,
-                            textStyle
-                        }
+                    const {
+                        content,
+                        textStyle
+                    } = pe.textRun;
+        
+                    return {
+                        content,
+                        textStyle
                     }
-                    else if (pe.inlineObjectElement) {
 
-                        const {
-                            inlineObjectId
-                        } = pe.inlineObjectElement;
-
-                        return {
-                            type: "Image",
-                            inlineObjectId
-                        }
-                    }
-                    
                 })
+
+                return {
+                    elements,
+                    blockType
+                }
             }
+            else {
+
+                const imgElt = elt.paragraph.elements.find(pe => {
+                    return pe.inlineObjectElement !== undefined;
+                })
+
+                const inlineObjectId = imgElt.inlineObjectElement.inlineObjectId;
+
+                const { contentUri } = inlineObjects[inlineObjectId].inlineObjectProperties.embeddedObject.imageProperties;
+
+                return {
+                    blockType: 'Image',
+                    contentUri
+                }
+            }
+
+            
         });
 
 
     return <>
-        
         <div className='w-full font-mono'>
-            {paragraphs.map((docElt, i) => <div key={`gdp-${i}`} className="mb-3">
+            {blocks.map((block, i) => {
 
-                {docElt.elements?.map((elt, j) => {
+                const key = `gdp-${i}`;
 
-                    const key = `gdpe-${j}`;
+                switch(block.blockType) {
+                    case 'Paragraph': 
+                        return <ParagraphBlock elements={block.elements} key={key} />
+                    case 'Heading1':
+                        return <Heading1Block elements={block.elements} key={key} />
+                    case 'Heading2':
+                        return <Heading2Block elements={block.elements} key={key} />
+                    case 'Heading3':
+                        return <Heading3Block elements={block.elements} key={key} />
+                    case 'Title':
+                        return <TitleBlock elements={block.elements} key={key} />
+                    case 'Image':
+                        return <ImageBlock contentUri={block.contentUri} onClick={() => setOverlaidUrl(block.contentUri)} key={key} />
+                }
 
-                    if (elt.type === "Paragraph") {
-                        const {
-                            content,
-                            textStyle
-                        } = elt;
-
-                        const { bold, italic, underline, fontSize } = textStyle;
-                        const classes = [];
-                        const style: CSSProperties = {};
-        
-                        if (bold) {
-                            classes.push("font-bold");
-                        }
-        
-                        if (italic) {
-                            classes.push("italic");
-                        }
-        
-                        if (underline) {
-                            classes.push("underline");
-                        }
-        
-                        if (fontSize) {
-                            const fsize = 16 + (fontSize.magnitude - 11);
-                            style.fontSize = fsize + 'px';
-                        }
-        
-                        return <span key={key} style={style} className={classes.join(" ")}>{content}</span>
-                    }
-                    else {
-                        const { contentUri } = inlineObjects[elt.inlineObjectId].inlineObjectProperties.embeddedObject.imageProperties;
-
-                        return <div key={key} className="center-child w-full h-72">
-                            <img className="h-full hover:cursor-pointer" src={contentUri} referrerPolicy="no-referrer" onClick={() => setOverlaidUrl(contentUri)} />
-                        </div>
-                    }
-                    
-                })}
-            </div>)}
+            })}
         </div>
-
         {overlaidUrl && <div className="fixed top-0 left-0 w-screen h-screen bg-slate-500/30 z-20">
             <div className="full absolute top-0 left-0 center-child p-24">
                 <img className='h-full' src={overlaidUrl} />
@@ -113,28 +113,139 @@ const GoogleDocDisplayer = (props: GoogleDocDisplayerProps) => {
             </div>
         </div>}
     </>;
+    }
+
+
+interface ImageBlockProps {
+    readonly contentUri: string;
+    readonly onClick: () => void;
+}
+
+interface TextBlockProps {
+    readonly elements: TextElement[];
 }
 
 
-interface Paragraph {
-    readonly elements: ParagraphElement[];
+const titleBaseFontSize = 60;
+const heading1BaseFontSize = 36;
+const heading2BaseFontSize = 24;
+const heading3BaseFontSize = 20;
+const paragraphBaseFontSize = 16;
+
+
+const titleGDocFontSize = 26;
+const heading1GDocFontSize = 20;
+const heading2GDocFontSize = 16;
+const heading3GDocFontSize = 14;
+const paragraphGDocFontSize = 11;
+
+
+const ParagraphBlock = ({ elements }: TextBlockProps) => <div className={`mb-2`}>
+
+    {elements?.map((elt, j) => <BlockTextElement
+        key={`gdpe-${j}`} textElement={elt}
+        gDocBaseSize={paragraphGDocFontSize} baseSize={paragraphBaseFontSize}
+    />)}
+</div>
+
+
+const TitleBlock = ({ elements }: TextBlockProps) => <div className="text-6xl">
+    {elements?.map((elt, j) => <BlockTextElement
+        key={`gdpe-${j}`} textElement={elt}
+        gDocBaseSize={titleGDocFontSize} baseSize={titleBaseFontSize}
+    />)}
+</div>
+
+
+const Heading1Block = ({ elements }: TextBlockProps) => <div className="text-4xl">
+    {elements?.map((elt, j) => <BlockTextElement
+        key={`gdpe-${j}`} textElement={elt}
+        gDocBaseSize={heading1GDocFontSize} baseSize={heading1BaseFontSize}
+    />)}
+</div>
+
+
+const Heading2Block = ({ elements }: TextBlockProps) => <div className="text-2xl">
+    {elements?.map((elt, j) => <BlockTextElement
+        key={`gdpe-${j}`} textElement={elt}
+        gDocBaseSize={heading2GDocFontSize} baseSize={heading2BaseFontSize}
+    />)}
+</div>
+
+
+const Heading3Block = ({ elements }: TextBlockProps) => <div className="text-xl">
+    {elements?.map((elt, j) => <BlockTextElement
+        key={`gdpe-${j}`} textElement={elt}
+        gDocBaseSize={heading3GDocFontSize} baseSize={heading3BaseFontSize}
+    />)}
+</div>
+
+const ImageBlock = ({ contentUri, onClick }: ImageBlockProps) => <div className="center-child w-full h-72">
+    <img className="h-full hover:cursor-pointer" src={contentUri} referrerPolicy="no-referrer" onClick={() => onClick()} />
+</div>
+
+
+interface BlockTextElementProps {
+    readonly textElement: TextElement;
+    readonly gDocBaseSize: number;
+    readonly baseSize: number;
 }
 
-type ParagraphElement = ParagraphTextElement|ParagraphImageElement;
+const BlockTextElement = (props: BlockTextElementProps) => {
+    const {
+        textElement: { content, textStyle },
+        baseSize, gDocBaseSize
+    } = props;
 
-interface ParagraphElementBase {
-    readonly type: string;
+    const { bold, italic, underline, fontSize } = textStyle;
+    const classes = [];
+    const style: CSSProperties = {};
+
+    if (bold) {
+        classes.push("font-bold");
+    }
+
+    if (italic) {
+        classes.push("italic");
+    }
+
+    if (underline) {
+        classes.push("underline");
+    }
+
+    if (fontSize) {
+        const fsize = baseSize + (fontSize.magnitude - gDocBaseSize);
+        style.fontSize = fsize + 'px';
+    }
+
+    return <span style={style} className={classes.join(" ")}>{content}</span>;
 }
 
-interface ParagraphTextElement extends ParagraphElementBase {
-    readonly type: "Paragraph";
+
+type BlockContent = TitleContent|Heading1Content|Heading2Content|Heading3Content|ParagraphContent|ImageContent;
+
+type TextBlockType = 'Title'|'Heading1'|'Heading2'|'Heading3'|'Paragraph'
+type BlockType = TextBlockType|'Image';
+
+interface TextBlockBase<T extends TextBlockType> {
+    readonly elements: TextElement[];
+    readonly blockType: T;
+}
+
+type TitleContent = TextBlockBase<'Title'>;
+type Heading1Content = TextBlockBase<'Heading1'>;
+type Heading2Content = TextBlockBase<'Heading2'>;
+type Heading3Content = TextBlockBase<'Heading3'>;
+type ParagraphContent = TextBlockBase<'Paragraph'>;
+
+interface ImageContent {
+    readonly contentUri: string;
+    readonly blockType: 'Image';
+}
+
+interface TextElement {
     readonly content: string;
     readonly textStyle: docs_v1.Schema$TextStyle;
-}
-
-interface ParagraphImageElement extends ParagraphElementBase {
-    readonly type: "Image";
-    readonly inlineObjectId: string;
 }
 
 export default GoogleDocDisplayer;
