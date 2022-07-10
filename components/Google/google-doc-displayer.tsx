@@ -1,5 +1,8 @@
-import { docs_v1, google } from 'googleapis';
-import { CSSProperties, Fragment } from 'react';
+import { docs_v1 } from 'googleapis';
+import { CSSProperties, useState} from 'react';
+
+import { RiCloseLine } from 'react-icons/ri';
+import Icon from '../UI/Icon';
 
 export interface GoogleDocDisplayerProps {
     readonly document: docs_v1.Schema$Document;
@@ -7,64 +10,109 @@ export interface GoogleDocDisplayerProps {
 
 const GoogleDocDisplayer = (props: GoogleDocDisplayerProps) => {
 
-    const { document } = props;
+    const [overlaidUrl, setOverlaidUrl] = useState<string|null>(null);
 
-    const paragraphs = document.body.content
+    const { 
+        body,
+        inlineObjects
+    } = props.document;
+
+    const paragraphs = body.content
         .map<Paragraph>(elt => {
+
+
             return {
                 elements: elt.paragraph?.elements.map(pe => {
 
-                    const {
-                        content,
-                        textStyle
-                    } = pe.textRun;
-        
-                    return {
-                        content,
-                        textStyle
+                    if (pe.textRun) {
+
+                        const {
+                            content,
+                            textStyle
+                        } = pe.textRun;
+            
+                        return {
+                            type: "Paragraph",
+                            content,
+                            textStyle
+                        }
                     }
+                    else if (pe.inlineObjectElement) {
+
+                        const {
+                            inlineObjectId
+                        } = pe.inlineObjectElement;
+
+                        return {
+                            type: "Image",
+                            inlineObjectId
+                        }
+                    }
+                    
                 })
             }
-        })
-        .filter(elt => elt.elements !== undefined);
+        });
 
 
-    return <div className='w-full font-mono'>
-        {paragraphs.map((paragraph, i) => <div key={`gdp-${i}`} className="mb-3">
+    return <>
+        
+        <div className='w-full font-mono'>
+            {paragraphs.map((docElt, i) => <div key={`gdp-${i}`} className="mb-3">
 
-            {paragraph.elements.map((elt, j) => {
-                const {
-                    content,
-                    textStyle
-                } = elt;
-            
-                const key = `gdpe-${j}`;
+                {docElt.elements?.map((elt, j) => {
 
-                const { bold, italic, underline, fontSize } = textStyle;
-                const classes = [];
-                const style: CSSProperties = {};
+                    const key = `gdpe-${j}`;
 
-                if (bold) {
-                    classes.push("font-bold");
-                }
+                    if (elt.type === "Paragraph") {
+                        const {
+                            content,
+                            textStyle
+                        } = elt;
 
-                if (italic) {
-                    classes.push("italic");
-                }
+                        const { bold, italic, underline, fontSize } = textStyle;
+                        const classes = [];
+                        const style: CSSProperties = {};
+        
+                        if (bold) {
+                            classes.push("font-bold");
+                        }
+        
+                        if (italic) {
+                            classes.push("italic");
+                        }
+        
+                        if (underline) {
+                            classes.push("underline");
+                        }
+        
+                        if (fontSize) {
+                            const fsize = 16 + (fontSize.magnitude - 11);
+                            style.fontSize = fsize + 'px';
+                        }
+        
+                        return <span key={key} style={style} className={classes.join(" ")}>{content}</span>
+                    }
+                    else {
+                        const { contentUri } = inlineObjects[elt.inlineObjectId].inlineObjectProperties.embeddedObject.imageProperties;
 
-                if (underline) {
-                    classes.push("underline");
-                }
+                        return <div key={key} className="center-child w-full h-72">
+                            <img className="h-full hover:cursor-pointer" src={contentUri} referrerPolicy="no-referrer" onClick={() => setOverlaidUrl(contentUri)} />
+                        </div>
+                    }
+                    
+                })}
+            </div>)}
+        </div>
 
-                if (fontSize) {
-                    const fsize = 16 + (fontSize.magnitude - 11);
-                    style.fontSize = fsize + 'px';
-                }
-
-                return <span key={key} style={style} className={classes.join(" ")}>{content}</span>
-            })}
-        </div>)}
-    </div>;
+        {overlaidUrl && <div className="fixed top-0 left-0 w-screen h-screen bg-slate-500/30 z-20">
+            <div className="full absolute top-0 left-0 center-child p-24">
+                <img className='h-full' src={overlaidUrl} />
+            </div>
+            <div className="absolute right-0 p-6">
+                <Icon icon={RiCloseLine} onClick={() => setOverlaidUrl(null)} />
+            </div>
+        </div>}
+    </>;
 }
 
 
@@ -72,35 +120,21 @@ interface Paragraph {
     readonly elements: ParagraphElement[];
 }
 
-interface ParagraphElement {
+type ParagraphElement = ParagraphTextElement|ParagraphImageElement;
+
+interface ParagraphElementBase {
+    readonly type: string;
+}
+
+interface ParagraphTextElement extends ParagraphElementBase {
+    readonly type: "Paragraph";
     readonly content: string;
     readonly textStyle: docs_v1.Schema$TextStyle;
 }
 
-
-interface GoogleDocParagraphProps {
-    readonly paragraph: Paragraph;
-}
-
-const GoogleDocParagraph = (props: GoogleDocParagraphProps) => {
-    const { paragraph } = props;
-    
-    return <div>
-        {paragraph.elements.map((elt, i) => <GoogleDocParagraphElement key={`gdpe-${i}`} element={elt} />)}
-    </div>
-}
-
-interface GoogleDocParagraphElementProps {
-    readonly element: ParagraphElement;
-}
-
-const GoogleDocParagraphElement = (props: GoogleDocParagraphElementProps) => {
-    
-    const {
-        element: { content, textStyle }
-    } = props;
-
-    return <>{content}</>
+interface ParagraphImageElement extends ParagraphElementBase {
+    readonly type: "Image";
+    readonly inlineObjectId: string;
 }
 
 export default GoogleDocDisplayer;

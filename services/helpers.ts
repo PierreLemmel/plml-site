@@ -65,3 +65,7 @@ export function rotate3d(deg: number) {
 export function px(nb: number) {
     return `${nb}px`;
 }
+
+export function conditionnal<T>(condition: boolean, value: T) {
+    return condition ? value : undefined;
+}

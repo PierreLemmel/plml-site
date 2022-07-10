@@ -32,7 +32,6 @@ export async function getServerSideProps() {
         documentId: docId
     });
 
-
     return {
         props: {
             doc: indexDoc.data
