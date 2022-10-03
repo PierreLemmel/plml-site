@@ -1,4 +1,5 @@
 import { docs_v1 } from 'googleapis';
+import Link from 'next/link';
 import { CSSProperties, useState} from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import Icon from '../UI/Icon';
@@ -40,6 +41,7 @@ const GoogleDocDisplayer = (props: GoogleDocDisplayerProps) => {
                     case 'HEADING_3':
                         blockType = 'Heading3';
                         break;
+
                 }
 
                 const elements = elt.paragraph.elements.map(pe => {
@@ -197,28 +199,51 @@ const BlockTextElement = (props: BlockTextElementProps) => {
         baseSize, gDocBaseSize
     } = props;
 
-    const { bold, italic, underline, fontSize } = textStyle;
-    const classes = [];
-    const style: CSSProperties = {};
+    const { link } = textStyle;
+    
+    if (link) {
+        const { url } = link;
 
-    if (bold) {
-        classes.push("font-bold");
+        const linkClass = "text-primary-600 hover:text-primary-800 transition-colors font-bold";
+
+        if (url.includes('plml.fr/')) {
+            const chunks = url.split("plml.fr");
+            const relativeUrl = chunks[chunks.length - 1];
+
+            return <Link href={relativeUrl}>
+                <a className={linkClass}>{content}</a>
+            </Link>
+        }
+        else {
+            return <a href={url} className={linkClass} target="_blank">{content}</a>
+        }
     }
+    else {
+        const { bold, italic, underline, fontSize } = textStyle;
 
-    if (italic) {
-        classes.push("italic");
+        const classes = [];
+        const style: CSSProperties = {};
+
+        if (bold) {
+            classes.push("font-bold");
+        }
+    
+        if (italic) {
+            classes.push("italic");
+        }
+    
+        if (underline) {
+            classes.push("underline");
+        }
+    
+        if (fontSize) {
+            const fsize = baseSize + (fontSize.magnitude - gDocBaseSize);
+            style.fontSize = fsize + 'px';
+        }
+    
+        return <span style={style} className={classes.join(" ")}>{content}</span>;
     }
-
-    if (underline) {
-        classes.push("underline");
-    }
-
-    if (fontSize) {
-        const fsize = baseSize + (fontSize.magnitude - gDocBaseSize);
-        style.fontSize = fsize + 'px';
-    }
-
-    return <span style={style} className={classes.join(" ")}>{content}</span>;
+    
 }
 
 

@@ -4,7 +4,7 @@ import { getGoogleDocContent } from '../services/googleHooks';
 
 export async function getServerSideProps() {
 
-    const { doc } = await getGoogleDocContent('Index')
+    const { doc } = await getGoogleDocContent('About')
 
     return {
         props: {
@@ -13,7 +13,7 @@ export async function getServerSideProps() {
     };
 }
 
-const HomePage = ({ doc }) => {
+const AboutPage = ({ doc }) => {
 
     return <BlogLayout>
         <div className='full centered-col justify-evenly'>
@@ -23,4 +23,4 @@ const HomePage = ({ doc }) => {
 }
 
 
-export default HomePage;
+export default AboutPage;
