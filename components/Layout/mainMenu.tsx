@@ -10,6 +10,7 @@ const MainMenu = () => {
         <MenuItem label="Accueil" href="/"/>
         <MenuItem label="Blog" href="blog" />
         <MenuItem label="Spectacles" href="spectacles" />
+        <MenuItem label="Stages" href="stages" />
         <MenuItem label="Textes" href="textes" />
         <MenuItem label="A propos" href="a-propos" />
     </div>
