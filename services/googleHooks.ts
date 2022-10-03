@@ -15,7 +15,6 @@ function getAuth(scopes: string[]) {
     return auth;
 }
 
-let pagesDatabase = null;
 async function getPagesDatabase() {
     const auth = getAuth([
         'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -45,7 +44,7 @@ async function getPagesDatabase() {
 
 export async function getGoogleDocContent(key: string) {
 
-    pagesDatabase ??= await getPagesDatabase();
+    const pagesDatabase = await getPagesDatabase();
 
     const auth = getAuth([
         'https://www.googleapis.com/auth/documents.readonly',
