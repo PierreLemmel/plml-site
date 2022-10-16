@@ -55,7 +55,7 @@ const Banneer = () => {
                 >
                     ierre
                 </motion.div>}
-                {/* Pèle-mêle */}
+                {/* Pêle-mêle */}
                 {displayPeleMeleParts && <motion.div
                     variants={{
                         "folded":{
@@ -73,7 +73,7 @@ const Banneer = () => {
                         damping: 8.9
                     }}
                 >
-                    è
+                    ê
                 </motion.div>}
 
                 <div>l</div>
@@ -97,7 +97,7 @@ const Banneer = () => {
                 >
                     e
                 </motion.div>}
-                {/* Pèle-mêle */}
+                {/* Pêle-mêle */}
                 {displayPeleMeleParts && <motion.div
                     variants={{
                         "folded":{
@@ -139,7 +139,7 @@ const Banneer = () => {
                 >
                     m
                 </motion.div>}
-                {/* Pèle-mêle: 'ê' */}
+                {/* Pêle-mêle: 'ê' */}
                 {displayPeleMeleParts && <motion.div
                     variants={{
                         "folded":{
@@ -205,7 +205,7 @@ const Banneer = () => {
                     l
                 </motion.div>
 
-                {/* Pèle-mêle */}
+                {/* Pêle-mêle */}
                 {displayPeleMeleParts && <motion.div
                     variants={{
                         "folded":{
