@@ -1,0 +1,199 @@
+---
+import { cn } from '../../lib/utils';
+
+const letterThickness = 2;
+const lettersSpacing = 3;
+---
+
+<script>
+    import { animate } from 'motion';
+
+    const animDuration = 0.7;
+    const animDelay = 0.45;
+
+    let isAnimating = false;
+    let isAnimatedIn = false;
+
+    function animateIn() {
+        if (isAnimating || isAnimatedIn) return;
+        isAnimating = true;
+
+        animate('#svg-letter-p', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l1', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            delay: animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-m', {
+            strokeDashoffset: 0,
+        }, {
+            duration: 1.4 * animDuration,
+            delay: 2 * 	animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l2', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            delay: 3 * animDelay,
+            ease: 'easeInOut'
+        }).then(() => {
+            isAnimating = false;
+            isAnimatedIn = true;
+
+            checkForAnimation();
+        });
+
+        animate('#card-1-container', {
+            backgroundColor: 'rgba(0, 0, 0, 1)'
+        }, {
+            duration: 2.5 * animDuration,
+            delay: 0.8 * animDelay,
+            ease: 'easeIn'
+        });
+    }
+
+    function animateOut() {
+        if (isAnimating || !isAnimatedIn) return;
+        isAnimating = true;
+        
+        animate('#svg-letter-p', {
+            strokeDashoffset: 100,
+        }, {
+            duration: animDuration,
+            delay: 3 * 	animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l1', {
+            strokeDashoffset: 100,
+        }, {
+            duration: animDuration,
+            delay: 2 * animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-m', {
+            strokeDashoffset: 100,
+        }, {
+            duration: 1.4 * animDuration,
+            delay: animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l2', {
+            strokeDashoffset: -100,
+        }, {
+            duration: animDuration,
+            ease: 'easeInOut'
+        }).then(() => {
+            isAnimating = false;
+            isAnimatedIn = false;
+
+            checkForAnimation();
+        });
+
+        animate('#card-1-container', {
+            backgroundColor: 'rgba(0, 0, 0, 0)'
+        }, {
+            duration: 2.5 * animDuration,
+            delay: 0.8 * animDelay,
+            ease: 'easeIn'
+        });
+    }
+    
+    checkForAnimation();
+
+    function checkForAnimation() {
+        if (isAnimating) return;
+
+        if (window.scrollY > window.innerHeight * 0.75) {
+            animateOut();
+        } else {
+            animateIn();
+        }
+    }
+
+    window.addEventListener('scroll', (event) => {
+        checkForAnimation();
+    });
+</script>
+
+<div class={cn(
+    "fixed w-screen h-screen",
+    "flex flex-col items-center justify-center gap-4",
+    "p-[20%]"
+)} id="card-1-container" style={{
+    backgroundColor: 'rgba(0, 0, 0, 1)'
+}}>
+    <svg
+        class={cn(
+            "overflow-visible"
+        )}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="10 10 230 80"
+        fill="none"
+        stroke="currentColor"
+        stroke-width={letterThickness}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <!-- P -->
+        <path
+            id="svg-letter-p"
+            style={{
+                transform:`translateX(${-2 * lettersSpacing}px)`
+            }}
+            d="M10 90 L10 10 L35 10 C55 10 55 45 35 45 L10 45"
+            pathLength="99"
+            stroke-dasharray="100"
+            stroke-dashoffset="100"
+        />
+        
+        <!-- L -->
+        <path
+            id="svg-letter-l1"
+            style={{
+                transform:`translateX(${-lettersSpacing}px)`
+            }}
+            d="M70 10 L70 90 L110 90"
+            pathLength="99"
+            stroke-dasharray="100"
+            stroke-dashoffset="100"
+        />
+        
+        <!-- M -->
+        <path
+            id="svg-letter-m"
+            style={{
+                transform:`translateX(${lettersSpacing}px)`
+            }}
+            d="M125 90 L125 10 L155 50 L185 10 L185 90"
+            pathLength="99"
+            stroke-dasharray="100"
+            stroke-dashoffset="100"
+        />
+        
+        <!-- L -->
+        <path
+            id="svg-letter-l2"
+            style={{
+                transform:`translateX(${2 * lettersSpacing}px)`
+            }}
+            d="M200 10 L200 90 L240 90"
+            pathLength="99"
+            stroke-dasharray="100"
+            stroke-dashoffset="-100"
+        />
+    </svg>
+</div>

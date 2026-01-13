@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cn } from '../lib/utils';
+
+import Card1 from '../components/cards/Card1.astro';
+---
+
+<Layout>
+    <main class={cn(
+		"min-h-[200vh]",
+		"bg-red-500",
+		"text-white font-barlow font-thin uppercase"
+	)}>
+		<Card1 />
+    </main>
+</Layout>
