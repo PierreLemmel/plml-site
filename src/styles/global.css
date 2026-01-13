@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @font-face {
     font-family: 'Barlow';
     src: url('/fonts/barlow/Barlow-Thin.ttf') format('truetype');
@@ -128,6 +129,7 @@
 
 @theme {
     --font-barlow: 'Barlow', sans-serif;
+    --color-accent1: #618ae8;
 }
 
 body {

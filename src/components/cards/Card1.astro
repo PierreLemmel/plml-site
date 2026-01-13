@@ -47,19 +47,44 @@ const lettersSpacing = 3;
             duration: animDuration,
             delay: 3 * animDelay,
             ease: 'easeInOut'
+        });
+
+        animate('#card-1-container', {
+            '--gradient-color-1': '#000000'
+        }, {
+            duration: 2.5 * animDuration,
+            delay: 0.8 * animDelay,
+            ease: 'easeIn'
+        });
+
+        animate('#card-1-container', {
+            '--gradient-color-2': '#000000'
+        }, {
+            duration: 2.5 * animDuration,
+            delay: 0 * animDelay,
+            ease: 'easeIn'
+        });
+
+
+        animate('#card-1-scroll-arrow', {
+            opacity: [0, 1],
+        }, {
+            duration: 0.7 * animDuration,
+            delay: 5.5 * animDelay,
+            ease: 'linear'
+        });
+
+        animate('#card-1-tagline', {
+            transform: ['translateY(-100%)', 'translateY(0)'],
+        }, {
+            duration: 1.5 * animDuration,
+            delay: 3.5 * animDelay,
+            ease: 'easeIn'
         }).then(() => {
             isAnimating = false;
             isAnimatedIn = true;
 
             checkForAnimation();
-        });
-
-        animate('#card-1-container', {
-            backgroundColor: 'rgba(0, 0, 0, 1)'
-        }, {
-            duration: 2.5 * animDuration,
-            delay: 0.8 * animDelay,
-            ease: 'easeIn'
         });
     }
 
@@ -71,30 +96,7 @@ const lettersSpacing = 3;
             strokeDashoffset: 100,
         }, {
             duration: animDuration,
-            delay: 3 * 	animDelay,
-            ease: 'easeInOut'
-        });
-
-        animate('#svg-letter-l1', {
-            strokeDashoffset: 100,
-        }, {
-            duration: animDuration,
-            delay: 2 * animDelay,
-            ease: 'easeInOut'
-        });
-
-        animate('#svg-letter-m', {
-            strokeDashoffset: 100,
-        }, {
-            duration: 1.4 * animDuration,
-            delay: animDelay,
-            ease: 'easeInOut'
-        });
-
-        animate('#svg-letter-l2', {
-            strokeDashoffset: -100,
-        }, {
-            duration: animDuration,
+            delay: 4 * 	animDelay,
             ease: 'easeInOut'
         }).then(() => {
             isAnimating = false;
@@ -103,16 +105,63 @@ const lettersSpacing = 3;
             checkForAnimation();
         });
 
+        animate('#svg-letter-l1', {
+            strokeDashoffset: 100,
+        }, {
+            duration: animDuration,
+            delay: 3 * animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-m', {
+            strokeDashoffset: 100,
+        }, {
+            duration: 1.4 * animDuration,
+            delay: 2 * animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l2', {
+            strokeDashoffset: -100,
+        }, {
+            duration: animDuration,
+            ease: 'easeInOut'
+        })
+
         animate('#card-1-container', {
-            backgroundColor: 'rgba(0, 0, 0, 0)'
+            '--gradient-color-1': 'rgba(0, 0, 0, 0)'
         }, {
             duration: 2.5 * animDuration,
             delay: 0.8 * animDelay,
             ease: 'easeIn'
         });
+
+        animate('#card-1-container', {
+            '--gradient-color-2': 'rgba(0, 0, 0, 0)'
+        }, {
+            duration: 2.5 * animDuration,
+            delay: 2.2 * animDelay,
+            ease: 'easeIn'
+        });
+
+        animate('#card-1-tagline', {
+            transform: 'translateY(-100%)',
+        }, {
+            duration: 1.5 * animDuration,
+            delay: 0,
+            ease: 'easeIn'
+        });
+
+        animate('#card-1-scroll-arrow', {
+            opacity: [1, 0],
+        }, {
+            duration: 0.7 * animDuration,
+            delay: 0,
+            ease: 'linear'
+        });
     }
     
-    checkForAnimation();
+    
 
     function checkForAnimation() {
         if (isAnimating) return;
@@ -127,19 +176,43 @@ const lettersSpacing = 3;
     window.addEventListener('scroll', (event) => {
         checkForAnimation();
     });
+
+    checkForAnimation();
+
+    function syncTaglineScale() {
+        const svgWidth = document.getElementById("card-1-svg")?.clientWidth;
+        const tagline = document.getElementById("card-1-tagline-container");
+        if (svgWidth && tagline) {
+            tagline.style.transform = 'scale(1)';
+            const textWidth = tagline.clientWidth;
+            const scale = (svgWidth + 30) / textWidth;
+            tagline.style.transform = `scale(${scale})`;
+        }
+    }
+
+    syncTaglineScale();
+
+    const resizeObserver = new ResizeObserver(() => {
+        syncTaglineScale();
+    });
+
+    const container = document.getElementById("card-1-container");
+    if (container) {
+        resizeObserver.observe(container);
+    }
 </script>
 
 <div class={cn(
     "fixed w-screen h-screen",
-    "flex flex-col items-center justify-center gap-4",
-    "p-[20%]"
-)} id="card-1-container" style={{
-    backgroundColor: 'rgba(0, 0, 0, 1)'
-}}>
+    "flex flex-col items-center justify-center gap-10",
+    "p-[10%] md:p-[12%] lg:p-[16%] xl:p-[20%]",
+    "card-1-gradient"
+)} id="card-1-container">
     <svg
         class={cn(
             "overflow-visible"
         )}
+        id="card-1-svg"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="10 10 230 80"
         fill="none"
@@ -147,6 +220,10 @@ const lettersSpacing = 3;
         stroke-width={letterThickness}
         stroke-linecap="round"
         stroke-linejoin="round"
+        style={{
+            paddingLeft: `${lettersSpacing}px`,
+            paddingRight: `${lettersSpacing}px`,
+        }}
     >
         <!-- P -->
         <path
@@ -196,4 +273,81 @@ const lettersSpacing = 3;
             stroke-dashoffset="-100"
         />
     </svg>
+    <div 
+        id="card-1-tagline-container"
+        class={cn(
+            "flex flex-col items-center",
+            "overflow-hidden"
+        )}
+    >
+        <div
+            id="card-1-tagline"
+            class={cn(
+                "text-center",
+                "text-white/70",
+                "font-barlow",
+                "font-thin",
+                "uppercase",
+                "italic"
+            )}
+            style={{
+                transform: 'translateY(-100%)',
+            }}
+        >
+            Arts numériques, théâtre et autres trucs...
+        </div>
+    </div>
+    <div
+        id="card-1-scroll-arrow"
+        class={cn(
+            "absolute",
+            "flex items-center justify-center",
+            "bottom-10 md:bottom-8 lg:bottom-6",
+        )}
+    >
+        <svg
+            class={cn(
+                "size-12",
+                "text-white/50",
+                "animate-bounce-down",
+                "absolute bottom-8"
+            )}
+            style={{
+                opacity: 0,
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="M6 9 L12 15 L18 9"/>
+        </svg>
+    </div>
+    
 </div>
+
+<style>
+    .card-1-gradient {
+        --gradient-color-1: rgba(0, 0, 0, 1);
+        --gradient-color-2: rgba(0, 0, 0, 1);
+        background: linear-gradient(to top right, var(--gradient-color-1), var(--gradient-color-2));
+    }
+
+    @keyframes bounce-down {
+        0%, 100% {
+            transform: translateY(0);
+            opacity: 0.5;
+        }
+        50% {
+            transform: translateY(6px);
+            opacity: 1;
+        }
+    }
+
+    .animate-bounce-down {
+        animation: bounce-down 1.5s ease-in-out infinite;
+    }
+</style>
