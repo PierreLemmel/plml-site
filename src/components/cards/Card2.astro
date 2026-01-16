@@ -1,0 +1,441 @@
+---
+import { cn, getZIndex } from "../../lib/utils";
+import ShaderBackground from "../ShaderBackground.astro";
+import fragmentShader from "../../shaders/presentation.frag?raw";
+
+type Props = {
+    class?: string;
+    cardIndex?: number;
+    cardCount?: number;
+}
+
+const {
+    class: className,
+    cardIndex = 0,
+    cardCount = 1
+} = Astro.props;
+
+const zindex = getZIndex(cardIndex, cardCount);
+---
+
+<script>
+    import { animate } from 'motion';
+    import { parseNumberWithDefault } from '../../lib/utils';
+
+    const cardIndex = parseNumberWithDefault(document.getElementById('card-2-container')?.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(document.getElementById('card-2-container')?.dataset.cardCount, 1);
+
+    const canvas = document.getElementById('card2-background') as HTMLCanvasElement;
+
+
+    let isAnimating = false;
+
+    let state: 'before' | 'during' | 'after' = 'before';
+
+    const textAnimDuration = 0.7;
+    const textAnimDelay = 0.34;
+    const backgroundAnimDuration = 1.6;
+
+    const makeContainerVisible = () => {
+        document.getElementById('card-2-container')?.classList.remove('hidden');
+    }
+
+    const makeContainerInvisible = () => {
+        document.getElementById('card-2-container')?.classList.add('hidden');
+    }
+
+    function beforeToDuring() {
+        isAnimating = true;
+
+        makeContainerVisible();
+
+        const baseDelay = 2.5;
+        
+        const intensityTarget = { intensity: 1 };
+        const scaleTarget = { scale: 1.15 };
+
+        animate(
+            intensityTarget,
+            { intensity: 0.45 },
+            { 
+                duration: backgroundAnimDuration,
+                delay: baseDelay,
+                ease: 'easeInOut',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fIntensity.value = intensityTarget.intensity;
+                    }
+                }
+            }
+        );
+
+        animate(
+            scaleTarget,
+            { scale: 1 },
+            { 
+                duration: backgroundAnimDuration * 2.5,
+                delay: 0,
+                ease: 'easeOut',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fScale.value = scaleTarget.scale;
+                    }
+                }
+            }
+        );
+
+        animate("#card-2-title", {
+            transform: ['translateY(-100%)', 'translateY(0)'],
+        }, {
+            duration: textAnimDuration,
+            delay: baseDelay,
+            ease: 'easeInOut'
+        });
+
+        for (let i = 1; i <= 3; i++) {
+            animate(`#card-2-text-${i}`, {
+                transform: ['translateY(-100%)', 'translateY(0)'],
+            }, {
+                duration: textAnimDuration,
+                delay: baseDelay + i * textAnimDelay,
+                ease: 'easeInOut'
+            });
+        }
+
+        animate("#card-2-portrait", {
+            opacity: [0.4, 1],
+            transform: ['scale(0)', 'scale(1)'],
+        }, {
+            duration: textAnimDuration,
+            delay: baseDelay + 3 * textAnimDelay,
+            ease: 'linear'
+        }).then(() => {
+            state = 'during';
+            isAnimating = false;
+            window.setCardIndex(cardIndex);
+        });
+    }
+
+    function duringToBefore() {
+        isAnimating = true;
+
+        for (let i = 1; i <= 3; i++) {
+            animate(`#card-2-text-${i}`, {
+                transform: ['translateY(0)', 'translateY(-100%)'],
+            }, {
+                duration: textAnimDuration,
+                delay: (3 - i) * textAnimDelay,
+                ease: 'easeInOut'
+            });
+        }
+
+        animate("#card-2-title", {
+            transform: ['translateX(0)', 'translateX(-100%)'],
+        }, {
+            duration: textAnimDuration,
+            delay: 3 * textAnimDelay,
+            ease: 'easeInOut'
+        }).then(() => {
+            state = 'before';
+            isAnimating = false;
+
+            makeContainerInvisible();
+        });
+
+        
+        animate("#card-2-portrait", {
+            opacity: [1, 0.4],
+            transform: ['scale(1)', 'scale(0)'],
+        }, {
+            duration: textAnimDuration,
+            delay: 2 * textAnimDelay,
+            ease: 'linear'
+        })
+
+        const intensityTarget = { intensity: 0.45 };
+        const scaleTarget = { scale: 1 };
+        animate(
+            intensityTarget,
+            { intensity: 1 },
+            { 
+                duration: backgroundAnimDuration,
+                delay: 1 * textAnimDelay,
+                ease: 'easeInOut',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fIntensity.value = intensityTarget.intensity;
+                    }
+                }
+            }
+        );
+
+        animate(
+            scaleTarget,
+            { scale: 1.15 },
+            { 
+                duration: backgroundAnimDuration * 2.5,
+                delay: 0,
+                ease: 'easeOut',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fScale.value = scaleTarget.scale;
+                    }
+                }
+            }
+        );
+    }
+    
+    function duringToAfter() {
+        isAnimating = true;
+
+        for (let i = 1; i <= 3; i++) {
+            animate(`#card-2-text-${i}`, {
+                transform: ['translateY(0)', 'translateY(-100%)'],
+            }, {
+                duration: textAnimDuration,
+                delay: (3 - i) * textAnimDelay,
+                ease: 'easeInOut'
+            });
+        }
+
+        animate("#card-2-title", {
+            transform: ['translateX(0)', 'translateX(-100%)'],
+        }, {
+            duration: textAnimDuration,
+            delay: 3 * textAnimDelay,
+            ease: 'easeInOut'
+        });
+
+        
+        animate("#card-2-portrait", {
+            opacity: [1, 0.4],
+            transform: ['scale(1)', 'scale(0)'],
+        }, {
+            duration: textAnimDuration,
+            delay: 2 * textAnimDelay,
+            ease: 'linear'
+        })
+
+        const thresholdTarget = { threshold: -0.1 };
+        animate(
+            thresholdTarget,
+            { threshold: 1 },
+            { 
+                duration: 1.5 * backgroundAnimDuration,
+                delay: 2 * textAnimDelay,
+                ease: 'easeIn',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fThreshold.value = thresholdTarget.threshold;
+                    }
+                }
+            }
+        ).then(() => {
+            state = 'after';
+            isAnimating = false;
+
+            makeContainerInvisible();
+        });
+    }
+
+    function afterToDuring() {
+        isAnimating = true;
+
+        const baseDelay = 2;
+
+        makeContainerVisible();
+
+        for (let i = 1; i <= 3; i++) {
+            animate(`#card-2-text-${i}`, {
+                transform: ['translateY(-100%)', 'translateY(0)'],
+            }, {
+                duration: textAnimDuration,
+                delay: baseDelay + i * textAnimDelay,
+                ease: 'easeInOut'
+            });
+        }
+
+        animate("#card-2-title", {
+            transform: ['translateY(-100%)', 'translateY(0)'],
+        }, {
+            duration: textAnimDuration,
+            delay: baseDelay,
+            ease: 'easeInOut'
+        });
+
+        
+        animate("#card-2-portrait", {
+            opacity: [0.4, 1],
+            transform: ['scale(0)', 'scale(1)'],
+        }, {
+            duration: textAnimDuration,
+            delay: baseDelay + 3 * textAnimDelay,
+            ease: 'linear'
+        }).then(() => {
+            state = 'during';
+            isAnimating = false;
+            window.setCardIndex(cardIndex);
+        });
+
+        const thresholdTarget = { threshold: 1 };
+        animate(
+            thresholdTarget,
+            { threshold: -0.1 },
+            { 
+                duration: 1.5 * backgroundAnimDuration,
+                delay: 0,
+                ease: 'easeIn',
+                onUpdate: () => {
+                    if (canvas.shaderUniforms) {
+                        canvas.shaderUniforms.fThreshold.value = thresholdTarget.threshold;
+                    }
+                }
+            }
+        );
+    }
+
+    function checkForAnimation() {
+        if (isAnimating) return;
+
+        const scrollY = window.scrollY;
+        
+        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
+        const afterThreshold = (cardIndex + 0.95) * window.innerHeight;
+        
+        switch (state) {
+            case 'before':
+                if (scrollY >= beforeThreshold) {
+                    if (window.canGoToCard(cardIndex)) {
+                        beforeToDuring();
+                    }
+                }
+                break;
+            case 'during':
+
+                if (scrollY < beforeThreshold) {
+                    if (window.canGoToCard(cardIndex - 1)) {
+                        duringToBefore();
+                    }
+                }
+
+                if (scrollY >= afterThreshold) {
+                    if (window.canGoToCard(cardIndex + 1)) {
+                        duringToAfter();
+                    }
+                }
+                break;
+            case 'after':
+                if (scrollY < afterThreshold) {
+                    if (window.canGoToCard(cardIndex)) {
+                        afterToDuring();
+                    }
+                }
+                break;
+        }
+    }
+
+    window.addEventListener('scroll', (event) => {
+        checkForAnimation();
+    });
+
+    checkForAnimation();
+</script>
+
+<div
+    id="card-2-container"
+    data-card-index={cardIndex}
+    data-card-count={cardCount}
+    class={cn(
+        "fixed w-screen h-screen",
+        className
+    )}
+    style={`z-index: ${zindex};`}
+>
+    <div class={cn(
+        "relative w-full h-full",
+        "px-[10%] md:px-[12%] lg:px-[16%] xl:px-[20%]",
+        "flex flex-col items-center justify-center",
+    )}>
+        <ShaderBackground 
+            id="card2-background" 
+            class="absolute inset-0"
+            fragmentShader={fragmentShader}
+            uniforms={{
+                fScale: 1.0,
+                fIntensity: 1.0,
+                fOpacity: 1.0,
+                fSpeed: 1.0,
+                fThreshold: 0.2
+            }}
+            pixelRatio={0.25}
+        />
+
+        <div class={cn(
+            "grid",
+            "grid-cols-1 md:grid-cols-[1fr_2fr]",
+            "grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr]",
+            "gap-6 md:gap-10",
+            "z-10",
+            "max-h-[80vh]"
+        )}>
+            <div class={cn(
+                "overflow-hidden",
+                "md:col-span-2"
+            )}>
+                <div
+                    id="card-2-title"
+                    class={cn(
+                        "text-2xl font-bold",
+                        "text-white",
+                    )}
+                >
+                    Qui suis-je ?
+                </div>
+            </div>
+
+            <div
+                id="card-2-portrait"
+                class={cn(
+                    "bg-center bg-cover bg-no-repeat",
+                    "bg-[url('/img/portrait-pierre-02.jpg')]",
+                    "rounded-md",
+                    "h-48 md:h-auto"
+                )}
+            />
+            <div class={cn(
+                "flex flex-col items-center justify-start md:justify-center",
+                "gap-4",
+                "overflow-y-auto md:overflow-y-visible",
+                "min-h-0"
+            )}>
+                <div class="overflow-hidden">
+                    <div
+                    id="card-2-text-1"
+                    class={cn(
+                    )}
+                    >
+                        Je m&apos;appelle Pierre Lemmel, je suis artiste numérique, comédien, metteur-en-scène et technicien lumière.
+                    </div>
+                </div>
+                <div class="overflow-hidden">
+                    <div
+                    id="card-2-text-2"
+                    class={cn(
+                    )}
+                    >
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                    </div>
+                </div>
+                <div class="overflow-hidden">
+                    <div
+                        id="card-2-text-3"
+                        class={cn(
+                        )}
+                    >
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

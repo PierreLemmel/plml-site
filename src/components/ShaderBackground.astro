@@ -1,0 +1,143 @@
+---
+
+import baseVertexShader from '../shaders/base.vert?raw';
+import noiseGlsl from '../shaders/noise.glsl?raw';
+import utilsGlsl from '../shaders/utils.glsl?raw';
+
+const shaderChunks: Record<string, string> = {
+    noise: noiseGlsl,
+    utils: utilsGlsl,
+};
+
+function processIncludes(shader: string): string {
+    return shader.replace(/#include <(\w+)>/g, (_, name) => {
+        return shaderChunks[name] || `// ERROR: Unknown include <${name}>`;
+    });
+}
+
+interface Props {
+    class?: string;
+    id?: string;
+    fragmentShader: string;
+    vertexShader?: string;
+    uniforms?: Record<string, number>;
+    zIndex?: number;
+    pixelRatio?: number;
+}
+
+const {
+    class: className,
+    id = "shader-canvas",
+    uniforms = {},
+    vertexShader = baseVertexShader,
+    fragmentShader: rawFragmentShader,
+    zIndex = 0,
+    pixelRatio = 1.0
+} = Astro.props;
+
+const fragmentShader = processIncludes(rawFragmentShader);
+---
+
+<div class={className} style={`z-index: ${zIndex};`}>
+    <canvas 
+        id={id}
+        class="w-full h-full"
+        style="image-rendering: auto;"
+        data-shader 
+        data-uniforms={JSON.stringify(uniforms)}
+        data-vertex-shader={vertexShader}
+        data-fragment-shader={fragmentShader}
+        data-pixel-ratio={pixelRatio}
+    />
+</div>
+
+
+<script>
+    import * as THREE from 'three';
+
+    export interface ShaderUniforms {
+        [key: string]: { value: unknown };
+    }
+
+    declare global {
+        interface HTMLCanvasElement {
+            shaderUniforms?: ShaderUniforms;
+        }
+    }
+
+    function initShader(canvasId: string) {
+        const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+        if (!canvas) return;
+
+        const pixelRatio = parseFloat(canvas.dataset.pixelRatio || '1.0');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+        const customUniforms = JSON.parse(canvas.dataset.uniforms || '{}') as Record<string, number>;
+        
+        const vertexShader = canvas.dataset.vertexShader as string;
+        const fragmentShader = canvas.dataset.fragmentShader as string;
+
+        const uResolution = new THREE.Vector2();
+        
+        const uniforms: ShaderUniforms = {
+            uTime: { value: 0 },
+            uResolution: { value: uResolution },
+            ...Object.fromEntries(
+                Object.entries(customUniforms).map(([key, value]) => [key, { value }])
+            )
+        };
+
+        canvas.shaderUniforms = uniforms;
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms
+        });
+
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        function resize() {
+            const displayWidth = container.clientWidth;
+            const displayHeight = container.clientHeight;
+            
+            const renderWidth = Math.floor(displayWidth * pixelRatio);
+            const renderHeight = Math.floor(displayHeight * pixelRatio);
+            
+            canvas.style.width = `${displayWidth}px`;
+            canvas.style.height = `${displayHeight}px`;
+            
+            renderer.setSize(renderWidth, renderHeight, false);
+            uResolution.set(renderWidth, renderHeight);
+        }
+
+        const container = canvas.parentElement!;
+        const resizeObserver = new ResizeObserver(() => {
+            resize();
+        });
+        resizeObserver.observe(container);
+
+        resize();
+
+
+        function animate() {
+            uniforms.uTime.value = performance.now() / 1000;
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('canvas[data-shader]').forEach((canvas) => {
+            initShader(canvas.id);
+        });
+    });
+</script>

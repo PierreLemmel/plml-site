@@ -1,0 +1,131 @@
+---
+import { cn, getZIndex } from "../../lib/utils";
+
+type Props = {
+    class?: string;
+    cardIndex?: number;
+    cardCount?: number;
+}
+
+const {
+    class: className,
+    cardIndex = 0,
+    cardCount = 1
+} = Astro.props;
+
+const zindex = getZIndex(cardIndex, cardCount);
+---
+
+<script>
+    import { animate } from 'motion';
+    import { parseNumberWithDefault } from '../../lib/utils';
+
+    const cardIndex = parseNumberWithDefault(document.getElementById('card-4-container')?.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(document.getElementById('card-4-container')?.dataset.cardCount, 1);
+
+    let isAnimating = false;
+    let state: 'before' | 'during' = 'before';
+
+    const animDuration = 0.7;
+    const animDelay = 0.34;
+
+    const makeContainerVisible = () => {
+        document.getElementById('card-4-container')?.classList.remove('hidden');
+    }
+
+    const makeContainerInvisible = () => {
+        document.getElementById('card-4-container')?.classList.add('hidden');
+    }
+
+    function beforeToDuring() {
+        isAnimating = true;
+
+        makeContainerVisible();
+
+        const baseDelay = 2;
+
+        animate('#card-4-content', {
+            opacity: [0, 1],
+        }, {
+            duration: animDuration,
+            delay: baseDelay,
+            ease: 'easeInOut'
+        }).then(() => {
+            state = 'during';
+            isAnimating = false;
+            window.setCardIndex(cardIndex);
+        });
+    }
+
+    function duringToBefore() {
+        isAnimating = true;
+
+        animate('#card-4-content', {
+            opacity: [1, 0],
+        }, {
+            duration: animDuration,
+            delay: 0,
+            ease: 'easeInOut'
+        }).then(() => {
+            state = 'before';
+            isAnimating = false;
+
+            makeContainerInvisible();
+        });
+    }
+
+    function checkForAnimation() {
+        if (isAnimating) return;
+
+        const scrollY = window.scrollY;
+        
+        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
+        
+        switch (state) {
+            case 'before':
+                if (scrollY >= beforeThreshold) {
+                    if (window.canGoToCard(cardIndex)) {
+                        beforeToDuring();
+                    }
+                }
+                break;
+            case 'during':
+                if (scrollY < beforeThreshold) {
+                    if (window.canGoToCard(cardIndex - 1)) {
+                        duringToBefore();
+                    }
+                }
+                break;
+        }
+    }
+
+    window.addEventListener('scroll', (event) => {
+        checkForAnimation();
+    });
+
+    checkForAnimation();
+</script>
+
+<div
+    id="card-4-container"
+    data-card-index={cardIndex}
+    data-card-count={cardCount}
+    class={cn(
+        "fixed w-screen h-screen hidden",
+        "bg-pink-500",
+        className
+    )}
+    style={`z-index: ${zindex};`}
+>
+    <div 
+        id="card-4-content"
+        class={cn(
+            "relative w-full h-full",
+            "px-[10%] md:px-[12%] lg:px-[16%] xl:px-[20%]",
+            "flex flex-col items-center justify-center",
+        )}
+        style="opacity: 0;"
+    >
+    </div>
+</div>
+

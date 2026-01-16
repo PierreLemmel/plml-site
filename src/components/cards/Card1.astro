@@ -1,12 +1,29 @@
 ---
-import { cn } from '../../lib/utils';
+import { cn, getZIndex } from '../../lib/utils';
+import WiggleArrow from '../WiggleArrow.astro';
+
+type Props = {
+    class?: string;
+    cardIndex?: number;
+    cardCount?: number;
+}
+
+const {
+    class: className,
+    cardIndex = 0,
+    cardCount = 1
+} = Astro.props;
 
 const letterThickness = 2;
 const lettersSpacing = 3;
+
+const zindex = getZIndex(cardIndex, cardCount);
+
 ---
 
 <script>
     import { animate } from 'motion';
+    import { parseNumberWithDefault } from '../../lib/utils';
 
     const animDuration = 0.7;
     const animDelay = 0.45;
@@ -14,14 +31,22 @@ const lettersSpacing = 3;
     let isAnimating = false;
     let isAnimatedIn = false;
 
-    function animateIn() {
+    const cardIndex = parseNumberWithDefault(document.getElementById('card-1-container')?.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(document.getElementById('card-1-container')?.dataset.cardCount, 1);
+
+    function animateIn(initialDelay: number = 1.55) {
         if (isAnimating || isAnimatedIn) return;
         isAnimating = true;
+
+        document.getElementById('card-1-container')?.classList.remove('hidden');
+
+        const baseDelay = initialDelay;
 
         animate('#svg-letter-p', {
             strokeDashoffset: 0,
         }, {
             duration: animDuration,
+            delay: baseDelay,
             ease: 'easeInOut'
         });
 
@@ -29,7 +54,7 @@ const lettersSpacing = 3;
             strokeDashoffset: 0,
         }, {
             duration: animDuration,
-            delay: animDelay,
+            delay: baseDelay + animDelay,
             ease: 'easeInOut'
         });
 
@@ -37,7 +62,7 @@ const lettersSpacing = 3;
             strokeDashoffset: 0,
         }, {
             duration: 1.4 * animDuration,
-            delay: 2 * 	animDelay,
+            delay: baseDelay + 2 * 	animDelay,
             ease: 'easeInOut'
         });
 
@@ -45,7 +70,7 @@ const lettersSpacing = 3;
             strokeDashoffset: 0,
         }, {
             duration: animDuration,
-            delay: 3 * animDelay,
+            delay: baseDelay + 3 * animDelay,
             ease: 'easeInOut'
         });
 
@@ -53,7 +78,7 @@ const lettersSpacing = 3;
             '--gradient-color-1': '#000000'
         }, {
             duration: 2.5 * animDuration,
-            delay: 0.8 * animDelay,
+            delay: baseDelay + 0.8 * animDelay,
             ease: 'easeIn'
         });
 
@@ -61,7 +86,7 @@ const lettersSpacing = 3;
             '--gradient-color-2': '#000000'
         }, {
             duration: 2.5 * animDuration,
-            delay: 0 * animDelay,
+            delay: baseDelay + 0 * animDelay,
             ease: 'easeIn'
         });
 
@@ -70,7 +95,7 @@ const lettersSpacing = 3;
             opacity: [0, 1],
         }, {
             duration: 0.7 * animDuration,
-            delay: 5.5 * animDelay,
+            delay: baseDelay + 5.5 * animDelay,
             ease: 'linear'
         });
 
@@ -78,11 +103,12 @@ const lettersSpacing = 3;
             transform: ['translateY(-100%)', 'translateY(0)'],
         }, {
             duration: 1.5 * animDuration,
-            delay: 3.5 * animDelay,
+            delay: baseDelay + 3.5 * animDelay,
             ease: 'easeIn'
         }).then(() => {
             isAnimating = false;
             isAnimatedIn = true;
+            window.setCardIndex(cardIndex);
 
             checkForAnimation();
         });
@@ -102,6 +128,7 @@ const lettersSpacing = 3;
             isAnimating = false;
             isAnimatedIn = false;
 
+            document.getElementById('card-1-container')?.classList.add('hidden');
             checkForAnimation();
         });
 
@@ -166,10 +193,14 @@ const lettersSpacing = 3;
     function checkForAnimation() {
         if (isAnimating) return;
 
-        if (window.scrollY > window.innerHeight * 0.75) {
-            animateOut();
+        if (window.scrollY >= (cardIndex + 0.95) * window.innerHeight) {
+            if (window.canGoToCard(cardIndex + 1)) {
+                animateOut();
+            }
         } else {
-            animateIn();
+            if (window.canGoToCard(cardIndex)) {
+                animateIn();
+            }
         }
     }
 
@@ -177,7 +208,7 @@ const lettersSpacing = 3;
         checkForAnimation();
     });
 
-    checkForAnimation();
+    animateIn(0);
 
     function syncTaglineScale() {
         const svgWidth = document.getElementById("card-1-svg")?.clientWidth;
@@ -202,12 +233,19 @@ const lettersSpacing = 3;
     }
 </script>
 
-<div class={cn(
-    "fixed w-screen h-screen",
-    "flex flex-col items-center justify-center gap-10",
-    "p-[10%] md:p-[12%] lg:p-[16%] xl:p-[20%]",
-    "card-1-gradient"
-)} id="card-1-container">
+<div
+    class={cn(
+        "fixed w-screen h-screen",
+        "flex flex-col items-center justify-center gap-10",
+        "px-[10%] md:px-[12%] lg:px-[16%] xl:px-[20%]",
+        "card-1-gradient",
+        className
+    )}
+    style={`z-index: ${zindex};`}
+    id="card-1-container"
+    data-card-index={cardIndex}
+    data-card-count={cardCount}
+>
     <svg
         class={cn(
             "overflow-visible"
@@ -297,35 +335,12 @@ const lettersSpacing = 3;
             Arts numériques, théâtre et autres trucs...
         </div>
     </div>
-    <div
+    <WiggleArrow
         id="card-1-scroll-arrow"
-        class={cn(
-            "absolute",
-            "flex items-center justify-center",
-            "bottom-10 md:bottom-8 lg:bottom-6",
-        )}
-    >
-        <svg
-            class={cn(
-                "size-12",
-                "text-white/50",
-                "animate-bounce-down",
-                "absolute bottom-8"
-            )}
-            style={{
-                opacity: 0,
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <path d="M6 9 L12 15 L18 9"/>
-        </svg>
-    </div>
+        visible={false}
+        direction="down"
+        class="absolute bottom-10 md:bottom-8 lg:bottom-6"
+    />
     
 </div>
 
@@ -334,20 +349,5 @@ const lettersSpacing = 3;
         --gradient-color-1: rgba(0, 0, 0, 1);
         --gradient-color-2: rgba(0, 0, 0, 1);
         background: linear-gradient(to top right, var(--gradient-color-1), var(--gradient-color-2));
-    }
-
-    @keyframes bounce-down {
-        0%, 100% {
-            transform: translateY(0);
-            opacity: 0.5;
-        }
-        50% {
-            transform: translateY(6px);
-            opacity: 1;
-        }
-    }
-
-    .animate-bounce-down {
-        animation: bounce-down 1.5s ease-in-out infinite;
     }
 </style>

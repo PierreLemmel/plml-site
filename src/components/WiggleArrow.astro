@@ -1,0 +1,83 @@
+---
+import { cn } from '../lib/utils';
+
+type Props = {
+    id?: string;
+    visible?: boolean;
+    direction?: 'up' | 'down';
+    class?: string;
+}
+
+const {
+    id,
+    visible = true,
+    direction = 'down',
+    class: className
+} = Astro.props;
+
+const isUp = direction === 'up';
+---
+
+<div
+    id={id}
+    class={cn(
+        "flex items-center justify-center",
+        className
+    )}
+    style={{
+        opacity: visible ? 1 : 0,
+    }}
+>
+    <svg
+        class={cn(
+            "size-12",
+            "text-white/50",
+            isUp ? "animate-bounce-up" : "animate-bounce-down",
+        )}
+        style={{
+            transform: isUp ? 'rotate(180deg)' : 'none',
+        }}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <path d="M6 9 L12 15 L18 9"/>
+    </svg>
+</div>
+
+<style>
+    @keyframes bounce-down {
+        0%, 100% {
+            transform: translateY(0);
+            opacity: 0.5;
+        }
+        50% {
+            transform: translateY(6px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes bounce-up {
+        0%, 100% {
+            transform: translateY(0) rotate(180deg);
+            opacity: 0.5;
+        }
+        50% {
+            transform: translateY(-6px) rotate(180deg);
+            opacity: 1;
+        }
+    }
+
+    .animate-bounce-down {
+        animation: bounce-down 1.5s ease-in-out infinite;
+    }
+
+    .animate-bounce-up {
+        animation: bounce-up 1.5s ease-in-out infinite;
+    }
+</style>
+

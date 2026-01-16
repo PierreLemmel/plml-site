@@ -1,0 +1,412 @@
+---
+import { cn, getZIndex } from '../../lib/utils';
+
+type Props = {
+    class?: string;
+    cardIndex?: number;
+    cardCount?: number;
+}
+
+const {
+    class: className,
+    cardIndex = 0,
+    cardCount = 1
+} = Astro.props;
+
+const zindex = getZIndex(cardIndex, cardCount);
+---
+
+<script>
+    import { animate } from 'motion';
+    import { parseNumberWithDefault } from '../../lib/utils';
+
+    const cardIndex = parseNumberWithDefault(document.getElementById('card-3-container')?.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(document.getElementById('card-3-container')?.dataset.cardCount, 1);
+
+    let isAnimating = false;
+    let state: 'before' | 'during' | 'after' = 'before';
+
+    const animDuration = 1.7;
+    const animDelay = 0.8;
+    const titleAnimDuration = 0.6;
+    const titleAnimDelay = 0.2;
+
+    function isSmallScreen() {
+        return window.innerWidth < 768;
+    }
+
+    function getEnterTransform(index: number, entering: boolean) {
+        const isOdd = index % 2 === 0;
+        if (isSmallScreen()) {
+            return entering
+                ? (isOdd ? ['translateX(-100%)', 'translateX(0)'] : ['translateX(100%)', 'translateX(0)'])
+                : (isOdd ? ['translateX(0)', 'translateX(-100%)'] : ['translateX(0)', 'translateX(100%)']);
+        } else {
+            return entering
+                ? (isOdd ? ['translateY(-100%)', 'translateY(0)'] : ['translateY(100%)', 'translateY(0)'])
+                : (isOdd ? ['translateY(0)', 'translateY(-100%)'] : ['translateY(0)', 'translateY(100%)']);
+        }
+    }
+
+    function getExitTransform(index: number, exiting: boolean) {
+        const isOdd = index % 2 === 0;
+        if (isSmallScreen()) {
+            return exiting
+                ? (isOdd ? ['translateX(0)', 'translateX(100%)'] : ['translateX(0)', 'translateX(-100%)'])
+                : (isOdd ? ['translateX(100%)', 'translateX(0)'] : ['translateX(-100%)', 'translateX(0)']);
+        } else {
+            return exiting
+                ? (isOdd ? ['translateY(0)', 'translateY(100%)'] : ['translateY(0)', 'translateY(-100%)'])
+                : (isOdd ? ['translateY(100%)', 'translateY(0)'] : ['translateY(-100%)', 'translateY(0)']);
+        }
+    }
+
+    function beforeToDuring() {
+        isAnimating = true;
+
+        const baseDelay = 2.5;
+        const titleStartDelay = baseDelay + animDuration;
+
+        for (let i = 0; i < 3; i++) {
+            animate(`#card-3-col-${i}`, {
+                transform: getEnterTransform(i, true),
+                opacity: [0, 1],
+            }, {
+                duration: animDuration,
+                delay: baseDelay,
+                ease: 'easeOut'
+            });
+
+            animate(`#card-3-col-${i}-title`, {
+                transform: ['translateY(-100%)', 'translateY(0)'],
+            }, {
+                duration: titleAnimDuration,
+                delay: titleStartDelay + i * titleAnimDelay,
+                ease: 'easeOut'
+            });
+        }
+
+        animate(".card3-see-more-button", {
+            opacity: [0, 1],
+        }, {
+            duration: titleAnimDuration,
+            delay: titleStartDelay + 3 * titleAnimDelay,
+            ease: 'easeOut'
+        }).then(() => {
+            state = 'during';
+            isAnimating = false;
+            window.setCardIndex(cardIndex);
+        });
+    }
+
+    function duringToBefore() {
+        isAnimating = true;
+
+        const titlesOutDuration = (2 * titleAnimDelay) + titleAnimDuration;
+        const colStartDelay = titlesOutDuration;
+
+        for (let i = 0; i < 3; i++) {
+            animate(`#card-3-col-${i}-title`, {
+                transform: ['translateY(0)', 'translateY(-100%)'],
+            }, {
+                duration: titleAnimDuration,
+                delay: (2 - i) * titleAnimDelay,
+                ease: 'easeIn'
+            });
+
+            const anim = animate(`#card-3-col-${i}`, {
+                transform: getEnterTransform(i, false),
+                opacity: [1, 0],
+            }, {
+                duration: animDuration,
+                delay: colStartDelay,
+                ease: 'easeIn'
+            });
+
+            if (i === 0) {
+                anim.then(() => {
+                    state = 'before';
+                    isAnimating = false;
+                });
+            }
+        }
+
+        animate(".card3-see-more-button", {
+            opacity: [1, 0],
+        }, {
+            duration: titleAnimDuration,
+            delay: 0,
+            ease: 'easeOut'
+        });
+    }
+
+    function duringToAfter() {
+        isAnimating = true;
+
+        const titlesOutDuration = (2 * titleAnimDelay) + titleAnimDuration;
+        const colStartDelay = titlesOutDuration;
+
+        for (let i = 0; i < 3; i++) {
+            animate(`#card-3-col-${i}-title`, {
+                transform: ['translateY(0)', 'translateY(-100%)'],
+            }, {
+                duration: titleAnimDuration,
+                delay: (2 - i) * titleAnimDelay,
+                ease: 'easeIn'
+            });
+
+            const anim = animate(`#card-3-col-${i}`, {
+                transform: getExitTransform(i, true),
+                opacity: [1, 0],
+            }, {
+                duration: animDuration,
+                delay: colStartDelay,
+                ease: 'easeIn'
+            });
+
+            if (i === 0) {
+                anim.then(() => {
+                    state = 'after';
+                    isAnimating = false;
+                });
+            }
+        }
+    }
+
+    function afterToDuring() {
+        isAnimating = true;
+
+        const titleStartDelay = animDuration;
+
+        for (let i = 0; i < 3; i++) {
+            animate(`#card-3-col-${i}`, {
+                transform: getExitTransform(i, false),
+                opacity: [0, 1],
+            }, {
+                duration: animDuration,
+                delay: 0,
+                ease: 'easeOut'
+            });
+
+            const titleAnim = animate(`#card-3-col-${i}-title`, {
+                transform: ['translateY(-100%)', 'translateY(0)'],
+            }, {
+                duration: titleAnimDuration,
+                delay: titleStartDelay + i * titleAnimDelay,
+                ease: 'easeOut'
+            });
+
+            if (i === 2) {
+                titleAnim.then(() => {
+                    state = 'during';
+                    isAnimating = false;
+                    window.setCardIndex(cardIndex);
+                });
+            }
+        }
+    }
+
+    function checkForAnimation() {
+        if (isAnimating) return;
+
+        const scrollY = window.scrollY;
+
+        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
+        const afterThreshold = (cardIndex + 0.95) * window.innerHeight;
+
+        switch (state) {
+            case 'before':
+                if (scrollY >= beforeThreshold) {
+                    if (window.canGoToCard(cardIndex)) {
+                        beforeToDuring();
+                    }
+                }
+                break;
+            case 'during':
+                if (scrollY < beforeThreshold) {
+                    if (window.canGoToCard(cardIndex - 1)) {
+                        duringToBefore();
+                    }
+                }
+                if (scrollY >= afterThreshold) {
+                    if (window.canGoToCard(cardIndex + 1)) {
+                        duringToAfter();
+                    }
+                }
+                break;
+            case 'after':
+                if (scrollY < afterThreshold) {
+                    if (window.canGoToCard(cardIndex)) {
+                        afterToDuring();
+                    }
+                }
+                break;
+        }
+    }
+
+    window.addEventListener('scroll', (event) => {
+        checkForAnimation();
+    });
+
+    checkForAnimation();
+</script>
+
+<div
+    class={cn(
+        "fixed w-screen h-screen",
+        "bg-neutral-900",
+        className
+    )}
+    style={`z-index: ${zindex};`}
+    id="card-3-container"
+    data-card-index={cardIndex}
+    data-card-count={cardCount}
+>
+    <div class={cn(
+        "w-full h-full",
+        "grid",
+        "grid-rows-3 md:grid-rows-1",
+        "md:grid-cols-3",
+        "gap-1",
+        "bg-black"
+    )}>
+        <div
+            id="card-3-col-0"
+            class={cn(
+                "relative overflow-hidden",
+                "flex flex-col items-center justify-center",
+                "opacity-0",
+                "group"
+            )}
+        >
+            <div
+                class={cn(
+                    "absolute inset-0",
+                    "bg-cover bg-center bg-no-repeat",
+                    "grayscale brightness-50",
+                    "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
+                    "transition-all duration-500",
+                    "bg-[url('/img/bg-arts-numeriques.jpg')]"
+                )}
+            />
+            <div class={cn(
+                "relative z-10",
+                "flex flex-col items-center justify-center gap-4",
+                "text-white"
+            )}>
+                <h2 class={cn(
+                    "text-3xl md:text-4xl",
+                    "text-center",
+                    "uppercase italic font-semibold"
+                )}>
+                    <div class="overflow-hidden">
+                        <div id="card-3-col-0-title">Arts numériques</div>
+                    </div>
+                </h2>
+                <button class={cn(
+                    "px-6",
+                    "text-md font-medium uppercase tracking-wider",
+                    "transition-all duration-300",
+                    "card3-see-more-button",
+                    "underline underline-offset-1 italic",
+                    "hover:no-underline hover:cursor-pointer",
+                    "transition-all duration-300"
+                )}>
+                    Voir plus
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="card-3-col-1"
+            class={cn(
+                "relative overflow-hidden",
+                "flex flex-col items-center justify-center",
+                "opacity-0",
+                "group"
+            )}
+        >
+            <div
+                class={cn(
+                    "absolute inset-0",
+                    "bg-cover bg-center bg-no-repeat",
+                    "grayscale brightness-50",
+                    "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
+                    "transition-all duration-500",
+                    "bg-[url('/img/bg-theatre.jpg')]"
+                )}
+            />
+            <div class={cn(
+                "relative z-10",
+                "flex flex-col items-center justify-center gap-4",
+                "text-white"
+            )}>
+                <h2 class={cn(
+                    "text-3xl md:text-4xl",
+                    "text-center",
+                    "uppercase italic font-semibold"
+                )}>
+                    <div class="overflow-hidden">
+                        <div id="card-3-col-1-title">Théâtre</div>
+                    </div>
+                </h2>
+                <button class={cn(
+                    "px-6",
+                    "text-md font-medium uppercase tracking-wider",
+                    "transition-all duration-300",
+                    "card3-see-more-button",
+                    "underline underline-offset-1 italic",
+                    "hover:no-underline hover:cursor-pointer"
+                )}>
+                    Voir plus
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="card-3-col-2"
+            class={cn(
+                "relative overflow-hidden",
+                "flex flex-col items-center justify-center",
+                "opacity-0",
+                "group"
+            )}
+        >
+            <div
+                class={cn(
+                    "absolute inset-0",
+                    "bg-cover bg-position-[25%_50%] bg-no-repeat",
+                    "grayscale brightness-50",
+                    "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
+                    "transition-all duration-500",
+                    "bg-[url('/img/bg-other.jpg')]"
+                )}
+            />
+            <div class={cn(
+                "relative z-10",
+                "flex flex-col items-center justify-center gap-4",
+                "text-white"
+            )}>
+                <h2 class={cn(
+                    "text-3xl md:text-4xl",
+                    "text-center",
+                    "uppercase italic font-semibold"
+                )}>
+                    <div class="overflow-hidden">
+                        <div id="card-3-col-2-title">Autres</div>
+                    </div>
+                </h2>
+                <button class={cn(
+                    "px-6",
+                    "text-md font-medium uppercase tracking-wider",
+                    "transition-all duration-300",
+                    "card3-see-more-button",
+                    "underline underline-offset-1 italic",
+                    "hover:no-underline hover:cursor-pointer"
+                )}>
+                    Voir plus
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
