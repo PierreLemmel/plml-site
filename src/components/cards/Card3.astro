@@ -1,5 +1,6 @@
 ---
 import { cn, getZIndex } from '../../lib/utils';
+import WiggleArrow from '../WiggleArrow.astro';
 
 type Props = {
     class?: string;
@@ -20,8 +21,11 @@ const zindex = getZIndex(cardIndex, cardCount);
     import { animate } from 'motion';
     import { parseNumberWithDefault } from '../../lib/utils';
 
-    const cardIndex = parseNumberWithDefault(document.getElementById('card-3-container')?.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(document.getElementById('card-3-container')?.dataset.cardCount, 1);
+    const cardContainer = document.getElementById('card-3-container')!;
+    const scrollArrow = document.getElementById('card-3-scroll-arrow')!;
+
+    const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
     let isAnimating = false;
     let state: 'before' | 'during' | 'after' = 'before';
@@ -92,7 +96,17 @@ const zindex = getZIndex(cardIndex, cardCount);
             duration: titleAnimDuration,
             delay: titleStartDelay + 3 * titleAnimDelay,
             ease: 'easeOut'
+        });
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-3-scroll-arrow", {
+            opacity: [0, 1],
+        }, {
+            duration: 0.7 * titleAnimDuration,
+            delay: titleStartDelay + 4 * titleAnimDelay,
+            ease: 'linear'
         }).then(() => {
+            scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
             isAnimating = false;
             window.setCardIndex(cardIndex);
@@ -101,6 +115,15 @@ const zindex = getZIndex(cardIndex, cardCount);
 
     function duringToBefore() {
         isAnimating = true;
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-3-scroll-arrow", {
+            opacity: [1, 0],
+        }, {
+            duration: 0.5 * titleAnimDuration,
+            delay: 0,
+            ease: 'linear'
+        });
 
         const titlesOutDuration = (2 * titleAnimDelay) + titleAnimDuration;
         const colStartDelay = titlesOutDuration;
@@ -142,6 +165,15 @@ const zindex = getZIndex(cardIndex, cardCount);
 
     function duringToAfter() {
         isAnimating = true;
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-3-scroll-arrow", {
+            opacity: [1, 0],
+        }, {
+            duration: 0.5 * titleAnimDuration,
+            delay: 0,
+            ease: 'linear'
+        });
 
         const titlesOutDuration = (2 * titleAnimDelay) + titleAnimDuration;
         const colStartDelay = titlesOutDuration;
@@ -196,14 +228,21 @@ const zindex = getZIndex(cardIndex, cardCount);
                 ease: 'easeOut'
             });
 
-            if (i === 2) {
-                titleAnim.then(() => {
-                    state = 'during';
-                    isAnimating = false;
-                    window.setCardIndex(cardIndex);
-                });
-            }
         }
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-3-scroll-arrow", {
+            opacity: [0, 1],
+        }, {
+            duration: 0.7 * titleAnimDuration,
+            delay: titleStartDelay + 3 * titleAnimDelay,
+            ease: 'linear'
+        }).then(() => {
+            scrollArrow.classList.remove('pointer-events-none');
+            state = 'during';
+            isAnimating = false;
+            window.setCardIndex(cardIndex);
+        });
     }
 
     function checkForAnimation() {
@@ -408,5 +447,14 @@ const zindex = getZIndex(cardIndex, cardCount);
                 </button>
             </div>
         </div>
+    </div>
+    <div class={cn(
+        "absolute bottom-10 md:bottom-8 lg:bottom-6 z-10",
+        "w-full flex justify-center items-center"
+    )}>
+        <WiggleArrow
+            id="card-3-scroll-arrow"
+            visible={false}
+        />
     </div>
 </div>

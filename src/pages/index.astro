@@ -21,6 +21,7 @@ let cardIndex = 0;
 			getCardIndex: () => number;
 
 			canGoToCard: (index: number,) => boolean;
+			scrollToNextCard: () => void;
 		}
 	}
 
@@ -36,6 +37,14 @@ let cardIndex = 0;
 
 	window.canGoToCard = (index: number) => {
 		return Math.abs(index - globalCardIndex) === 1 && index >= 0 && index < cardCount;
+	};
+
+	history.scrollRestoration = 'manual';
+	window.scrollToNextCard = () => {
+		window.scrollTo({
+			top: (globalCardIndex + 1) * window.innerHeight,
+			behavior: 'smooth'
+		});
 	};
 </script>
 

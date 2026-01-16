@@ -1,6 +1,7 @@
 ---
 import { cn, getZIndex } from "../../lib/utils";
 import ShaderBackground from "../ShaderBackground.astro";
+import WiggleArrow from "../WiggleArrow.astro";
 import fragmentShader from "../../shaders/presentation.frag?raw";
 
 type Props = {
@@ -22,8 +23,11 @@ const zindex = getZIndex(cardIndex, cardCount);
     import { animate } from 'motion';
     import { parseNumberWithDefault } from '../../lib/utils';
 
-    const cardIndex = parseNumberWithDefault(document.getElementById('card-2-container')?.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(document.getElementById('card-2-container')?.dataset.cardCount, 1);
+    const cardContainer = document.getElementById('card-2-container')!;
+    const scrollArrow = document.getElementById('card-2-scroll-arrow')!;
+
+    const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
+    const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
     const canvas = document.getElementById('card2-background') as HTMLCanvasElement;
 
@@ -37,11 +41,11 @@ const zindex = getZIndex(cardIndex, cardCount);
     const backgroundAnimDuration = 1.6;
 
     const makeContainerVisible = () => {
-        document.getElementById('card-2-container')?.classList.remove('hidden');
+        cardContainer.classList.remove('hidden');
     }
 
     const makeContainerInvisible = () => {
-        document.getElementById('card-2-container')?.classList.add('hidden');
+        cardContainer.classList.add('hidden');
     }
 
     function beforeToDuring() {
@@ -109,7 +113,17 @@ const zindex = getZIndex(cardIndex, cardCount);
             duration: textAnimDuration,
             delay: baseDelay + 3 * textAnimDelay,
             ease: 'linear'
+        });
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-2-scroll-arrow", {
+            opacity: [0, 1],
+        }, {
+            duration: 0.7 * textAnimDuration,
+            delay: baseDelay + 4 * textAnimDelay,
+            ease: 'linear'
         }).then(() => {
+            scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
             isAnimating = false;
             window.setCardIndex(cardIndex);
@@ -118,6 +132,15 @@ const zindex = getZIndex(cardIndex, cardCount);
 
     function duringToBefore() {
         isAnimating = true;
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-2-scroll-arrow", {
+            opacity: [1, 0],
+        }, {
+            duration: 0.5 * textAnimDuration,
+            delay: 0,
+            ease: 'linear'
+        });
 
         for (let i = 1; i <= 3; i++) {
             animate(`#card-2-text-${i}`, {
@@ -187,6 +210,15 @@ const zindex = getZIndex(cardIndex, cardCount);
     
     function duringToAfter() {
         isAnimating = true;
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-2-scroll-arrow", {
+            opacity: [1, 0],
+        }, {
+            duration: 0.5 * textAnimDuration,
+            delay: 0,
+            ease: 'linear'
+        });
 
         for (let i = 1; i <= 3; i++) {
             animate(`#card-2-text-${i}`, {
@@ -271,7 +303,17 @@ const zindex = getZIndex(cardIndex, cardCount);
             duration: textAnimDuration,
             delay: baseDelay + 3 * textAnimDelay,
             ease: 'linear'
+        });
+
+        scrollArrow.classList.add('pointer-events-none');
+        animate("#card-2-scroll-arrow", {
+            opacity: [0, 1],
+        }, {
+            duration: 0.7 * textAnimDuration,
+            delay: baseDelay + 4 * textAnimDelay,
+            ease: 'linear'
         }).then(() => {
+            scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
             isAnimating = false;
             window.setCardIndex(cardIndex);
@@ -437,5 +479,10 @@ const zindex = getZIndex(cardIndex, cardCount);
                 </div>
             </div>
         </div>
+        <WiggleArrow
+            id="card-2-scroll-arrow"
+            visible={false}
+            class="absolute bottom-10 md:bottom-8 lg:bottom-6 z-10"
+        />
     </div>
 </div>
