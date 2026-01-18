@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { cn } from '../../lib/utils';
+import PortfolioGallery from './PortfolioGallery.astro';
+
+type Props = {
+    title: string;
+    description: string;
+    pageTitle: string;
+    subtitle: string;
+    backgroundImage: string;
+    backgroundClass?: string;
+    backgroundPosition?: string;
+}
+
+const {
+    title,
+    description,
+    pageTitle,
+    subtitle,
+    backgroundImage,
+    backgroundClass,
+    backgroundPosition = 'center'
+} = Astro.props;
+---
+
+<script>
+    import { animate } from 'motion';
+
+
+    animate('.page-title', {
+        transform: ['translateY(-100%)', 'translateY(0)'],
+    }, {
+        duration: 0.8,
+        delay: 0.4,
+        ease: [0.25, 0.1, 0.25, 1]
+    });
+
+    animate('.page-subtitle', {
+        transform: ['translateY(-100%)', 'translateY(0)'],
+    }, {
+        duration: 0.8,
+        delay: 0.8,
+        ease: [0.25, 0.1, 0.25, 1]
+    });
+
+    animate('#back-button', {
+        opacity: [0, 1],
+    }, {
+        duration: 0.8,
+        delay: 1.2,
+        ease: 'easeInOut'
+    });
+
+</script>
+
+
+<Layout
+    title={title}
+    description={description}
+    image={backgroundImage}
+>
+    <main class={cn(
+        "min-h-screen",
+        "bg-neutral-950",
+        "text-white font-barlow"
+    )}>
+        <header class={cn(
+            "fixed top-0 left-0 right-0 z-50",
+            "bg-linear-to-b from-black/80 to-transparent",
+            "p-6"
+        )}>
+            <a
+                id="back-button"
+                href="/"
+                class={cn(
+                    "inline-flex items-center gap-2",
+                    "text-white/70 hover:text-white",
+                    "transition-colors duration-200"
+                )}
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="font-medium">Retour</span>
+            </a>
+        </header>
+
+        <div class={cn(
+            "relative",
+            "h-[50vh]",
+            "flex items-center justify-center",
+            "overflow-hidden"
+        )}>
+            <div
+                class={cn(
+                    "absolute inset-0",
+                    "bg-cover bg-no-repeat",
+                    backgroundClass
+                )}
+                style={`background-image: url('${backgroundImage}'); background-position: ${backgroundPosition};`}
+            />
+            <div class={cn(
+                "absolute inset-0",
+                "bg-linear-to-t from-neutral-950 via-transparent to-transparent"
+            )} />
+            <div class="relative z-10 text-center px-6">
+                <div class="overflow-hidden">
+                    <h1 class={cn(
+                        "text-5xl md:text-7xl lg:text-8xl",
+                        "font-bold uppercase italic",
+                        "tracking-tight",
+                        "page-title"
+                    )}>
+                        {pageTitle}
+                    </h1>
+                </div>
+                <div class="overflow-hidden mt-4">
+                    <p class={cn(
+                        "text-lg md:text-xl",
+                        "text-neutral-300 max-w-2xl mx-auto",
+                        "page-subtitle"
+                    )}>
+                        {subtitle}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class={cn(
+            "px-6 md:px-12 lg:px-16",
+            "pb-12 md:pb-16"
+        )}>
+            <PortfolioGallery>
+                <slot />
+            </PortfolioGallery>
+        </div>
+    </main>
+</Layout>

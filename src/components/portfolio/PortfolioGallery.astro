@@ -1,0 +1,363 @@
+---
+import { cn } from '../../lib/utils';
+
+type Props = {
+    title?: string;
+    class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<script>
+    import { animate } from 'motion';
+    import { dateText } from '../../lib/utils';
+
+    const overlay = document.getElementById('portfolio-overlay');
+    const closeBtn = document.getElementById('overlay-close');
+    const carouselTrack = overlay?.querySelector('.carousel-track') as HTMLElement;
+    const carouselDots = overlay?.querySelector('.carousel-dots') as HTMLElement;
+    const prevBtn = overlay?.querySelector('.carousel-prev') as HTMLElement;
+    const nextBtn = overlay?.querySelector('.carousel-next') as HTMLElement;
+
+    let currentSlide = 0;
+    let totalSlides = 0;
+
+    type OverlayData = {
+        title: string;
+        description: string;
+        cover: string;
+        images: string[];
+        fromDate: string|null;
+        toDate: string|null;
+        link: string|null;
+        tags: string[];
+    }
+    declare global {
+        interface Window {
+            setupOverlay: (data: OverlayData) => void;
+            goToSlide: (index: number) => void;
+        }
+    }
+
+    window.setupOverlay = function(data: OverlayData) {
+
+        const {
+            title,
+            description,
+            cover,
+            images,
+            fromDate,
+            toDate,
+            link,
+            tags
+        } = data;
+
+        const overlay = document.getElementById('portfolio-overlay')!;
+        
+        const overlayTitle = overlay.querySelector('.overlay-title');
+        const overlayDescription = overlay.querySelector('.overlay-description');
+        const overlayImage = overlay.querySelector('.overlay-image') as HTMLElement;
+        const overlayDate = overlay.querySelector('.overlay-date');
+        const overlayTags = overlay.querySelector('.overlay-tags');
+        const overlayLink = overlay.querySelector('.overlay-link') as HTMLAnchorElement;
+
+        const carouselTrack = overlay.querySelector('.carousel-track') as HTMLElement;
+        carouselTrack.innerHTML = images.map(image => `<div class="min-w-full bg-center bg-no-repeat bg-cover" style="background-image: url('${image}');" ></div>`).join('');
+
+        carouselDots.innerHTML = images.map((_, index) => `<button class="carousel-dot size-2 bg-white/40 rounded-full transition-all duration-300 ease-in-out hover:bg-white/60 cursor-pointer" data-index="${index}"></button>`).join('');
+
+        if (overlayTitle) overlayTitle.textContent = title;
+        if (overlayDescription) overlayDescription.textContent = description;
+        if (overlayImage) overlayImage.style.backgroundImage = `url('${cover}')`;
+        if (overlayDate) {
+            overlayDate.textContent = dateText(fromDate, toDate);
+        }
+        if (overlayTags && tags) {
+            overlayTags.innerHTML = tags.map(tag =>
+                `<span class="px-3 py-1 bg-white/10 rounded-full text-sm">${tag}</span>`
+            ).join('');
+        }
+        if (overlayLink) {
+            if (link) {
+                overlayLink.href = link;
+                overlayLink.style.display = 'inline-flex';
+            } else {
+                overlayLink.style.display = 'none';
+            }
+        }
+
+        overlay.classList.remove('pointer-events-none', 'opacity-0');
+        overlay.classList.add('pointer-events-auto', 'opacity-100');
+
+        currentSlide = 0;
+        totalSlides = images.length;
+
+        updateCarousel();
+        document.body.style.overflow = 'hidden';
+    }
+
+    function updateCarousel() {
+        carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        const dots = carouselDots.querySelectorAll('.carousel-dot');
+        dots.forEach((dot, i) => {
+            if (i === currentSlide) {
+                dot.classList.add('bg-white', 'size-2.5');
+                dot.classList.remove('bg-white/40', 'size-2');
+            } else {
+                dot.classList.remove('bg-white', 'size-2');
+                dot.classList.add('bg-white/40', 'size-2.5');
+            }
+        });
+    }
+
+    function goToSlide(index: number) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentSlide = index;
+        updateCarousel();
+    }
+
+    window.goToSlide = goToSlide;
+
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        prevSlide();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        nextSlide();
+    });
+
+    carouselDots.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('carousel-dot')) {
+            const index = parseInt(target.getAttribute('data-index') || '0');
+            goToSlide(index);
+        }
+    });
+
+    function closeOverlay() {
+        if (overlay) {
+            overlay.classList.add('pointer-events-none', 'opacity-0');
+            overlay.classList.remove('pointer-events-auto', 'opacity-100');
+            document.body.style.overflow = '';
+        }
+    }
+
+    closeBtn?.addEventListener('click', closeOverlay);
+
+    overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeOverlay();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeOverlay();
+        }
+        if (overlay?.classList.contains('opacity-100')) {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        }
+    });
+
+    const portfolioGrid = document.querySelector('.portfolio-grid');
+    if (portfolioGrid) {
+        const items = portfolioGrid.children;
+        const baseDelay = 0.8;
+        const staggerDelay = 0.1;
+
+        Array.from(items).forEach((item, index) => {
+            const element = item as HTMLElement;
+            element.style.opacity = '0';
+            element.style.transform = 'scale(0.8)';
+
+            animate(element, {
+                opacity: [0, 1],
+                transform: ['scale(0.8)', 'scale(1)'],
+            }, {
+                duration: 0.5,
+                delay: baseDelay + index * staggerDelay,
+                ease: [0.25, 0.1, 0.25, 1]
+            });
+        });
+    }
+</script>
+
+
+<div class={cn(
+    "portfolio-gallery",
+    "w-full",
+    className
+)}>
+    {title && (
+        <h2 class={cn(
+            "text-2xl md:text-3xl font-bold",
+            "text-white mb-8",
+            "uppercase tracking-wide"
+        )}>
+            {title}
+        </h2>
+    )}
+
+    <div class={cn(
+        "portfolio-grid",
+        "grid gap-4 md:gap-6",
+        "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    )}>
+        <slot />
+    </div>
+</div>
+
+<div
+    id="portfolio-overlay"
+    class={cn(
+        "fixed inset-0 z-9999",
+        "bg-black/95 backdrop-blur-md",
+        "opacity-0 pointer-events-none",
+        "transition-opacity duration-300",
+        "overflow-y-auto"
+    )}
+>
+    <button
+        id="overlay-close"
+        class={cn(
+            "fixed top-6 right-6 z-10000",
+            "w-12 h-12",
+            "flex items-center justify-center",
+            "bg-white/10 hover:bg-white/20 rounded-full",
+            "transition-colors duration-200",
+            "cursor-pointer"
+        )}
+    >
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+
+    <div class={cn(
+        "min-h-screen",
+        "flex flex-col lg:flex-row",
+        "p-6 md:p-12 lg:p-16"
+    )}>
+        <div class={cn(
+            "lg:w-1/2 xl:w-3/5",
+            "mb-8 lg:mb-0 lg:pr-12"
+        )}>
+            <div class="carousel-container relative w-full aspect-video lg:aspect-4/3">
+                <div class="carousel-viewport overflow-hidden w-full h-full rounded-sm">
+                    <div class="carousel-track flex h-full transition-transform duration-800 ease-in-out">
+                    </div>
+                </div>
+
+                <button class={cn(
+                    "carousel-prev",
+                    "absolute left-3 top-1/2 -translate-y-1/2",
+                    "w-10 h-10 md:w-12 md:h-12",
+                    "flex items-center justify-center",
+                    "bg-black/50 hover:bg-black/70 rounded-full",
+                    "text-white",
+                    "transition-all duration-200",
+                    "backdrop-blur-sm",
+                    "cursor-pointer",
+                    "z-10"
+                )}>
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <button class={cn(
+                    "carousel-next",
+                    "absolute right-3 top-1/2 -translate-y-1/2",
+                    "w-10 h-10 md:w-12 md:h-12",
+                    "flex items-center justify-center",
+                    "bg-black/50 hover:bg-black/70 rounded-full",
+                    "text-white",
+                    "transition-all duration-200",
+                    "backdrop-blur-sm",
+                    "cursor-pointer",
+                    "z-10"
+                )}>
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <div class={cn(
+                    "carousel-dots",
+                    "absolute bottom-4 left-1/2 -translate-x-1/2",
+                    "flex items-center gap-2",
+                    "z-10"
+                )}>
+                </div>
+            </div>
+        </div>
+
+        <div class={cn(
+            "lg:w-1/2 xl:w-2/5",
+            "flex flex-col"
+        )}>
+            <span class={cn(
+                "overlay-date",
+                "block",
+                "text-white/80 text-sm font-medium tracking-wider uppercase",
+                "mb-2"
+            )}></span>
+
+            <h2 class={cn(
+                "overlay-title",
+                "text-3xl md:text-4xl lg:text-5xl font-bold",
+                "text-white mb-6",
+                "leading-tight"
+            )}></h2>
+
+            <div class={cn(
+                "overlay-tags",
+                "flex flex-wrap gap-2 mb-6"
+            )}></div>
+
+            <p class={cn(
+                "overlay-description",
+                "text-lg text-neutral-300",
+                "leading-relaxed mb-8"
+            )}></p>
+
+            <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class={cn(
+                    "overlay-link",
+                    "inline-flex items-center gap-2",
+                    "text-white font-medium",
+                    "rounded-sm",
+                    "transition-colors duration-200",
+                    "w-fit",
+                    "text-white/80 hover:text-white",
+                    "underline underline-offset-2"
+                )}
+            >
+                En savoir plus
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>

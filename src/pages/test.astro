@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { cn } from '../lib/utils';
 
 import Card3 from '../components/cards/Card3.astro';
+import Card2 from '../components/cards/Card2.astro';
 
 const cardCount = 1;
 ---
@@ -17,6 +18,9 @@ const cardCount = 1;
 			getCardIndex: () => number;
 
 			canGoToCard: (index: number,) => boolean;
+
+			lockScroll: () => void;
+			unlockScroll: () => void;
 		}
 	}
 
@@ -33,6 +37,13 @@ const cardCount = 1;
 	window.canGoToCard = (index: number) => {
 		return true;
 	};
+
+	window.lockScroll = () => {
+		document.body.style.overflowY = 'hidden';
+	};
+	window.unlockScroll = () => {
+		document.body.style.overflowY = 'auto';
+	};
 </script>
 
 
@@ -45,6 +56,6 @@ const cardCount = 1;
 		style={`min-height: ${100 * (cardCount)}vh;`}
 		data-card-count={cardCount}
 	>
-		<Card3 class="z-100" cardIndex={0} cardCount={cardCount} />
+		<Card2 class="z-100" cardIndex={0} cardCount={cardCount} />
     </main>
 </Layout>

@@ -37,10 +37,21 @@ const zindex = getZIndex(cardIndex, cardCount);
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
     const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
+    function onAnimationStart() {
+        isAnimating = true;
+        window.lockScroll();
+    }
+
+    function onAnimationEnd() {
+        isAnimating = false;
+        window.unlockScroll();
+        checkForAnimation();
+    }
+
     function animateIn(initialDelay: number = 1.55) {
         if (isAnimating || isAnimatedIn) return;
-        isAnimating = true;
-
+        
+        onAnimationStart();
         cardContainer.classList.remove('hidden');
 
         const baseDelay = initialDelay;
@@ -111,18 +122,16 @@ const zindex = getZIndex(cardIndex, cardCount);
             delay: baseDelay + 3.5 * animDelay,
             ease: 'easeIn'
         }).then(() => {
-            isAnimating = false;
+            onAnimationEnd();
             isAnimatedIn = true;
             window.setCardIndex(cardIndex);
-
-            checkForAnimation();
         });
     }
 
     function animateOut() {
         if (isAnimating || !isAnimatedIn) return;
-        isAnimating = true;
         
+        onAnimationStart();
         scrollArrow.classList.add('pointer-events-none');
 
         animate('#svg-letter-p', {
@@ -132,11 +141,10 @@ const zindex = getZIndex(cardIndex, cardCount);
             delay: 4 * 	animDelay,
             ease: 'easeInOut'
         }).then(() => {
-            isAnimating = false;
+            onAnimationEnd();
             isAnimatedIn = false;
 
             cardContainer.classList.add('hidden');
-            checkForAnimation();
         });
 
         animate('#svg-letter-l1', {

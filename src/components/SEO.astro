@@ -1,0 +1,64 @@
+---
+export interface Props {
+    title?: string;
+    description?: string;
+    image?: string;
+    canonical?: string;
+    type?: 'website' | 'article';
+    noindex?: boolean;
+}
+
+const defaultSEO = {
+    siteName: 'Plml',
+    title: 'Plml - Pierre Lemmel',
+    description: 'Portfolio de Pierre Lemmel - Théâtre, Arts Numériques et créations artistiques.',
+    image: '/img/portrait-pierre-01.jpg',
+    siteUrl: 'https://plml.fr'
+};
+
+const {
+    title = defaultSEO.title,
+    description = defaultSEO.description,
+    image = defaultSEO.image,
+    canonical,
+    type = 'website',
+    noindex = false
+} = Astro.props;
+
+const siteUrl = defaultSEO.siteUrl;
+const canonicalURL = canonical ? new URL(canonical, siteUrl).href : new URL(Astro.url.pathname, siteUrl).href;
+const imageURL = image.startsWith('http') ? image : new URL(image, siteUrl).href;
+const fullTitle = title === defaultSEO.siteName ? title : `${title}`;
+---
+
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:site_name" content={defaultSEO.siteName} />
+<meta property="og:locale" content="fr_FR" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pierre Lemmel",
+    "url": siteUrl,
+    "image": imageURL,
+    "description": description,
+    "sameAs": [
+        "https://www.instagram.com/p_lemmel"
+    ]
+})} />
+

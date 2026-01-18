@@ -13,3 +13,17 @@ export function parseNumberWithDefault(value: string | undefined, defaultValue: 
 export function getZIndex(cardIndex: number, cardCount: number): number {
     return (cardCount - cardIndex) * 100;
 }
+
+export function dateText(fromDate?: string|null, toDate?: string|null): string {
+    if (fromDate && toDate) {
+        if (fromDate === toDate) {
+            return fromDate;
+        }
+        else {
+            return `${fromDate} - ${toDate}`;
+        }
+    } else if (fromDate) {
+        return `Depuis ${fromDate}`;
+    }
+    return '';
+}

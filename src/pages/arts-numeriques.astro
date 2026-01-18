@@ -1,0 +1,56 @@
+---
+import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
+import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
+import type { PortfolioItemData } from '../components/portfolio/PortfolioItem.astro';
+
+const items: PortfolioItemData[] = [
+    {
+        id: 'digital-1',
+        title: 'Installation Interactive',
+        description: 'Une expérience immersive mêlant projection et capteurs de mouvement.',
+        fullDescription: 'Cette installation interactive invite le public à explorer un espace où la lumière et le son répondent à leurs mouvements. Utilisant des capteurs de profondeur et des projections mappées, l\'œuvre crée un dialogue entre le corps et l\'environnement numérique.',
+        coverImage: '/img/bg-arts-numeriques.jpg',
+        tags: ['Installation', 'Interactif', 'Projection'],
+        fromDate: '2024'
+    },
+    {
+        id: 'digital-2',
+        title: 'Génération Procédurale',
+        description: 'Exploration de formes générées par algorithmes.',
+        fullDescription: 'Une série d\'œuvres visuelles créées à partir d\'algorithmes de génération procédurale. Chaque pièce est unique, née de la rencontre entre règles mathématiques et hasard contrôlé.',
+        coverImage: '/img/bg-arts-numeriques.jpg',
+        tags: ['Génératif', 'Code', 'Visuel'],
+        fromDate: '2023'
+    },
+    {
+        id: 'digital-3',
+        title: 'Réalité Augmentée',
+        description: 'Application mobile de réalité augmentée artistique.',
+        fullDescription: 'Une application mobile permettant de superposer des œuvres numériques sur l\'environnement réel. Le projet questionne notre rapport à l\'espace public et la frontière entre réel et virtuel.',
+        coverImage: '/img/bg-arts-numeriques.jpg',
+        tags: ['AR', 'Mobile', 'Espace public'],
+        fromDate: '2023'
+    },
+    {
+        id: 'digital-4',
+        title: 'Sculpture Cinétique',
+        description: 'Sculpture motorisée pilotée par données en temps réel.',
+        fullDescription: 'Une sculpture physique dont les mouvements sont orchestrés par des flux de données en temps réel : météo, activité sociale, rythmes biologiques. L\'œuvre devient un pont entre le monde invisible des données et notre perception sensible.',
+        coverImage: '/img/bg-arts-numeriques.jpg',
+        tags: ['Sculpture', 'Data', 'Cinétique'],
+        fromDate: '2022'
+    }
+];
+---
+
+<PortfolioPage
+    title="Plml - Arts Numériques"
+    description="Explorations à l'intersection de l'art et de la technologie - Installations interactives, art génératif et créations numériques par Pierre Lemmel."
+    pageTitle="Arts Numériques"
+    subtitle="Explorations à l'intersection de l'art et de la technologie"
+    backgroundImage="/img/bg-arts-numeriques.jpg"
+>
+    {items.map(item => (
+        <PortfolioItem item={item} />
+    ))}
+</PortfolioPage>

@@ -28,6 +28,17 @@ const zindex = getZIndex(cardIndex, cardCount);
     const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
     let isAnimating = false;
+    function onAnimationStart() {
+        isAnimating = true;
+        window.lockScroll();
+    }
+
+    function onAnimationEnd() {
+        isAnimating = false;
+        window.unlockScroll();
+        checkForAnimation();
+    }
+
     let state: 'before' | 'during' | 'after' = 'before';
 
     const animDuration = 1.7;
@@ -66,7 +77,7 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function beforeToDuring() {
-        isAnimating = true;
+        onAnimationStart();
 
         const baseDelay = 2.5;
         const titleStartDelay = baseDelay + animDuration;
@@ -108,13 +119,13 @@ const zindex = getZIndex(cardIndex, cardCount);
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
-            isAnimating = false;
+            onAnimationEnd();
             window.setCardIndex(cardIndex);
         });
     }
 
     function duringToBefore() {
-        isAnimating = true;
+        onAnimationStart();
 
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-3-scroll-arrow", {
@@ -149,7 +160,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             if (i === 0) {
                 anim.then(() => {
                     state = 'before';
-                    isAnimating = false;
+                    onAnimationEnd();
                 });
             }
         }
@@ -164,7 +175,7 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function duringToAfter() {
-        isAnimating = true;
+        onAnimationStart();
 
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-3-scroll-arrow", {
@@ -183,7 +194,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 transform: ['translateY(0)', 'translateY(-100%)'],
             }, {
                 duration: titleAnimDuration,
-                delay: (2 - i) * titleAnimDelay,
+                delay: (3 - i) * titleAnimDelay,
                 ease: 'easeIn'
             });
 
@@ -199,14 +210,22 @@ const zindex = getZIndex(cardIndex, cardCount);
             if (i === 0) {
                 anim.then(() => {
                     state = 'after';
-                    isAnimating = false;
+                    onAnimationEnd();
                 });
             }
         }
+
+        animate(".card3-see-more-button", {
+            opacity: [1, 0],
+        }, {
+            duration: titleAnimDuration,
+            delay: 0,
+            ease: 'easeOut'
+        });
     }
 
     function afterToDuring() {
-        isAnimating = true;
+        onAnimationStart();
 
         const titleStartDelay = animDuration;
 
@@ -220,7 +239,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 ease: 'easeOut'
             });
 
-            const titleAnim = animate(`#card-3-col-${i}-title`, {
+            animate(`#card-3-col-${i}-title`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
             }, {
                 duration: titleAnimDuration,
@@ -229,6 +248,15 @@ const zindex = getZIndex(cardIndex, cardCount);
             });
 
         }
+
+        animate(".card3-see-more-button", {
+            opacity: [0, 1],
+        }, {
+            duration: titleAnimDuration,
+            delay: titleStartDelay + 3 * titleAnimDelay,
+            ease: 'easeOut'
+        });
+
 
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-3-scroll-arrow", {
@@ -240,7 +268,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
-            isAnimating = false;
+            onAnimationEnd();
             window.setCardIndex(cardIndex);
         });
     }
@@ -322,7 +350,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 class={cn(
                     "absolute inset-0",
                     "bg-cover bg-center bg-no-repeat",
-                    "grayscale brightness-50",
+                    "md:grayscale brightness-50",
                     "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
                     "transition-all duration-500",
                     "bg-[url('/img/bg-arts-numeriques.jpg')]"
@@ -342,17 +370,20 @@ const zindex = getZIndex(cardIndex, cardCount);
                         <div id="card-3-col-0-title">Arts numériques</div>
                     </div>
                 </h2>
-                <button class={cn(
-                    "px-6",
-                    "text-md font-medium uppercase tracking-wider",
-                    "transition-all duration-300",
-                    "card3-see-more-button",
-                    "underline underline-offset-1 italic",
-                    "hover:no-underline hover:cursor-pointer",
-                    "transition-all duration-300"
-                )}>
+                <a
+                    href="/arts-numeriques"
+                    class={cn(
+                        "px-6",
+                        "text-md font-medium uppercase tracking-wider",
+                        "transition-all duration-300",
+                        "card3-see-more-button",
+                        "underline underline-offset-1 italic",
+                        "hover:no-underline hover:cursor-pointer",
+                        "transition-all duration-300"
+                    )}
+                >
                     Voir plus
-                </button>
+                </a>
             </div>
         </div>
 
@@ -369,7 +400,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 class={cn(
                     "absolute inset-0",
                     "bg-cover bg-center bg-no-repeat",
-                    "grayscale brightness-50",
+                    "md:grayscale brightness-50",
                     "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
                     "transition-all duration-500",
                     "bg-[url('/img/bg-theatre.jpg')]"
@@ -389,16 +420,19 @@ const zindex = getZIndex(cardIndex, cardCount);
                         <div id="card-3-col-1-title">Théâtre</div>
                     </div>
                 </h2>
-                <button class={cn(
-                    "px-6",
-                    "text-md font-medium uppercase tracking-wider",
-                    "transition-all duration-300",
-                    "card3-see-more-button",
-                    "underline underline-offset-1 italic",
-                    "hover:no-underline hover:cursor-pointer"
-                )}>
+                <a
+                    href="/theatre"
+                    class={cn(
+                        "px-6",
+                        "text-md font-medium uppercase tracking-wider",
+                        "transition-all duration-300",
+                        "card3-see-more-button",
+                        "underline underline-offset-1 italic",
+                        "hover:no-underline hover:cursor-pointer"
+                    )}
+                >
                     Voir plus
-                </button>
+                </a>
             </div>
         </div>
 
@@ -415,7 +449,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 class={cn(
                     "absolute inset-0",
                     "bg-cover bg-position-[25%_50%] bg-no-repeat",
-                    "grayscale brightness-50",
+                    "md:grayscale brightness-50",
                     "group-hover:grayscale-0 group-hover:saturate-[1.2] group-hover:brightness-75 group-hover:scale-105",
                     "transition-all duration-500",
                     "bg-[url('/img/bg-other.jpg')]"
@@ -435,16 +469,19 @@ const zindex = getZIndex(cardIndex, cardCount);
                         <div id="card-3-col-2-title">Autres</div>
                     </div>
                 </h2>
-                <button class={cn(
-                    "px-6",
-                    "text-md font-medium uppercase tracking-wider",
-                    "transition-all duration-300",
-                    "card3-see-more-button",
-                    "underline underline-offset-1 italic",
-                    "hover:no-underline hover:cursor-pointer"
-                )}>
+                <a
+                    href="/autres"
+                    class={cn(
+                        "px-6",
+                        "text-md font-medium uppercase tracking-wider",
+                        "transition-all duration-300",
+                        "card3-see-more-button",
+                        "underline underline-offset-1 italic",
+                        "hover:no-underline hover:cursor-pointer"
+                    )}
+                >
                     Voir plus
-                </button>
+                </a>
             </div>
         </div>
     </div>

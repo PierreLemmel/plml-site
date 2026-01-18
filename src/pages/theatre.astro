@@ -1,0 +1,39 @@
+---
+import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
+import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
+import type { PortfolioItemData } from '../components/portfolio/PortfolioItem.astro';
+
+const items: PortfolioItemData[] = [
+    {
+        id: 'qacda',
+        title: "Quelque chose a changé dans l'air",
+        description: 'Danse, théâtre, musique et couleurs rendent hommage aux moments qui ont transformé notre vie.',
+        fullDescription: "Quelque chose a changé dans l'air explore les moments qui transforment notre existence. A partir de témoignages du public, danse, théâtre et musique se rencontrent et improvisent ensemble pour révéler les traces physiques ou symboliques que les événements marquent sur nos corps. Une matière colorée leur donne vie, sous forme de motifs, de formes et de traînées dans l'air et sur les corps et crée une expérience visuelle et émotionnelle captivante.",
+        coverImage: '/img/theatre/qacda/qacda-cover.jpg',
+        additionalImages: [
+            '/img/theatre/qacda/qacda-cover.jpg',
+            '/img/theatre/qacda/qacda-01.jpg',
+            '/img/theatre/qacda/qacda-02.jpg',
+            '/img/theatre/qacda/qacda-03.jpg',
+            '/img/theatre/qacda/qacda-04.jpg',
+            '/img/theatre/qacda/qacda-05.jpg',
+        ],
+        tags: ['Danse', 'Théâtre', 'Improvisation'],
+        fromDate: '2023',
+        link: "https://www.les-ecorces.com/spectacles"
+    },
+];
+---
+
+<PortfolioPage
+    title="Plml - Théâtre"
+    description="Improvisation, créations et mises en scène"
+    pageTitle="Théâtre"
+    subtitle="Improvisation, créations et mises en scène"
+    backgroundImage="/img/bg-theatre.jpg"
+    backgroundClass="brightness-[0.4]"
+>
+    {items.filter(item => !item.disabled).map(item => (
+        <PortfolioItem item={item} />
+    ))}
+</PortfolioPage>

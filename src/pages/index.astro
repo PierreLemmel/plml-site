@@ -22,6 +22,9 @@ let cardIndex = 0;
 
 			canGoToCard: (index: number,) => boolean;
 			scrollToNextCard: () => void;
+
+			lockScroll: () => void;
+			unlockScroll: () => void;
 		}
 	}
 
@@ -46,9 +49,19 @@ let cardIndex = 0;
 			behavior: 'smooth'
 		});
 	};
+
+	window.lockScroll = () => {
+		document.body.style.overflowY = 'hidden';
+	};
+	window.unlockScroll = () => {
+		document.body.style.overflowY = 'auto';
+	};
 </script>
 
-<Layout>
+<Layout
+	title="Plml - Pierre Lemmel"
+	description="Pierre Lemmel - Comédien, metteur en scène et artiste numérique. Découvrez mes créations."
+>
     <main
 		id="main-container"
 		class={cn(

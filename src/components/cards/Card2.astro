@@ -33,6 +33,16 @@ const zindex = getZIndex(cardIndex, cardCount);
 
 
     let isAnimating = false;
+    function onAnimationStart() {
+        isAnimating = true;
+        window.lockScroll();
+    }
+
+    function onAnimationEnd() {
+        isAnimating = false;
+        window.unlockScroll();
+        checkForAnimation();
+    }
 
     let state: 'before' | 'during' | 'after' = 'before';
 
@@ -49,7 +59,7 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function beforeToDuring() {
-        isAnimating = true;
+        onAnimationStart();
 
         makeContainerVisible();
 
@@ -125,13 +135,13 @@ const zindex = getZIndex(cardIndex, cardCount);
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
-            isAnimating = false;
+            onAnimationEnd();
             window.setCardIndex(cardIndex);
         });
     }
 
     function duringToBefore() {
-        isAnimating = true;
+        onAnimationStart();
 
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-2-scroll-arrow", {
@@ -160,7 +170,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'easeInOut'
         }).then(() => {
             state = 'before';
-            isAnimating = false;
+            onAnimationEnd();
 
             makeContainerInvisible();
         });
@@ -209,7 +219,7 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
     
     function duringToAfter() {
-        isAnimating = true;
+        onAnimationStart();
 
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-2-scroll-arrow", {
@@ -264,14 +274,14 @@ const zindex = getZIndex(cardIndex, cardCount);
             }
         ).then(() => {
             state = 'after';
-            isAnimating = false;
+            onAnimationEnd();
 
             makeContainerInvisible();
         });
     }
 
     function afterToDuring() {
-        isAnimating = true;
+        onAnimationStart();
 
         const baseDelay = 2;
 
@@ -315,7 +325,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
             state = 'during';
-            isAnimating = false;
+            onAnimationEnd();
             window.setCardIndex(cardIndex);
         });
 
@@ -397,6 +407,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         "relative w-full h-full",
         "px-[10%] md:px-[12%] lg:px-[16%] xl:px-[20%]",
         "flex flex-col items-center justify-center",
+        "overflow-hidden"
     )}>
         <ShaderBackground 
             id="card2-background" 
@@ -414,11 +425,11 @@ const zindex = getZIndex(cardIndex, cardCount);
 
         <div class={cn(
             "grid",
-            "grid-cols-1 md:grid-cols-[1fr_2fr]",
-            "grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr]",
-            "gap-6 md:gap-10",
+            "grid-cols-1 md:grid-cols-[2fr_3fr]",
+            "sm:grid-rows-[auto_auto_1fr] md:grid-rows-[auto_1fr]",
+            "gap-5 lg:gap-6 xl:gap-x-10",
             "z-10",
-            "max-h-[80vh]"
+            "max-h-[90vh]"
         )}>
             <div class={cn(
                 "overflow-hidden",
@@ -427,7 +438,8 @@ const zindex = getZIndex(cardIndex, cardCount);
                 <div
                     id="card-2-title"
                     class={cn(
-                        "text-2xl font-bold",
+                        "text-2xl md:text-3xl lg:text-4xl font-bold",
+                        "font-semibold uppercase",
                         "text-white",
                     )}
                 >
@@ -441,13 +453,15 @@ const zindex = getZIndex(cardIndex, cardCount);
                     "bg-center bg-cover bg-no-repeat",
                     "bg-[url('/img/portrait-pierre-02.jpg')]",
                     "rounded-md",
-                    "h-48 md:h-auto"
+                    "h-[max(12rem,10vh)] sm:h-48 md:h-auto"
                 )}
             />
             <div class={cn(
                 "flex flex-col items-center justify-start md:justify-center",
-                "gap-4",
-                "overflow-y-auto md:overflow-y-visible",
+                "max-h-full",
+                "md:text-lg",
+                "gap-2 sm:gap-3 md:gap-4",
+                "overflow-y-auto",
                 "min-h-0"
             )}>
                 <div class="overflow-hidden">
@@ -465,7 +479,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                     class={cn(
                     )}
                     >
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                        Après une première carrière en tant que développeur informatique, je me tourne en 2016 vers le théâtre improvisé. Celui-ci m&apos;amène vers la technique de scène, celle-ci vers les arts numériques et ceux-ci me ramène au développement informatique. La boucle est bouclée.
                     </div>
                 </div>
                 <div class="overflow-hidden">
@@ -474,7 +488,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                         class={cn(
                         )}
                     >
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                        Dans ce site, je vous propose de découvrir mes différentes créations, passées en cours et à venir.
                     </div>
                 </div>
             </div>
