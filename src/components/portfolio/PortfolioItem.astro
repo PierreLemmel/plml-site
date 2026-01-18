@@ -76,8 +76,7 @@ const { item: {
         "p-4 md:p-5"
     )}>
         <div class={cn(
-            "transform translate-y-8 group-hover:translate-y-0",
-            "transition-transform duration-300"
+            
         )}>
             {fromDate && (
                 <span class={cn(
@@ -93,12 +92,13 @@ const { item: {
                 "line-clamp-2",
             )}>
                 {title}
-            </h3>
+            </h3>       
             <p class={cn(
                 "text-sm text-neutral-300",
-                "line-clamp-2",
+                "line-clamp2 md:line-clamp-3",
                 "opacity-0 group-hover:opacity-100",
-                "transition-opacity duration-300 delay-75"
+                "transition-all duration-300 delay-75",
+                "max-h-0 group-hover:max-h-32",
             )}>
                 {description}
             </p>
