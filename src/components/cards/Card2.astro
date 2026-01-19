@@ -21,30 +21,15 @@ const zindex = getZIndex(cardIndex, cardCount);
 
 <script>
     import { animate } from 'motion';
-    import { parseNumberWithDefault } from '../../lib/utils';
+    import { clamp, parseNumberWithDefault } from '../../lib/utils';
 
     const cardContainer = document.getElementById('card-2-container')!;
     const scrollArrow = document.getElementById('card-2-scroll-arrow')!;
 
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
     const canvas = document.getElementById('card2-background') as HTMLCanvasElement;
-
-
-    let isAnimating = false;
-    function onAnimationStart() {
-        isAnimating = true;
-        window.lockScroll();
-    }
-
-    function onAnimationEnd() {
-        isAnimating = false;
-        window.unlockScroll();
-        checkForAnimation();
-    }
-
-    let state: 'before' | 'during' | 'after' = 'before';
+    const canvasContainer = document.getElementById('card2-background-container')!;
 
     const textAnimDuration = 0.7;
     const textAnimDelay = 0.34;
@@ -59,14 +44,15 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function beforeToDuring() {
-        onAnimationStart();
-
         makeContainerVisible();
 
         const baseDelay = 2.5;
         
         const intensityTarget = { intensity: 1 };
         const scaleTarget = { scale: 1.15 };
+
+        canvas.shaderUniforms!.fIntensity.value = 1;
+        canvas.style.opacity = '1';
 
         animate(
             intensityTarget,
@@ -134,15 +120,11 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
-            state = 'during';
-            onAnimationEnd();
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
     }
 
     function duringToBefore() {
-        onAnimationStart();
-
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-2-scroll-arrow", {
             opacity: [1, 0],
@@ -169,9 +151,6 @@ const zindex = getZIndex(cardIndex, cardCount);
             delay: 3 * textAnimDelay,
             ease: 'easeInOut'
         }).then(() => {
-            state = 'before';
-            onAnimationEnd();
-
             makeContainerInvisible();
         });
 
@@ -219,8 +198,6 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
     
     function duringToAfter() {
-        onAnimationStart();
-
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-2-scroll-arrow", {
             opacity: [1, 0],
@@ -259,6 +236,9 @@ const zindex = getZIndex(cardIndex, cardCount);
         })
 
         const thresholdTarget = { threshold: -0.1 };
+
+        canvasContainer.style.opacity = "100%";
+        canvas.shaderUniforms!.fThreshold.value = 1;
         animate(
             thresholdTarget,
             { threshold: 1 },
@@ -273,16 +253,11 @@ const zindex = getZIndex(cardIndex, cardCount);
                 }
             }
         ).then(() => {
-            state = 'after';
-            onAnimationEnd();
-
             makeContainerInvisible();
         });
     }
 
     function afterToDuring() {
-        onAnimationStart();
-
         const baseDelay = 2;
 
         makeContainerVisible();
@@ -324,9 +299,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
-            state = 'during';
-            onAnimationEnd();
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
 
         const thresholdTarget = { threshold: 1 };
@@ -346,51 +319,12 @@ const zindex = getZIndex(cardIndex, cardCount);
         );
     }
 
-    function checkForAnimation() {
-        if (isAnimating) return;
-
-        const scrollY = window.scrollY;
-        
-        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
-        const afterThreshold = (cardIndex + 0.95) * window.innerHeight;
-        
-        switch (state) {
-            case 'before':
-                if (scrollY >= beforeThreshold) {
-                    if (window.canGoToCard(cardIndex)) {
-                        beforeToDuring();
-                    }
-                }
-                break;
-            case 'during':
-
-                if (scrollY < beforeThreshold) {
-                    if (window.canGoToCard(cardIndex - 1)) {
-                        duringToBefore();
-                    }
-                }
-
-                if (scrollY >= afterThreshold) {
-                    if (window.canGoToCard(cardIndex + 1)) {
-                        duringToAfter();
-                    }
-                }
-                break;
-            case 'after':
-                if (scrollY < afterThreshold) {
-                    if (window.canGoToCard(cardIndex)) {
-                        afterToDuring();
-                    }
-                }
-                break;
-        }
-    }
-
-    window.addEventListener('scroll', (event) => {
-        checkForAnimation();
+    window.registerCard(cardIndex, {
+        beforeToDuring,
+        duringToBefore,
+        duringToAfter,
+        afterToDuring
     });
-
-    checkForAnimation();
 </script>
 
 <div

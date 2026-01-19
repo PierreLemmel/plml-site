@@ -11,7 +11,7 @@ const { title, class: className } = Astro.props;
 
 <script>
     import { animate } from 'motion';
-    import { dateText } from '../../lib/utils';
+    import { dateText, mergeRoles } from '../../lib/utils';
 
     const overlay = document.getElementById('portfolio-overlay');
     const closeBtn = document.getElementById('overlay-close');
@@ -32,6 +32,7 @@ const { title, class: className } = Astro.props;
         toDate: string|null;
         link: string|null;
         tags: string[];
+        roles: string[];
     }
     declare global {
         interface Window {
@@ -50,13 +51,15 @@ const { title, class: className } = Astro.props;
             fromDate,
             toDate,
             link,
-            tags
+            tags,
+            roles
         } = data;
 
         const overlay = document.getElementById('portfolio-overlay')!;
         
         const overlayTitle = overlay.querySelector('.overlay-title');
         const overlayDescription = overlay.querySelector('.overlay-description');
+        const overlayRoles = overlay.querySelector('.overlay-roles');
         const overlayImage = overlay.querySelector('.overlay-image') as HTMLElement;
         const overlayDate = overlay.querySelector('.overlay-date');
         const overlayTags = overlay.querySelector('.overlay-tags');
@@ -70,13 +73,14 @@ const { title, class: className } = Astro.props;
         if (overlayTitle) overlayTitle.textContent = title;
         if (overlayDescription) overlayDescription.textContent = description;
         if (overlayImage) overlayImage.style.backgroundImage = `url('${cover}')`;
-        if (overlayDate) {
-            overlayDate.textContent = dateText(fromDate, toDate);
-        }
-        if (overlayTags && tags) {
+        if (overlayDate) overlayDate.textContent = dateText(fromDate, toDate);
+        if (overlayTags && tags && tags.length > 0) {
             overlayTags.innerHTML = tags.map(tag =>
                 `<span class="px-3 py-1 bg-white/10 rounded-full text-sm">${tag}</span>`
             ).join('');
+        }
+        if (overlayRoles && roles && roles.length > 0) {
+            overlayRoles.textContent = mergeRoles(roles);
         }
         if (overlayLink) {
             if (link) {
@@ -322,10 +326,16 @@ const { title, class: className } = Astro.props;
 
             <h2 class={cn(
                 "overlay-title",
-                "text-3xl md:text-4xl lg:text-5xl font-bold",
-                "text-white mb-6",
+                "text-3xl md:text-4xl lg:text-5xl font-semibold uppercase",
+                "text-white",
                 "leading-tight"
             )}></h2>
+
+            <div class={cn(
+                "overlay-roles",
+                "text-lg md:text-xl text-white/70",
+                "mb-6"
+            )}></div>
 
             <div class={cn(
                 "overlay-tags",

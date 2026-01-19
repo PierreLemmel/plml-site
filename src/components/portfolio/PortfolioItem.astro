@@ -10,6 +10,7 @@ export type PortfolioItemData = {
     additionalImages?: string[];
     fullDescription?: string;
     tags?: string[];
+    roles?: string[];
     fromDate?: string;
     toDate?: string;
     link?: string;
@@ -27,6 +28,7 @@ const { item: {
     fullDescription,
     coverImage,
     tags,
+    roles,
     fromDate,
     toDate,
     link,
@@ -48,6 +50,7 @@ const { item: {
     data-item-full-description={fullDescription || description}
     data-item-cover={coverImage}
     data-item-tags={tags?.join(',') || ''}
+    data-item-roles={roles?.join(',') || ''}
     data-item-from-date={fromDate}
     data-item-to-date={toDate}
     data-item-link={link || ''}
@@ -132,6 +135,7 @@ const { item: {
             const description = item.getAttribute('data-item-full-description') || '';
             const cover = item.getAttribute('data-item-cover') || '';
             const tags = item.getAttribute('data-item-tags')?.split(',') || [];
+            const roles = item.getAttribute('data-item-roles')?.split(',') || [];
             const fromDate = item.getAttribute('data-item-from-date');
             const toDate = item.getAttribute('data-item-to-date');
             const link = item.getAttribute('data-item-link');
@@ -145,7 +149,8 @@ const { item: {
                 fromDate,
                 toDate,
                 link,
-                tags
+                tags,
+                roles
             });
             
         });

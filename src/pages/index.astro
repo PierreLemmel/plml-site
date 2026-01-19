@@ -14,48 +14,145 @@ let cardIndex = 0;
 <script>
 	import { parseNumberWithDefault } from "../lib/utils";
 
+	type CardState = 'before' | 'during' | 'after';
+
+	type CardTransitions = {
+		beforeToDuring: () => void;
+		duringToBefore: () => void;
+		duringToAfter?: () => void;
+		afterToDuring?: () => void;
+	};
 
 	declare global {
 		interface Window {
-			setCardIndex: (index: number) => void;
-			getCardIndex: () => number;
+			registerCard: (index: number, transitions: CardTransitions) => void;
 
-			canGoToCard: (index: number,) => boolean;
-			scrollToNextCard: () => void;
+			goToNextCard: () => void;
+			goToPrevCard: () => void;
+			unlockCardsAnimation: () => void;
 
-			lockScroll: () => void;
-			unlockScroll: () => void;
+			isSmallScreen: () => boolean;
 		}
 	}
 
-	let globalCardIndex = 0;
-	window.setCardIndex = (index: number) => {
-		globalCardIndex = index;
-	};
-	window.getCardIndex = () => {
-		return globalCardIndex;
-	};
-
 	const cardCount = parseNumberWithDefault(document.getElementById('main-container')?.dataset.cardCount, 2);
+	
+	let currentCardIndex = 0;
+	let isAnimating = false;
+	const cardStates: Map<number, CardState> = new Map();
+	const cardTransitions: Map<number, CardTransitions> = new Map();
 
-	window.canGoToCard = (index: number) => {
-		return Math.abs(index - globalCardIndex) === 1 && index >= 0 && index < cardCount;
+	for (let i = 0; i < cardCount; i++) {
+		cardStates.set(i, i === 0 ? 'during' : 'before');
+	}
+
+	function dispatchCardChanged(index: number) {
+		currentCardIndex = index;
+		window.dispatchEvent(new CustomEvent('cardchanged', { detail: { index } }));
+	}
+
+	function lockAnimation() {
+		isAnimating = true;
+	}
+
+	window.unlockCardsAnimation = () => {
+		isAnimating = false;
 	};
 
-	history.scrollRestoration = 'manual';
-	window.scrollToNextCard = () => {
-		window.scrollTo({
-			top: (globalCardIndex + 1) * window.innerHeight,
-			behavior: 'smooth'
-		});
+	window.registerCard = (index: number, transitions: CardTransitions) => {
+		cardTransitions.set(index, transitions);
 	};
 
-	window.lockScroll = () => {
-		document.body.style.overflowY = 'hidden';
+	function canTransitionTo(targetIndex: number): boolean {
+		return !isAnimating && 
+			Math.abs(targetIndex - currentCardIndex) === 1 && 
+			targetIndex >= 0 && 
+			targetIndex < cardCount;
+	}
+
+	function transitionToCard(targetIndex: number) {
+		if (!canTransitionTo(targetIndex)) return;
+
+		lockAnimation();
+
+		const goingForward = targetIndex > currentCardIndex;
+		const currentTransitions = cardTransitions.get(currentCardIndex);
+		const targetTransitions = cardTransitions.get(targetIndex);
+
+		if (goingForward) {
+			const currentState = cardStates.get(currentCardIndex);
+			if (currentState === 'during' && currentTransitions?.duringToAfter) {
+				cardStates.set(currentCardIndex, 'after');
+				currentTransitions.duringToAfter();
+			} else if (currentState === 'during') {
+				cardStates.set(currentCardIndex, 'before');
+				currentTransitions?.duringToBefore();
+			}
+
+			if (targetTransitions) {
+				const targetState = cardStates.get(targetIndex);
+				if (targetState === 'before') {
+					cardStates.set(targetIndex, 'during');
+					targetTransitions.beforeToDuring();
+				} else if (targetState === 'after' && targetTransitions.afterToDuring) {
+					cardStates.set(targetIndex, 'during');
+					targetTransitions.afterToDuring();
+				}
+			}
+		} else {
+			const currentState = cardStates.get(currentCardIndex);
+			if (currentState === 'during') {
+				cardStates.set(currentCardIndex, 'before');
+				currentTransitions?.duringToBefore();
+			}
+
+			if (targetTransitions) {
+				const targetState = cardStates.get(targetIndex);
+				if (targetState === 'after' && targetTransitions.afterToDuring) {
+					cardStates.set(targetIndex, 'during');
+					targetTransitions.afterToDuring();
+				} else if (targetState === 'before') {
+					cardStates.set(targetIndex, 'during');
+					targetTransitions.beforeToDuring();
+				}
+			}
+		}
+
+		dispatchCardChanged(targetIndex);
+	}
+
+	window.goToNextCard = () => {
+		transitionToCard(currentCardIndex + 1);
 	};
-	window.unlockScroll = () => {
-		document.body.style.overflowY = 'auto';
+
+	window.goToPrevCard = () => {
+		transitionToCard(currentCardIndex - 1);
 	};
+
+	window.addEventListener('wheel', (event) => {
+		if (isAnimating) return;
+
+		if (event.deltaY > 0) {
+			window.goToNextCard();
+		} else if (event.deltaY < 0) {
+			window.goToPrevCard();
+		}
+	}, { passive: true });
+
+	window.isSmallScreen = () => {
+		return window.innerWidth < 768;
+	};
+
+	document.body.style.overflow = 'hidden';
+
+	const startInterval = setInterval(() => {
+		const card0 = cardTransitions.get(0);
+		if (card0) {
+			lockAnimation();
+			card0.beforeToDuring();
+			clearInterval(startInterval);
+		}
+	}, 10);
 </script>
 
 <Layout
@@ -65,9 +162,9 @@ let cardIndex = 0;
     <main
 		id="main-container"
 		class={cn(
-			"text-white font-barlow"
+			"text-white font-barlow",
+			"h-screen w-screen overflow-hidden"
 		)}
-		style={`min-height: ${100 * (cardCount)}vh;`}
 		data-card-count={cardCount}
 	>
 		<Card1 cardIndex={cardIndex++} cardCount={cardCount} />

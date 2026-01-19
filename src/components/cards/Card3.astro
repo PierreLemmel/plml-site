@@ -25,34 +25,15 @@ const zindex = getZIndex(cardIndex, cardCount);
     const scrollArrow = document.getElementById('card-3-scroll-arrow')!;
 
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
-
-    let isAnimating = false;
-    function onAnimationStart() {
-        isAnimating = true;
-        window.lockScroll();
-    }
-
-    function onAnimationEnd() {
-        isAnimating = false;
-        window.unlockScroll();
-        checkForAnimation();
-    }
-
-    let state: 'before' | 'during' | 'after' = 'before';
 
     const animDuration = 1.7;
     const animDelay = 0.8;
     const titleAnimDuration = 0.6;
     const titleAnimDelay = 0.2;
 
-    function isSmallScreen() {
-        return window.innerWidth < 768;
-    }
-
     function getEnterTransform(index: number, entering: boolean) {
         const isOdd = index % 2 === 0;
-        if (isSmallScreen()) {
+        if (window.isSmallScreen()) {
             return entering
                 ? (isOdd ? ['translateX(-100%)', 'translateX(0)'] : ['translateX(100%)', 'translateX(0)'])
                 : (isOdd ? ['translateX(0)', 'translateX(-100%)'] : ['translateX(0)', 'translateX(100%)']);
@@ -65,7 +46,7 @@ const zindex = getZIndex(cardIndex, cardCount);
 
     function getExitTransform(index: number, exiting: boolean) {
         const isOdd = index % 2 === 0;
-        if (isSmallScreen()) {
+        if (window.isSmallScreen()) {
             return exiting
                 ? (isOdd ? ['translateX(0)', 'translateX(100%)'] : ['translateX(0)', 'translateX(-100%)'])
                 : (isOdd ? ['translateX(100%)', 'translateX(0)'] : ['translateX(-100%)', 'translateX(0)']);
@@ -77,8 +58,6 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function beforeToDuring() {
-        onAnimationStart();
-
         const baseDelay = 2.5;
         const titleStartDelay = baseDelay + animDuration;
 
@@ -118,15 +97,11 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
-            state = 'during';
-            onAnimationEnd();
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
     }
 
     function duringToBefore() {
-        onAnimationStart();
-
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-3-scroll-arrow", {
             opacity: [1, 0],
@@ -148,7 +123,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 ease: 'easeIn'
             });
 
-            const anim = animate(`#card-3-col-${i}`, {
+            animate(`#card-3-col-${i}`, {
                 transform: getEnterTransform(i, false),
                 opacity: [1, 0],
             }, {
@@ -156,13 +131,6 @@ const zindex = getZIndex(cardIndex, cardCount);
                 delay: colStartDelay,
                 ease: 'easeIn'
             });
-
-            if (i === 0) {
-                anim.then(() => {
-                    state = 'before';
-                    onAnimationEnd();
-                });
-            }
         }
 
         animate(".card3-see-more-button", {
@@ -175,8 +143,6 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function duringToAfter() {
-        onAnimationStart();
-
         scrollArrow.classList.add('pointer-events-none');
         animate("#card-3-scroll-arrow", {
             opacity: [1, 0],
@@ -198,7 +164,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 ease: 'easeIn'
             });
 
-            const anim = animate(`#card-3-col-${i}`, {
+            animate(`#card-3-col-${i}`, {
                 transform: getExitTransform(i, true),
                 opacity: [1, 0],
             }, {
@@ -206,13 +172,6 @@ const zindex = getZIndex(cardIndex, cardCount);
                 delay: colStartDelay,
                 ease: 'easeIn'
             });
-
-            if (i === 0) {
-                anim.then(() => {
-                    state = 'after';
-                    onAnimationEnd();
-                });
-            }
         }
 
         animate(".card3-see-more-button", {
@@ -225,19 +184,28 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function afterToDuring() {
-        onAnimationStart();
-
+        const useSimpleAnim = window.isSmallScreen();
         const titleStartDelay = animDuration;
 
         for (let i = 0; i < 3; i++) {
-            animate(`#card-3-col-${i}`, {
-                transform: getExitTransform(i, false),
-                opacity: [0, 1],
-            }, {
-                duration: animDuration,
-                delay: 0,
-                ease: 'easeOut'
-            });
+            if (useSimpleAnim) {
+                animate(`#card-3-col-${i}`, {
+                    opacity: [0, 1],
+                }, {
+                    duration: animDuration,
+                    delay: 0,
+                    ease: 'easeOut'
+                });
+            } else {
+                animate(`#card-3-col-${i}`, {
+                    transform: getExitTransform(i, false),
+                    opacity: [0, 1],
+                }, {
+                    duration: animDuration,
+                    delay: 0,
+                    ease: 'easeOut'
+                });
+            }
 
             animate(`#card-3-col-${i}-title`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
@@ -267,55 +235,16 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         }).then(() => {
             scrollArrow.classList.remove('pointer-events-none');
-            state = 'during';
-            onAnimationEnd();
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
     }
 
-    function checkForAnimation() {
-        if (isAnimating) return;
-
-        const scrollY = window.scrollY;
-
-        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
-        const afterThreshold = (cardIndex + 0.95) * window.innerHeight;
-
-        switch (state) {
-            case 'before':
-                if (scrollY >= beforeThreshold) {
-                    if (window.canGoToCard(cardIndex)) {
-                        beforeToDuring();
-                    }
-                }
-                break;
-            case 'during':
-                if (scrollY < beforeThreshold) {
-                    if (window.canGoToCard(cardIndex - 1)) {
-                        duringToBefore();
-                    }
-                }
-                if (scrollY >= afterThreshold) {
-                    if (window.canGoToCard(cardIndex + 1)) {
-                        duringToAfter();
-                    }
-                }
-                break;
-            case 'after':
-                if (scrollY < afterThreshold) {
-                    if (window.canGoToCard(cardIndex)) {
-                        afterToDuring();
-                    }
-                }
-                break;
-        }
-    }
-
-    window.addEventListener('scroll', (event) => {
-        checkForAnimation();
+    window.registerCard(cardIndex, {
+        beforeToDuring,
+        duringToBefore,
+        duringToAfter,
+        afterToDuring
     });
-
-    checkForAnimation();
 </script>
 
 <div
@@ -466,11 +395,11 @@ const zindex = getZIndex(cardIndex, cardCount);
                     "uppercase italic font-semibold"
                 )}>
                     <div class="overflow-hidden">
-                        <div id="card-3-col-2-title">Autres</div>
+                        <div id="card-3-col-2-title">Technique</div>
                     </div>
                 </h2>
                 <a
-                    href="/autres"
+                    href="/technique"
                     class={cn(
                         "px-6",
                         "text-md font-medium uppercase tracking-wider",

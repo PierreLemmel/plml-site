@@ -27,3 +27,13 @@ export function dateText(fromDate?: string|null, toDate?: string|null): string {
     }
     return '';
 }
+
+export function mergeRoles(roles: string[]): string {
+    const cleanedUp = roles.map((r, i) => r.trim().replace(/^./, c => i !== 0 ? c.toLowerCase() : c.toUpperCase()));
+
+    return cleanedUp.slice(0, -1).join(', ') + ' et ' + cleanedUp[cleanedUp.length - 1];
+}
+
+export function clamp(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(value, max));
+}

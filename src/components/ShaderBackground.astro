@@ -38,7 +38,7 @@ const {
 const fragmentShader = processIncludes(rawFragmentShader);
 ---
 
-<div class={className} style={`z-index: ${zIndex};`}>
+<div class={className} style={`z-index: ${zIndex};`} id={`${id}-container`}>
     <canvas 
         id={id}
         class="w-full h-full"

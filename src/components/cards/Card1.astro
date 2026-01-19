@@ -28,30 +28,12 @@ const zindex = getZIndex(cardIndex, cardCount);
     const animDuration = 0.7;
     const animDelay = 0.45;
 
-    let isAnimating = false;
-    let isAnimatedIn = false;
-
     const cardContainer = document.getElementById('card-1-container')!;
     const scrollArrow = document.getElementById('card-1-scroll-arrow')!;
 
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(cardContainer.dataset.cardCount, 1);
 
-    function onAnimationStart() {
-        isAnimating = true;
-        window.lockScroll();
-    }
-
-    function onAnimationEnd() {
-        isAnimating = false;
-        window.unlockScroll();
-        checkForAnimation();
-    }
-
-    function animateIn(initialDelay: number = 1.55) {
-        if (isAnimating || isAnimatedIn) return;
-        
-        onAnimationStart();
+    function beforeToDuring(initialDelay: number = 1.55) {
         cardContainer.classList.remove('hidden');
 
         const baseDelay = initialDelay;
@@ -76,7 +58,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             strokeDashoffset: 0,
         }, {
             duration: 1.4 * animDuration,
-            delay: baseDelay + 2 * 	animDelay,
+            delay: baseDelay + 2 * animDelay,
             ease: 'easeInOut'
         });
 
@@ -122,28 +104,20 @@ const zindex = getZIndex(cardIndex, cardCount);
             delay: baseDelay + 3.5 * animDelay,
             ease: 'easeIn'
         }).then(() => {
-            onAnimationEnd();
-            isAnimatedIn = true;
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
     }
 
-    function animateOut() {
-        if (isAnimating || !isAnimatedIn) return;
-        
-        onAnimationStart();
+    function duringToBefore() {
         scrollArrow.classList.add('pointer-events-none');
 
         animate('#svg-letter-p', {
             strokeDashoffset: 100,
         }, {
             duration: animDuration,
-            delay: 4 * 	animDelay,
+            delay: 4 * animDelay,
             ease: 'easeInOut'
         }).then(() => {
-            onAnimationEnd();
-            isAnimatedIn = false;
-
             cardContainer.classList.add('hidden');
         });
 
@@ -202,28 +176,11 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         });
     }
-    
-    
 
-    function checkForAnimation() {
-        if (isAnimating) return;
-
-        if (window.scrollY >= (cardIndex + 0.95) * window.innerHeight) {
-            if (window.canGoToCard(cardIndex + 1)) {
-                animateOut();
-            }
-        } else {
-            if (window.canGoToCard(cardIndex)) {
-                animateIn();
-            }
-        }
-    }
-
-    window.addEventListener('scroll', (event) => {
-        checkForAnimation();
+    window.registerCard(cardIndex, {
+        beforeToDuring: () => beforeToDuring(0),
+        duringToBefore
     });
-
-    animateIn(0);
 
     function syncTaglineScale() {
         const svgWidth = document.getElementById("card-1-svg")?.clientWidth;

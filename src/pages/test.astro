@@ -2,8 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import { cn } from '../lib/utils';
 
-import Card3 from '../components/cards/Card3.astro';
+import Card1 from '../components/cards/Card1.astro';
 import Card2 from '../components/cards/Card2.astro';
+import Card3 from '../components/cards/Card3.astro';
+import Card4 from '../components/cards/Card4.astro';
 
 const cardCount = 1;
 ---
@@ -11,38 +13,33 @@ const cardCount = 1;
 <script>
 	import { parseNumberWithDefault } from "../lib/utils";
 
+	type CardState = 'before' | 'during' | 'after';
+
+	type CardTransitions = {
+		beforeToDuring: () => void;
+		duringToBefore: () => void;
+		duringToAfter?: () => void;
+		afterToDuring?: () => void;
+	};
 
 	declare global {
 		interface Window {
-			setCardIndex: (index: number) => void;
-			getCardIndex: () => number;
+			registerCard: (index: number, transitions: CardTransitions) => void;
 
-			canGoToCard: (index: number,) => boolean;
+			goToNextCard: () => void;
+			goToPrevCard: () => void;
+			unlockCardsAnimation: () => void;
 
-			lockScroll: () => void;
-			unlockScroll: () => void;
+			isSmallScreen: () => boolean;
 		}
 	}
 
-	let globalCardIndex = 0;
-	window.setCardIndex = (index: number) => {
-		globalCardIndex = index;
-	};
-	window.getCardIndex = () => {
-		return globalCardIndex;
-	};
-
-	const cardCount = parseNumberWithDefault(document.getElementById('main-container')?.dataset.cardCount, 1);
-
-	window.canGoToCard = (index: number) => {
-		return true;
-	};
-
-	window.lockScroll = () => {
-		document.body.style.overflowY = 'hidden';
-	};
-	window.unlockScroll = () => {
-		document.body.style.overflowY = 'auto';
+	window.registerCard = (index: number, transitions: CardTransitions) => {};
+	window.goToNextCard = () => {};
+	window.goToPrevCard = () => {};
+	window.unlockCardsAnimation = () => {};
+	window.isSmallScreen = () => {
+		return window.innerWidth < 768;
 	};
 </script>
 
@@ -56,6 +53,6 @@ const cardCount = 1;
 		style={`min-height: ${100 * (cardCount)}vh;`}
 		data-card-count={cardCount}
 	>
-		<Card2 class="z-100" cardIndex={0} cardCount={cardCount} />
+		<Card4 class="z-100" cardIndex={0} cardCount={cardCount} />
     </main>
 </Layout>

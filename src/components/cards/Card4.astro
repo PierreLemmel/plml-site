@@ -24,10 +24,6 @@ const currentYear = new Date().getFullYear();
     import { parseNumberWithDefault } from '../../lib/utils';
 
     const cardIndex = parseNumberWithDefault(document.getElementById('card-4-container')?.dataset.cardIndex, 0);
-    const cardCount = parseNumberWithDefault(document.getElementById('card-4-container')?.dataset.cardCount, 1);
-
-    let isAnimating = false;
-    let state: 'before' | 'during' = 'before';
 
     const animDuration = 0.7;
     const animDelay = 0.34;
@@ -41,8 +37,6 @@ const currentYear = new Date().getFullYear();
     }
 
     function beforeToDuring() {
-        isAnimating = true;
-
         makeContainerVisible();
 
         const baseDelay = 2;
@@ -89,15 +83,11 @@ const currentYear = new Date().getFullYear();
             delay: baseDelay + 4 * animDelay,
             ease: 'easeInOut'
         }).then(() => {
-            state = 'during';
-            isAnimating = false;
-            window.setCardIndex(cardIndex);
+            window.unlockCardsAnimation();
         });
     }
 
     function duringToBefore() {
-        isAnimating = true;
-
         animate('#card-4-footer', {
             opacity: [1, 0],
         }, {
@@ -140,43 +130,14 @@ const currentYear = new Date().getFullYear();
             delay: 4 * animDelay,
             ease: 'easeInOut'
         }).then(() => {
-            state = 'before';
-            isAnimating = false;
-
             makeContainerInvisible();
         });
     }
 
-    function checkForAnimation() {
-        if (isAnimating) return;
-
-        const scrollY = window.scrollY;
-        
-        const beforeThreshold = (cardIndex - 0.05) * window.innerHeight;
-        
-        switch (state) {
-            case 'before':
-                if (scrollY >= beforeThreshold) {
-                    if (window.canGoToCard(cardIndex)) {
-                        beforeToDuring();
-                    }
-                }
-                break;
-            case 'during':
-                if (scrollY < beforeThreshold) {
-                    if (window.canGoToCard(cardIndex - 1)) {
-                        duringToBefore();
-                    }
-                }
-                break;
-        }
-    }
-
-    window.addEventListener('scroll', (event) => {
-        checkForAnimation();
+    window.registerCard(cardIndex, {
+        beforeToDuring,
+        duringToBefore
     });
-
-    checkForAnimation();
 </script>
 
 <div
