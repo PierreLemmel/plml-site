@@ -12,13 +12,14 @@ const { title, class: className } = Astro.props;
 <script>
     import { animate } from 'motion';
     import { dateText, mergeRoles } from '../../lib/utils';
+    import type { PortfolioItemImageData } from '../../contents/content-types';
 
-    const overlay = document.getElementById('portfolio-overlay');
-    const closeBtn = document.getElementById('overlay-close');
-    const carouselTrack = overlay?.querySelector('.carousel-track') as HTMLElement;
-    const carouselDots = overlay?.querySelector('.carousel-dots') as HTMLElement;
-    const prevBtn = overlay?.querySelector('.carousel-prev') as HTMLElement;
-    const nextBtn = overlay?.querySelector('.carousel-next') as HTMLElement;
+    const overlay = document.getElementById('portfolio-overlay')!;
+    const closeBtn = document.getElementById('overlay-close')!;
+    const carouselTrack = overlay.querySelector('.carousel-track') as HTMLElement;
+    const carouselDots = overlay.querySelector('.carousel-dots') as HTMLElement;
+    const prevBtn = overlay.querySelector('.carousel-prev') as HTMLElement;
+    const nextBtn = overlay.querySelector('.carousel-next') as HTMLElement;
 
     let currentSlide = 0;
     let totalSlides = 0;
@@ -27,27 +28,33 @@ const { title, class: className } = Astro.props;
         title: string;
         description: string;
         cover: string;
-        images: string[];
+        images: PortfolioItemImageData[];
+        additionalInfo: {
+            label: string;
+            value: string;
+        }[];
         fromDate: string|null;
         toDate: string|null;
         link: string|null;
         tags: string[];
         roles: string[];
     }
+
     declare global {
         interface Window {
-            setupOverlay: (data: OverlayData) => void;
+            openOverlay: (projectId: string) => void;
             goToSlide: (index: number) => void;
         }
     }
 
-    window.setupOverlay = function(data: OverlayData) {
+    function setupOverlay(data: OverlayData) {
 
         const {
             title,
             description,
             cover,
             images,
+            additionalInfo,
             fromDate,
             toDate,
             link,
@@ -62,23 +69,59 @@ const { title, class: className } = Astro.props;
         const overlayRoles = overlay.querySelector('.overlay-roles');
         const overlayImage = overlay.querySelector('.overlay-image') as HTMLElement;
         const overlayDate = overlay.querySelector('.overlay-date');
-        const overlayTags = overlay.querySelector('.overlay-tags');
+        const overlayTags = overlay.querySelector('.overlay-tags')!;
+        const overlayAdditionalInfo = overlay.querySelector('.overlay-additional-info')!;
         const overlayLink = overlay.querySelector('.overlay-link') as HTMLAnchorElement;
 
         const carouselTrack = overlay.querySelector('.carousel-track') as HTMLElement;
-        carouselTrack.innerHTML = images.map(image => `<div class="min-w-full bg-center bg-no-repeat bg-cover" style="background-image: url('${image}');" ></div>`).join('');
+        carouselTrack.innerHTML = images.map(image =>{
+            if (typeof image === 'string') {
+                return `<div class="min-w-full bg-center bg-no-repeat bg-cover" style="background-image: url('${image}');" ></div>`
+            }
+            else if (image.type === 'image') {
+                return `<div class="min-w-full bg-center bg-no-repeat bg-cover" style="background-image: url('${image.src}');" ></div>`;
+            }
+            else if (image.type === 'video') {
+                return `<div class="min-w-full flex justify-center items-center overlay-video-content"><video class="min-w-full h-full" src="${image.src}" controls></video></div>`;
+            }
+            else if (image.type === 'youtube') {
+                return `<iframe class="min-w-full h-full overlay-youtube-content" src="https://www.youtube.com/embed/${image.id}?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+            }
+            else {
+                console.error('Invalid image found in overlay data:', JSON.stringify(image));
+                return '';
+            }
+        }).join('');
 
         carouselDots.innerHTML = images.map((_, index) => `<button class="carousel-dot size-2 bg-white/40 rounded-full transition-all duration-300 ease-in-out hover:bg-white/60 cursor-pointer" data-index="${index}"></button>`).join('');
 
         if (overlayTitle) overlayTitle.textContent = title;
-        if (overlayDescription) overlayDescription.textContent = description;
+        if (overlayDescription) overlayDescription.innerHTML = description;
         if (overlayImage) overlayImage.style.backgroundImage = `url('${cover}')`;
         if (overlayDate) overlayDate.textContent = dateText(fromDate, toDate);
-        if (overlayTags && tags && tags.length > 0) {
+
+        if (tags && tags.length > 0) {
+            overlayTags.classList.remove('hidden');
             overlayTags.innerHTML = tags.map(tag =>
                 `<span class="px-3 py-1 bg-white/10 rounded-full text-sm">${tag}</span>`
             ).join('');
         }
+        else {
+            overlayTags.classList.add('hidden');
+        }
+
+        if (additionalInfo && additionalInfo.length > 0) {
+            overlayAdditionalInfo.classList.remove('hidden');
+            overlayAdditionalInfo.innerHTML = additionalInfo.map(info =>
+                `<div class="overlay-additional-info-item">
+                    <span class="text-white font-semibold">${info.label} :</span> <span class="text-white/80">${info.value}</span>
+                </div>`
+            ).join('');
+        }
+        else {
+            overlayAdditionalInfo.classList.add('hidden');
+        }
+
         if (overlayRoles && roles && roles.length > 0) {
             overlayRoles.textContent = mergeRoles(roles);
         }
@@ -101,6 +144,38 @@ const { title, class: className } = Astro.props;
         document.body.style.overflow = 'hidden';
     }
 
+    window.openOverlay = function(projectId: string) {
+        const portfolioItem = document.querySelector(`.portfolio-item[data-item-id="${projectId}"]`);
+
+        if (portfolioItem) {
+            const title = portfolioItem.getAttribute('data-item-title') || '';
+            const description = portfolioItem.getAttribute('data-item-full-description') || '';
+            const cover = portfolioItem.getAttribute('data-item-cover') || '';
+            const tags = portfolioItem.getAttribute('data-item-tags')?.split(',').filter(Boolean) || [];
+            const roles = portfolioItem.getAttribute('data-item-roles')?.split(',').filter(Boolean) || [];
+            const fromDate = portfolioItem.getAttribute('data-item-from-date');
+            const toDate = portfolioItem.getAttribute('data-item-to-date');
+            const link = portfolioItem.getAttribute('data-item-link');
+            const images = JSON.parse(portfolioItem.getAttribute('data-item-images') || '[]');
+            const additionalInfo = JSON.parse(portfolioItem.getAttribute('data-item-additional-info') || '[]');
+
+            setupOverlay({
+                title,
+                description,
+                cover,
+                images,
+                fromDate,
+                toDate,
+                link,
+                tags,
+                roles,
+                additionalInfo: JSON.parse(portfolioItem.getAttribute('data-item-additional-info') || '[]')
+            });
+        } else {
+            console.warn(`Portfolio item with id "${projectId}" not found`);
+        }
+    }
+
     function updateCarousel() {
         carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
 
@@ -117,6 +192,19 @@ const { title, class: className } = Astro.props;
     }
 
     function goToSlide(index: number) {
+        const youtubeContent = overlay.querySelectorAll('.overlay-youtube-content');
+        youtubeContent.forEach(content => {
+            (content as HTMLIFrameElement).contentWindow?.postMessage(
+                '{"event":"command","func":"pauseVideo","args":""}', 
+                '*'
+            );
+        });
+
+        const videoContent = overlay.querySelectorAll('.overlay-video-content video');
+        videoContent.forEach(content => {
+            (content as HTMLVideoElement).pause();
+        });
+
         if (index < 0) index = totalSlides - 1;
         if (index >= totalSlides) index = 0;
         currentSlide = index;
@@ -201,8 +289,32 @@ const { title, class: className } = Astro.props;
             });
         });
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('id');
+
+
+    
+    if (projectId) {
+        window.openOverlay(projectId);
+    }
 </script>
 
+<style>
+.overlay-additional-info-item {
+        background-color: rgb(17, 0, 255);
+    }
+    .overlay-additional-info-item a {
+        text-decoration-line: underline;
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.2s ease-in-out;
+        background-color: red;
+    }
+
+    .overlay-additional-info-item a:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+</style>
 
 <div class={cn(
     "portfolio-gallery",
@@ -263,7 +375,12 @@ const { title, class: className } = Astro.props;
             "lg:w-1/2 xl:w-3/5",
             "mb-8 lg:mb-0 lg:pr-12"
         )}>
-            <div class="carousel-container relative w-full aspect-video lg:aspect-4/3">
+            <div class={cn(
+                "overlay-carousel",
+                "carousel-container relative w-full aspect-video lg:aspect-4/3",
+                "flex flex-col items-center justify-center",
+                "gap-2 md:gap-3 xl:gap-4"
+            )}>
                 <div class="carousel-viewport overflow-hidden w-full h-full rounded-sm">
                     <div class="carousel-track flex h-full transition-transform duration-800 ease-in-out">
                     </div>
@@ -305,7 +422,6 @@ const { title, class: className } = Astro.props;
 
                 <div class={cn(
                     "carousel-dots",
-                    "absolute bottom-4 left-1/2 -translate-x-1/2",
                     "flex items-center gap-2",
                     "z-10"
                 )}>
@@ -345,8 +461,14 @@ const { title, class: className } = Astro.props;
             <p class={cn(
                 "overlay-description",
                 "text-lg text-neutral-300",
+                "flex flex-col items-stretch gap-2",
                 "leading-relaxed mb-8"
             )}></p>
+
+            <div class={cn(
+                "overlay-additional-info",
+                "flex flex-col gap-4 mb-6"
+            )}></div>
 
             <a
                 href="#"
@@ -371,3 +493,4 @@ const { title, class: className } = Astro.props;
         </div>
     </div>
 </div>
+

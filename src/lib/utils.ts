@@ -29,9 +29,19 @@ export function dateText(fromDate?: string|null, toDate?: string|null): string {
 }
 
 export function mergeRoles(roles: string[]): string {
+
+    if (roles.length === 0) {
+        return '';
+    }
+
     const cleanedUp = roles.map((r, i) => r.trim().replace(/^./, c => i !== 0 ? c.toLowerCase() : c.toUpperCase()));
 
-    return cleanedUp.slice(0, -1).join(', ') + ' et ' + cleanedUp[cleanedUp.length - 1];
+    if (cleanedUp.length === 1) {
+        return cleanedUp[0];
+    }
+    else {
+        return cleanedUp.slice(0, -1).join(', ') + ' et ' + cleanedUp[cleanedUp.length - 1];
+    }
 }
 
 export function clamp(value: number, min: number, max: number): number {

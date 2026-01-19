@@ -1,20 +1,7 @@
 ---
 import { cn, dateText } from '../../lib/utils';
-
-export type PortfolioItemData = {
-    id: string;
-    title: string;
-    disabled?: boolean;
-    description: string;
-    coverImage: string;
-    additionalImages?: string[];
-    fullDescription?: string;
-    tags?: string[];
-    roles?: string[];
-    fromDate?: string;
-    toDate?: string;
-    link?: string;
-};
+import type { PortfolioItemData } from '../../contents/content-types';
+import ExternalLinkSvg from '../icons/external-link-svg.astro';
 
 type Props = {
     item: PortfolioItemData;
@@ -33,6 +20,7 @@ const { item: {
     toDate,
     link,
     additionalImages,
+    additionalInfo,
 }, class: className } = Astro.props;
 ---
 
@@ -55,6 +43,7 @@ const { item: {
     data-item-to-date={toDate}
     data-item-link={link || ''}
     data-item-images={JSON.stringify(additionalImages || [])}
+    data-item-additional-info={JSON.stringify(additionalInfo || [])}
 >
     <div
         class={cn(
@@ -117,42 +106,22 @@ const { item: {
         "transform scale-50 group-hover:scale-100",
         "transition-all duration-300"
     )}>
-        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-        </svg>
+        <ExternalLinkSvg class="w-4 h-4 text-white" />
     </div>
 </div>
 
 <script>
-    import { dateText } from "../../lib/utils";
-
     const items = document.querySelectorAll('.portfolio-item');
-    const overlay = document.getElementById('portfolio-overlay');
 
     items.forEach(item => {
-        item.addEventListener('click', () => {
-            const title = item.getAttribute('data-item-title') || '';
-            const description = item.getAttribute('data-item-full-description') || '';
-            const cover = item.getAttribute('data-item-cover') || '';
-            const tags = item.getAttribute('data-item-tags')?.split(',') || [];
-            const roles = item.getAttribute('data-item-roles')?.split(',') || [];
-            const fromDate = item.getAttribute('data-item-from-date');
-            const toDate = item.getAttribute('data-item-to-date');
-            const link = item.getAttribute('data-item-link');
-            const images = JSON.parse(item.getAttribute('data-item-images') || '[]');
-
-            window.setupOverlay({
-                title,
-                description,
-                cover,
-                images,
-                fromDate,
-                toDate,
-                link,
-                tags,
-                roles
+        const itemId = item.getAttribute('data-item-id');
+        if (itemId) {
+            item.addEventListener('click', () => {
+                window.openOverlay(itemId);
             });
-            
-        });
+        }
+        else {
+            console.error('Portfolio item with no item id found');
+        }
     });
 </script>

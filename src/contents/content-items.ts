@@ -1,4 +1,4 @@
-import type { PortfolioItemData } from "../components/portfolio/PortfolioItem.astro";
+import type { PortfolioItemData } from "./content-types";
 
 export const contentItems = {
 
@@ -7,9 +7,49 @@ export const contentItems = {
         title: "Quelque chose a changé dans l'air",
         description: 'Danse, théâtre, musique et couleurs rendent hommage aux moments qui ont transformé notre vie.',
         fullDescription: "Quelque chose a changé dans l'air explore les moments qui transforment notre existence. A partir de témoignages du public, danse, théâtre et musique se rencontrent et improvisent ensemble pour révéler les traces physiques ou symboliques que les événements marquent sur nos corps. Une matière colorée leur donne vie, sous forme de motifs, de formes et de traînées dans l'air et sur les corps et crée une expérience visuelle et émotionnelle captivante.",
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: '<a href="https://www.les-ecorces.com" target="_blank">Les Écorces</a>',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Alice Rey',
+            },
+            {
+                label: 'Distribution',
+                value: 'Alice Rey, Kenan Philbert-Zehani, Pierre Lemmel, Lionel Boucharlat, Alice Bounmy, Constanza Aliste',
+            },
+            {
+                label: 'Nombre de représentations',
+                value: '35',
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://www.la-factory.org/" target="_blank">Théâtre de l'Oulle</a>  (Avignon)</li>
+                    <li><a href="https://www.lecroiseur.fr/" target="_blank">Le Croiseur</a>  (Lyon)</li>
+                    <li>Salle Paul Garçin (Lyon)</li>
+                    <li><a href="https://www.improviste.be/" target="_blank">L'Improviste</a>  (Bruxelles)</li>
+                    <li><a href="https://www.theatre-clavel.com/" target="_blank">Théâtre Clavel</a>  (Paris)</li>
+                    <li><a href="https://improenseine.com/" target="_blank">Impro en Seine</a>  (Paris)</li>
+                    <li><a href="https://improfestival.com/" target="_blank">Semaine de l'Impro</a>  (Nancy)</li>
+                </ul>
+                `,
+            }
+        ],
         coverImage: '/img/theatre/qacda/qacda-cover.jpg',
         additionalImages: [
             '/img/theatre/qacda/qacda-cover.jpg',
+            {
+                type: 'youtube',
+                id: 'jfNCNQVzyCw',
+            },
+            {
+                type: 'video',
+                src: '/img/arts-numeriques/dwl/dwl-poc-mapping.mp4',
+                videoType: 'mp4',
+            },
             '/img/theatre/qacda/qacda-01.jpg',
             '/img/theatre/qacda/qacda-02.jpg',
             '/img/theatre/qacda/qacda-03.jpg',
@@ -40,6 +80,39 @@ export const contentItems = {
         roles: ['Directeur artistique', 'Directeur technique', 'Comédien'],
         fromDate: '2022',
         toDate: '2025',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Tout est dans le titre',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Pierre Lemmel',
+            },
+            {
+                label: 'Distribution',
+                value: 'Luc Mouret, Charlotte Finet, Clémence Mollet, Romain Guyot, Dorine Bocquet, Kenan Philbert-Zehani, Pierre Lemmel, Alice Rey',
+            },
+            {
+                label: 'Nombre de représentations',
+                value: '100+',
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://www.theatres-luna.fr/" target="_blank">Théâtre de la Luna</a>  (Avignon)</li>
+                    <li><a href="https://www.theatredutemps.net/" target="_blank">Théâtre du temps</a>  (Paris)</li>
+                    <li><a href="https://www.improviste.be/" target="_blank">L'Improviste</a>  (Bruxelles)</li>
+                    <li><a href="https://www.theatredutemps.net/" target="_blank">Théâtre du Temps</a>  (Paris)</li>
+                    <li><a href="https://www.theotheatre.com/" target="_blank">Théo Théâtre</a>  (Paris)</li>
+                    <li><a href="https://improenseine.com/" target="_blank">Impro en Seine</a>  (Paris)</li>
+                    <li>Théâtre Tremplin (Avignon)</li>
+                    <li>Improvi'bar (Paris)</li>
+                    <li><a href="https://lafabriqueaimpros.com/" target="_blank">Fabrique à Impros</a>  (Nantes)</li>
+                </ul>
+                `,
+            }, 
+        ],
         link: "https://www.billetreduc.com/spectacle/aleas-330517/avis"
     },
 
@@ -56,30 +129,131 @@ export const contentItems = {
             '/img/theatre/plg/plg-02.jpg',
             '/img/theatre/plg/plg-03.jpg',
         ],
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Tout est dans le titre',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Pierre Lemmel',
+            },
+            {
+                label: 'Distribution',
+                value: 'Juliette Baron, Simon Coulm, Pierre Lemmel',
+            },
+            {
+                label: 'Lumières',
+                value: 'David Buit, Harmonie Freyburger',
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://www.improviste.be/" target="_blank">L'Improviste</a>  (Bruxelles)</li>
+                    <li><a href="https://www.theatredutemps.net/" target="_blank">Théâtre du Temps</a>  (Paris)</li>
+                    <li><a href="https://improenseine.com/" target="_blank">Impro en Seine</a>  (Paris)</li>
+                    <li><a href="https://theatredugouvernail.fr/letheatre/" target="_blank">Théâtre du Gouvernail</a>  (Paris)</li>
+                    <li>Improvi'bar (Paris)</li>
+                </ul>
+                `,
+            },
+        ],
+        fromDate: '2021',
     },
 
-    // TODO: NSFW - Aucune information trouvée en ligne. À compléter avec les vraies informations.
     NSFW: {
         id: 'nsfw',
         title: 'NSFW',
-        description: 'TODO: Description courte à compléter',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/nsfw/nsfw-cover.jpg',
-        additionalImages: [],
-        tags: ['TODO'], // À compléter avec les bons tags
-        // fromDate: 'TODO',
+        description: 'Spectacle improvisé expérimental entre adultes consentant.e.s.',
+        fullDescription: 'Spectacle improvisé expérimental entre adultes consentant.e.s.',
+        coverImage: '/img/theatre/misc/nsfw-cover.jpg',
+        additionalImages: [
+            '/img/theatre/misc/nsfw-cover.jpg'
+        ],
+        tags: ['Improvisation', 'Théâtre contemporain', 'Spectacle pour adultes'],
+        roles: ['Comédien'],
+        fromDate: '2021',
+        toDate: '2023',
+        additionalInfo: [
+            {
+                label: 'Mise en scène',
+                value: 'Luc Mouret',
+            },
+            {
+                label: 'Distribution',
+                value: 'Luc Mouret, Emma Debroise, Jo',
+            },
+        ]
     },
 
     TresChairCorps: {
         id: 'tres-chair-corps',
         title: 'Très chair corps',
-        description: 'Un seul en scène improvisé explorant le corps que l\'on porte depuis la naissance.',
+        description: 'Un seul en scène improvisé explorant le rapport au corps.',
+        roles: ['Création lumières', 'Régie Improvisée'],
         fullDescription: 'À travers des anecdotes et témoignages anonymes, ce seul en scène improvisé explore le corps que l\'on porte depuis la naissance – ce qu\'il révèle, ce qu\'il dissimule, notre rapport à soi et au regard des autres. Un spectacle intime mêlant saynètes improvisées et récits personnels.',
-        coverImage: '/img/theatre/tres-chair-corps/tres-chair-corps-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Seul en scène'],
-        // TODO: Vérifier les dates exactes
-        // fromDate: '2024',
+        coverImage: '/img/theatre/tcc/tcc-cover.jpg',
+        additionalImages: [
+            '/img/theatre/tcc/tcc-01.jpg',
+            '/img/theatre/tcc/tcc-02.jpg',
+            '/img/theatre/tcc/tcc-03.jpg',
+            '/img/theatre/tcc/tcc-04.jpg',
+            '/img/theatre/tcc/tcc-05.jpg',
+        ],
+        tags: ['Improvisation', 'Seule en scène', 'Théâtre contemporain'],
+        fromDate: '2025',
+        link: "https://www.tres-chair-corps.fr/",
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Anamorphoses',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Sylvie Nadin',
+            },
+            {
+                label: 'Interpète',
+                value: 'Sylvie Nadin',
+            },
+        ]
+    },
+
+    Ensemble: {
+        id: 'ensemble',
+        title: 'Ensemble',
+        description: 'Un spectacle sur la rencontre entre individus dans un monde en fuite, présenté avec l\'Orchestre Philharmonique de Genève.',
+        fullDescription: `<div>Dans un monde en fuite, une troupe d'individus se croise, pressée, bruyante, chacun portant avec lui ses souvenirs, ses espoirs et ses peurs. Comment réagit-on quand on ne sait pas où aller et quand on ne connaît pas ceux qui nous entourent ? L'orage éclate. Chacun cherche à se protéger, à sa manière : ils se rapprochent, s'éloignent, hésitent. Ils apprennent peu à peu à se comprendre. C'est dans le partage des émotions et des défauts, dans la douceur du campement et des rêves, que chacun va essayer de se trouver, se comprendre et se réveiller.</div>
+        <div>Avec les adolescent·es de la classe Acces II et de l'atelier théâtre du Collège Rousseau, accompagné·es sur scène par les seniors de la structure AVIVO.</div>`,
+        coverImage: '/img/theatre/ensemble/ensemble-cover.jpg',
+        additionalImages: [
+            '/img/theatre/ensemble/ensemble-01.jpg',
+            '/img/theatre/ensemble/ensemble-02.jpg',
+            '/img/theatre/ensemble/ensemble-03.jpg',
+            '/img/theatre/ensemble/ensemble-04.jpg',
+        ],
+        additionalInfo: [
+            {
+                label: 'Représentations',
+                value: '17 avril - 13 mai 2025',
+            },
+            {
+                label: 'Mise en scène et texte',
+                value: 'Victoria May et Loup Lacaille',
+            },
+            {
+                label: 'Enseignants référents',
+                value: 'Raouf Sana et Marc Zucchello',
+            },
+            {
+                label: 'Création sonore et interprétation',
+                value: 'Aida Diop',
+            },
+        ],
+        tags: ['Musique', 'Orchestre'],
+        roles: ['Création lumière'],
+        link: "https://locg.ch/fr/calendrier/ensemble",
+        fromDate: '2025',
     },
 
     SystemeExploitation: {
@@ -87,11 +261,34 @@ export const contentItems = {
         title: "Système d'exploitation",
         description: 'Une tragi-comédie dystopique entre Brecht et Black Mirror sur l\'omniprésence des écrans.',
         fullDescription: "Dans un futur proche marqué par une crise écologique et économique, les citoyens sont devenus dépendants des écrans. Une intelligence artificielle nommée « Minotaure » observe et enquête. Militants éco-anxieux, livreurs ubérisés, mères isolées, cadres en burn-out... tous sont impactés par les métadonnées croisées et l'omniprésence numérique. Une pièce contemporaine mêlant humour et gravité, inspirée de Black Mirror et Brecht.",
-        coverImage: '/img/theatre/systeme-exploitation/systeme-exploitation-cover.jpg',
-        additionalImages: [],
-        tags: ['Théâtre', 'Dystopie', 'Arts numériques'],
-        // TODO: Vérifier les dates - spectacle joué à Paris en 2023
-        // fromDate: '2023',
+        coverImage: '/img/theatre/sysex/sysex-cover.jpg',
+        additionalImages: [
+            '/img/theatre/sysex/sysex-01.jpg',
+            '/img/theatre/sysex/sysex-02.jpg',
+            '/img/theatre/sysex/sysex-03.jpg',
+            '/img/theatre/sysex/sysex-04.jpg',
+        ],
+        tags: ['Théâtre', 'Dystopie'],
+        roles: [
+            'Comédien',
+        ],
+        fromDate: '2023',
+        toDate: '2023',
+        additionalInfo: [
+            {
+                label: 'Mise en scène',
+                value: 'Luc Mouret',
+            },
+            {
+                label: 'Distribution',
+                value: '(En alternance) Adeline Belloc, Amira Hadzic, Pierre Lemmel, Emma Debroise, Karine Bocobza, Nathalie Charade, Tom Bérenger, Xavier Kutalian, Emma Ceya, Lucas de La Loge',
+            },
+            {
+                label: 'Représentations',
+                value: '30 dates à la Folie Théâtre (Paris)',
+            }
+        ],
+        link: "https://www.folietheatre.com/?page=Spectacle&spectacle=408"
     },
 
     Zermos: {
@@ -99,24 +296,28 @@ export const contentItems = {
         title: 'Zermos',
         description: 'Zone Exposée aux Risques de Mouvements Spontanés – théâtre physique improvisé mêlant danse, mime et parole.',
         fullDescription: "Le spectacle commence par une chanson tirée au sort par le public, source d'inspiration pour les comédiens. À partir de cette musique, ils improvisent une histoire à la fois poétique et burlesque. Les émotions, les rêves, le quotidien sont incarnés par les corps, les mots, les gestes. Chaque représentation est unique, mêlant danse, mime, parole et mouvements spontanés.",
-        coverImage: '/img/theatre/zermos/zermos-cover.jpg',
-        additionalImages: [],
+        coverImage: '/img/theatre/zermos/zermos-cover.png',
+        additionalImages: [
+            '/img/theatre/zermos/zermos-cover.png',
+            {
+                type: 'youtube',
+                id: 'Dnd62kSrSUM',
+            },
+        ],
+        roles: ['Comédien'],
         tags: ['Improvisation', 'Danse', 'Théâtre physique'],
-        // TODO: Vérifier les dates
-        // fromDate: '2023',
-    },
-
-    Ensemble: {
-        id: 'ensemble',
-        title: 'Ensemble',
-        description: 'Un spectacle sur la rencontre entre individus dans un monde en fuite, présenté avec l\'Orchestre Philharmonique de Genève.',
-        fullDescription: "Dans un monde en fuite, une troupe d'individus se croise, pressée, bruyante, chacun portant avec lui ses souvenirs, ses espoirs et ses peurs. Comment réagit-on quand on ne sait pas où aller et quand on ne connaît pas ceux qui nous entourent ? L'orage éclate. Chacun cherche à se protéger, à sa manière : ils se rapprochent, s'éloignent, hésitent. Ils apprennent peu à peu à se comprendre. C'est dans le partage des émotions et des défauts, dans la douceur du campement et des rêves, que chacun va essayer de se trouver, se comprendre et se réveiller.",
-        coverImage: '/img/theatre/ensemble/ensemble-cover.jpg',
-        additionalImages: [],
-        tags: ['Musique', 'Orchestre'],
-        // TODO: Spectacle présenté au festival VIVA au Bâtiment des Forces Motrices, Genève (17 avril - 13 mai 2025) - Vérifier si ces dates sont correctes
-        // fromDate: '2025',
-        link: "https://locg.ch/fr/calendrier/ensemble"
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Sémillants',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Sarah Zetiou',
+            },
+        ],
+        fromDate: '2022',
+        toDate: '2024',
     },
 
     // TODO: Les Sons de ma vie - Aucune information trouvée en ligne. À compléter avec les infos du site les-ecorces.com
