@@ -47,3 +47,7 @@ export function mergeRoles(roles: string[]): string {
 export function clamp(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(value, max));
 }
+
+export function descritionHtml(paragraphs: string[]): string {
+    return paragraphs.map(paragraph => `<div>${paragraph}</div>`).join('');
+}

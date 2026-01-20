@@ -1,3 +1,4 @@
+import { descritionHtml } from "../lib/utils";
 import type { PortfolioItemData } from "./content-types";
 
 export const contentItems = {
@@ -193,7 +194,7 @@ export const contentItems = {
         title: 'Très chair corps',
         description: 'Un seul en scène improvisé explorant le rapport au corps.',
         roles: ['Création lumières', 'Régie Improvisée'],
-        fullDescription: 'À travers des anecdotes et témoignages anonymes, ce seul en scène improvisé explore le corps que l\'on porte depuis la naissance – ce qu\'il révèle, ce qu\'il dissimule, notre rapport à soi et au regard des autres. Un spectacle intime mêlant saynètes improvisées et récits personnels.',
+        fullDescription: 'À travers des témoignages audio anonymes, ce seule en scène explore nos rapports intimes, complexes et souvent ambigus au corps – le nôtre, mais aussi celui des autres. Un spectacle intime mêlant saynètes improvisées et récits personnels',
         coverImage: '/img/theatre/tcc/tcc-cover.jpg',
         additionalImages: [
             '/img/theatre/tcc/tcc-01.jpg',
@@ -415,24 +416,129 @@ export const contentItems = {
         link: "https://www.instagram.com/whataimpro/"
     },
 
-    // TODO: Madeleine - Aucune information trouvée en ligne. À compléter avec les infos du site les-ecorces.com
+    LireUnePageBlanche: {
+        id: 'lire-une-page-blanche',
+        title: 'Lire une page blanche',
+        description: "Pourquoi apprendre un texte quand on peut lire une page blanche ?",
+        fullDescription: "Dans ce spectacle, Pierre Lemmel nous propose un monologue improvisé d'une heure. Seul sur scène, il se livre, il laisse à lire en lui comme en un livre ouvert. Venez assister à un texte qui s'écrit devant le spectateur, devant le comédien, une pensée pudique et impudique qui se découvre au fil des mots.",
+        coverImage: '/img/theatre/misc/page-blanche.jpg',
+        additionalImages: [],
+        tags: [
+            'Improvisation',
+            'Seul en scène'
+        ],
+        roles: ['Créateur', 'Comédien'],
+        fromDate: '2022',
+        toDate: '2023',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Tout est dans le Titre',
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://improfestival.com/" target="_blank">Semaine de l'Impro</a> (Nancy)</li>
+                    <li><a href="https://www.theatrepixel.org/" target="_blank">Théâtre Pixel</a> (Paris)</li>
+                    <li>Improvib'bar (Paris)</li>
+                </ul>`,
+            }
+        ],
+        link: "https://www.billetreduc.com/spectacle/lire-une-page-blanche-288477"
+    },
+
+    Accoudes: {
+        id: 'accoudes',
+        title: 'Accoudés',
+        description: 'Spectacle immersif au comptoir : 4 comédiens incarnent serveurs et clients, mêlant anecdotes, récits, musique et chant improvisés.',
+        fullDescription: "« Bienvenue au comptoir ! Qu'est-ce que j'vous sers ? » Derrière chaque personne accoudée au comptoir se cache une histoire. Quatre comédiens jouent directement dans le décor du bar, incarnant à la fois serveurs et clients. Les récits s'appuient sur les anecdotes du comptoir, pensées, désirs, des histoires inattendues aux tons variés, avec musique et chant improvisés.",
+        coverImage: '/img/theatre/accoudes/accoudes-cover.jpg',
+        additionalImages: [
+            '/img/theatre/accoudes/accoudes-01.jpg',
+            '/img/theatre/accoudes/accoudes-02.jpg',
+            '/img/theatre/accoudes/accoudes-03.jpg',
+        ],
+        tags: ['Improvisation', 'Immersif', 'Musique'],
+        roles: [ 'Comédien', 'Guest' ],
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Le 13eme cri',
+            },
+        ],
+        fromDate: '2019',
+        link: "https://le13emecri.com/"
+    },
+
     Madeleine: {
         id: 'madeleine',
         title: 'Madeleine',
-        description: 'TODO: Description courte à compléter',
-        fullDescription: 'TODO: Description complète à compléter',
+        description: 'Un personnage créé sur l\'instant, son passé, ses rêves et cauchemars, ses envolées et ses fantasmes…',
+        fullDescription: descritionHtml([
+            'Embarquez pour un voyage introspectif, intime et onirique, une conversation avec ses souvenirs présents, passés et futurs.',
+            'Venez expérimenter un moment suspendu qui va diluer le temps du spectacle et tisser les fils d\'une histoire aussi drôle que chaotique où une seconde devient infini, l’ordinaire extraordinaire.',
+        ]),
+        roles: ['Comédien'],
         coverImage: '/img/theatre/madeleine/madeleine-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation'], // TODO: À compléter avec les bons tags
+        additionalImages: [
+            '/img/theatre/madeleine/madeleine-01.jpg',
+            '/img/theatre/madeleine/madeleine-02.jpg',
+            '/img/theatre/madeleine/madeleine-cover.jpg',
+            '/img/theatre/madeleine/madeleine-03.jpg',
+            '/img/theatre/madeleine/madeleine-04.jpg',
+            '/img/theatre/madeleine/madeleine-05.jpg',
+        ],
+        tags: ['Improvisation','Théâtre contemporain'],
         fromDate: '2021',
         additionalInfo: [
             {
                 label: 'Compagnie',
                 value: 'Les Écorces',
             },
-        ],
-        link: "https://www.les-ecorces.com/spectacles"
+            {
+                label: 'Mise en scène',
+                value: 'Alice Rey',
+            },
+            {
+                label: 'Distribution',
+                value: 'Alice Rey, Pierre Lemmel, Charles-Henri Botton',
+            },
+        ]
     },
+
+    LaSeance: {
+        id: 'la-seance',
+        title: 'La séance',
+        description: "Une patiente inédite prend vie sous vos yeux, façonnée par les suggestions du public.",
+        fullDescription: descritionHtml([
+            "Ce spectacle aborde la santé mentale avec justesse et humanité, en mêlant profondeur et légèreté. À travers différentes techniques d'impro (expression corporelle, danse, voix off, multi-personnages), les interprètes donnent vie aux émotions et aux réalités intérieures, dans une exploration à la fois sensible et légère.",
+            "L’humour devient alors un outil puissant pour susciter l’empathie, libérer la parole et rendre ces enjeux accessibles au plus grand nombre. Appuyé sur des apports scientifiques issus de la psychologie, ce spectacle propose une expérience à la fois touchante, drôle et résolument actuelle.",
+        ]),
+        coverImage: '/img/theatre/la-seance/la-seance-cover.jpg',
+        additionalImages: [
+            '/img/theatre/la-seance/la-seance-01.jpg',
+            '/img/theatre/la-seance/la-seance-cover.jpg',
+            '/img/theatre/la-seance/la-seance-02.jpg',
+            '/img/theatre/la-seance/la-seance-03.jpg',
+            '/img/theatre/la-seance/la-seance-04.jpg',
+            '/img/theatre/la-seance/la-seance-05.jpg',
+        ],
+        tags: ['Improvisation'],
+        roles: ['Metteur en scène', 'Comédien'],
+        fromDate: '2024',
+        additionalInfo: [
+            {
+                label: 'Mise en scène',
+                value: 'Pierre Lemmel',
+            },
+            {
+                label: 'Distribution',
+                value: 'Alice Béchu, Kenan Philbert-Zehani, Pierre Lemmel',
+            },
+        ],
+    },
+
+
 
     Frichti: {
         id: 'frichti',
@@ -447,18 +553,7 @@ export const contentItems = {
         link: "https://improvidence.fr/spectacles/43359-frichti/"
     },
 
-    Accoudes: {
-        id: 'accoudes',
-        title: 'Accoudés',
-        description: 'Spectacle immersif au comptoir : 4 comédiens incarnent serveurs et clients, mêlant anecdotes, récits, musique et chant improvisés.',
-        fullDescription: "« Bienvenue au comptoir ! Qu'est-ce que j'vous sers ? » Derrière chaque personne accoudée au comptoir se cache une histoire. Quatre comédiens jouent directement dans le décor du bar, incarnant à la fois serveurs et clients. Les récits s'appuient sur les anecdotes du comptoir, pensées, désirs, des histoires inattendues aux tons variés, avec musique et chant improvisés.",
-        coverImage: '/img/theatre/accoudes/accoudes-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Immersif', 'Musique'],
-        roles: ['Comédien'],
-        // fromDate: 'TODO',
-        link: "https://le13emecri.com/spectacles"
-    },
+
 
     // TODO: Impro en Seine - Aucune information détaillée trouvée en ligne.
     ImproEnSeine: {
@@ -473,18 +568,7 @@ export const contentItems = {
         // fromDate: 'TODO',
     },
 
-    // TODO: La séance - Aucune information trouvée en ligne. À compléter.
-    LaSeance: {
-        id: 'la-seance',
-        title: 'La séance',
-        description: 'TODO: Description courte à compléter - Spectacle créé avec Alice Béchu et Kenan Philbert',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/la-seance/la-seance-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur', 'Comédien'],
-        // fromDate: 'TODO',
-    },
+
 
     // TODO: La galerie des beaux gens - Aucune information trouvée en ligne. Bar immersif Lumiia.
     GalerieDesBeauxGens: {
@@ -514,18 +598,7 @@ export const contentItems = {
         link: "https://www.lumiia.fr/"
     },
 
-    // TODO: Lire une page blanche - Aucune information trouvée en ligne.
-    LireUnePageBlanche: {
-        id: 'lire-une-page-blanche',
-        title: 'Lire une page blanche',
-        description: 'TODO: Description courte à compléter - Seul en scène improvisé',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/lire-une-page-blanche/lire-une-page-blanche-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Seul en scène'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur', 'Comédien'],
-        // fromDate: 'TODO',
-    },
+    
 
     LesMainsBavardes: {
         id: 'les-mains-bavardes',
