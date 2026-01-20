@@ -262,6 +262,30 @@ export const contentItems = {
         fromDate: '2025',
     },
 
+    SavantMelange: {
+        id: 'savant-melange',
+        title: 'Savant mélange',
+        description: 'Quand science et impro se rencontrent.',
+        fullDescription: descritionHtml([
+            "Savant Mélange est une compagnie fondée en 2025 autour d’une envie commune : faire dialoguer la scène et la science ! Nous proposons des spectacles de théâtre improvisé, pour transmettre la science de manière vivante, sensible et ludique.",
+            "L’improvisation théâtrale est une discipline artistique qui demande aux comédien-nes d’inventer des histoires en temps réel sans texte ni mise en scène préétablie. Depuis quelques années, elle s’invite dans les fêtes de la science, les festivals de vulgarisation scientifique et les universités. Elle constitue un outil original et pertinent à la médiation scientifique.",
+        ]),
+        coverImage: '/img/theatre/savant-melange/savant-melange-cover.jpg',
+        additionalImages: [
+            '/img/theatre/savant-melange/savant-melange-01.jpg',
+            '/img/theatre/savant-melange/savant-melange-02.jpg',
+            '/img/theatre/savant-melange/savant-melange-03.jpg',
+            '/img/theatre/savant-melange/savant-melange-04.jpg',
+            '/img/theatre/savant-melange/savant-melange-05.jpg',
+        ],
+        tags: [
+            'Improvisation',
+            'Médiation scientifique',
+        ],
+        link: "https://savantmelange.fr/",
+        pressKit: "/dossiers/theatre/Dossier diffusion - Savant Mélange.pdf",
+    },
+
     Terrarium: {
         id: 'terrarium',
         title: 'Terrarium',
@@ -596,6 +620,38 @@ export const contentItems = {
         roles: ['Comédien'],
         fromDate: '2023',
         toDate: '2023',
+    },
+
+    Fluide: {
+        id: 'fluide',
+        title: 'Fluide',
+        description: 'Un geste, un mot, un regard et les voilà embarqués dans un nouvel univers.',
+        fullDescription: descritionHtml([
+            "A chaque instant, n’importe quel artiste peut s’emparer d’un élément du spectacle afin d’initier une transition vers une nouvelle scène. Cela peut être par exemple un mot repris pour commencer un nouveau monologue, un son inopiné qui devient une mélodie pour un chant improvisé ou encore un geste anodin qui se transforme en une chorégraphie de groupe…",
+            "Les scènes s'enchaînent, comiques, dramatiques, corporelles, poétiques ou autres... Rien n’est interdit, au contraire ! Une seule règle : être à l’écoute de l’énergie de l’instant, de ses envies et de ses partenaires.",
+        ]),
+        coverImage: '/img/theatre/fluide/fluide-cover.jpg',
+        additionalImages: [
+            '/img/theatre/fluide/fluide-01.jpg',
+            '/img/theatre/fluide/fluide-02.jpg',
+            '/img/theatre/fluide/fluide-03.jpg',
+            '/img/theatre/fluide/fluide-04.jpg',
+            '/img/theatre/fluide/fluide-05.jpg',
+            '/img/theatre/fluide/fluide-06.jpg',
+        ],
+        tags: ['Improvisation', 'Organicité'],
+        roles: [ 
+            'Comédien',
+            'Directeur artistique',
+        ],
+        fromDate: '2018',
+        toDate: '2020',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorces',
+            },
+        ],
     },
 
     
