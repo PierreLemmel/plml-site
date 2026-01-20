@@ -140,6 +140,16 @@ const { title, class: className } = Astro.props;
         currentSlide = 0;
         totalSlides = images.length;
 
+        if (totalSlides <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            carouselDots.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+            carouselDots.style.display = 'flex';
+        }
+
         updateCarousel();
         document.body.style.overflow = 'hidden';
     }

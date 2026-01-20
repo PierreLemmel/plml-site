@@ -128,6 +128,8 @@ export const contentItems = {
             '/img/theatre/plg/plg-01.jpg',
             '/img/theatre/plg/plg-02.jpg',
             '/img/theatre/plg/plg-03.jpg',
+            '/img/theatre/plg/plg-04.jpg',
+            '/img/theatre/plg/plg-cover.jpg',
         ],
         additionalInfo: [
             {
@@ -181,7 +183,7 @@ export const contentItems = {
             },
             {
                 label: 'Distribution',
-                value: 'Luc Mouret, Emma Debroise, Jo',
+                value: 'Luc Mouret, Emma Debroise, Johnathan Chaboissier, Marine Galland, Stella Pueyo, Jérémy Veluire, Pierre Lemmel, Julie Douine',
             },
         ]
     },
@@ -256,6 +258,44 @@ export const contentItems = {
         fromDate: '2025',
     },
 
+    Terrarium: {
+        id: 'terrarium',
+        title: 'Terrarium',
+        description: 'Deux personnes cherchent une issue l’un·e à l’autre',
+        fullDescription: `<div>Entre quatre murs, deux personnes cherchent une issue l’un·e à l’autre, assourdi·e·s par le bruit de leurs cris intérieurs.</div>
+        <div>Survivre l’enfermement, et toi aussi. A ciel ouvert, l’enfer c’est toi ici.</div>`,
+        coverImage: '/img/theatre/terrarium/terrarium-cover.jpg',
+        additionalImages: [
+            '/img/theatre/terrarium/terrarium-01.jpg',
+            '/img/theatre/terrarium/terrarium-cover.jpg',
+            '/img/theatre/terrarium/terrarium-02.jpg',
+            '/img/theatre/terrarium/terrarium-03.jpg',
+            '/img/theatre/terrarium/terrarium-04.jpg',
+        ],
+        tags: ['Improvisation', 'Huis Clos'],
+        roles: ['Mise en scène', 'Comédien'],
+        fromDate: '2022',
+        toDate: '2023',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorces',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Pierre Lemmel',
+            },
+            {
+                label: 'Distribution',
+                value: 'Pierre Lemmel, Charles-Henri Botton',
+            },
+            {
+                label: 'Musique',
+                value: 'Carole Piclet, Quentin Legris',
+            },
+        ],
+    },
+
     SystemeExploitation: {
         id: 'systeme-exploitation',
         title: "Système d'exploitation",
@@ -320,17 +360,59 @@ export const contentItems = {
         toDate: '2024',
     },
 
-    // TODO: Les Sons de ma vie - Aucune information trouvée en ligne. À compléter avec les infos du site les-ecorces.com
     LesSonsDeMaVie: {
         id: 'les-sons-de-ma-vie',
         title: 'Les Sons de ma vie',
-        description: 'TODO: Description courte à compléter',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/les-sons-de-ma-vie/les-sons-de-ma-vie-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation'], // TODO: À compléter avec les bons tags
-        // fromDate: 'TODO',
+        description: "Des histoires improvisées, sous l'impulsion des musiques et des souvenirs du public !",
+        fullDescription: `<div>Il y a des musiques qui nous marquent. Parfois elles nous plaisent, parfois elles nous obsèdent, parfois elles nous entêtent, et parfois elles accompagnent un moment de notre vie, comme la bande son d’un film.</div>
+        <div>Dans ce spectacle, venez présenter les titres qui vous ont marqué et les tranches de vie qu’ils illustrent !</div>`,
+        coverImage: '/img/theatre/lsdmv/lsdmv-cover.jpg',
+        additionalImages: [
+            '/img/theatre/lsdmv/lsdmv-01.jpg',
+            '/img/theatre/lsdmv/lsdmv-02.jpg',
+            '/img/theatre/lsdmv/lsdmv-03.jpg',
+            '/img/theatre/lsdmv/lsdmv-04.jpg',
+        ],
+        tags: [
+            'Improvisation'
+        ],
+        fromDate: '2019',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorces',
+            },
+        ],
         link: "https://www.les-ecorces.com/spectacles"
+    },
+
+    CaNeSImprovisePas: {
+        id: 'ca-ne-simprovise-pas',
+        title: "Ca ne s'improvise pas",
+        description: 'Création improvisée réalisée en 24h',
+        fullDescription: `<div>Création improvisée réalisée en 24h dans le cadre du festival <span class="italic font-semibold">Ca ne s'improvise pas</span></div>
+        <div><span class="italic font-semibold">C'est le bordel de ma teuté</span> met en scène un personnage isolé et relate sa vie, ses réflexions et sa santé mentale qui s'amenuise jour après jour</div>`,
+        coverImage: '/img/theatre/cnsip/cnsip-cover.jpg',
+        additionalImages: [
+            '/img/theatre/cnsip/cnsip-01.jpg',
+            '/img/theatre/cnsip/cnsip-02.jpg',
+            '/img/theatre/cnsip/cnsip-03.jpg',
+        ],
+        tags: [
+            'Improvisation',
+            'Festival',
+            'Seul en scène',
+        ],
+        roles: ['Création', 'Jeu'],
+        fromDate: '2024',
+        toDate: '2024',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Whata',
+            },
+        ],
+        link: "https://www.instagram.com/whataimpro/"
     },
 
     // TODO: Madeleine - Aucune information trouvée en ligne. À compléter avec les infos du site les-ecorces.com
@@ -342,20 +424,13 @@ export const contentItems = {
         coverImage: '/img/theatre/madeleine/madeleine-cover.jpg',
         additionalImages: [],
         tags: ['Improvisation'], // TODO: À compléter avec les bons tags
-        // fromDate: 'TODO',
-        link: "https://www.les-ecorces.com/spectacles"
-    },
-
-    // TODO: Terrarium - Aucune information trouvée en ligne. À compléter avec les infos du site les-ecorces.com
-    Terrarium: {
-        id: 'terrarium',
-        title: 'Terrarium',
-        description: 'TODO: Description courte à compléter',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/terrarium/terrarium-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation'], // TODO: À compléter avec les bons tags
-        // fromDate: 'TODO',
+        fromDate: '2021',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorces',
+            },
+        ],
         link: "https://www.les-ecorces.com/spectacles"
     },
 
@@ -383,19 +458,6 @@ export const contentItems = {
         roles: ['Comédien'],
         // fromDate: 'TODO',
         link: "https://le13emecri.com/spectacles"
-    },
-
-    // TODO: Ca ne s'improvise pas - Aucune information trouvée en ligne. À compléter.
-    CaNeSImprovisePas: {
-        id: 'ca-ne-simprovise-pas',
-        title: "Ca ne s'improvise pas",
-        description: 'TODO: Description courte à compléter - Festival de la compagnie Whata',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/ca-ne-simprovise-pas/ca-ne-simprovise-pas-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Festival'], // TODO: À compléter
-        roles: ['Créateur spectacle'],
-        // fromDate: 'TODO',
     },
 
     // TODO: Impro en Seine - Aucune information détaillée trouvée en ligne.
