@@ -27,4 +27,5 @@ export type PortfolioItemData = {
     fromDate?: string;
     toDate?: string;
     link?: string;
+    pressKit?: string;
 };

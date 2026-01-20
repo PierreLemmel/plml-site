@@ -60,7 +60,8 @@ export const contentItems = {
         tags: ['Danse', 'Théâtre', 'Improvisation'],
         roles: ['Comédien', 'Assisant mise en scène'],
         fromDate: '2023',
-        link: "https://www.les-ecorces.com/spectacles"
+        link: "https://www.les-ecorces.com/spectacles",
+        pressKit: "/dossiers/theatre/Dossier diffusion - QACDA.pdf",
     },
 
     Aleas: {
@@ -114,7 +115,8 @@ export const contentItems = {
                 `,
             }, 
         ],
-        link: "https://www.billetreduc.com/spectacle/aleas-330517/avis"
+        link: "https://www.billetreduc.com/spectacle/aleas-330517/avis",
+        pressKit: "/dossiers/theatre/Dossier Aléas.pdf",
     },
 
     PleinLaGueule: {
@@ -219,7 +221,8 @@ export const contentItems = {
                 label: 'Interpète',
                 value: 'Sylvie Nadin',
             },
-        ]
+        ],
+        pressKit: "/dossiers/theatre/Très chair corps - dossier global.pdf",
     },
 
     Ensemble: {
@@ -538,8 +541,64 @@ export const contentItems = {
         ],
     },
 
+    LesMainsBavardes: {
+        id: 'les-mains-bavardes',
+        title: 'Les Mains Bavardes',
+        description: 'Spectacle bilingue LSF/Français accessible à toustes, né de l\'intérêt de trois comédiens pour la Langue des Signes Française.',
+        fullDescription: "Les Mains Bavardes est une création de la compagnie Les Écorces née de l'intérêt partagé de trois comédiens pour la Langue des Signes Française (LSF). Le spectacle est conçu pour être accessible à tous — entendants ou non, signants ou non. Il privilégie le corps et l'expression visuelle pour transmettre les histoires.",
+        coverImage: '/img/theatre/lmb/lmb-cover.jpg',
+        additionalImages: [
+            '/img/theatre/lmb/lmb-01.jpg',
+            '/img/theatre/lmb/lmb-cover.jpg',
+            '/img/theatre/lmb/lmb-02.jpg',
+            '/img/theatre/lmb/lmb-10.jpg',
+            '/img/theatre/lmb/lmb-03.jpg',
+            '/img/theatre/lmb/lmb-04.jpg',
+            '/img/theatre/lmb/lmb-05.jpg',
+            '/img/theatre/lmb/lmb-06.jpg',
+            '/img/theatre/lmb/lmb-07.jpg',
+            '/img/theatre/lmb/lmb-08.jpg',
+            '/img/theatre/lmb/lmb-09.jpg',
+        ],
+        tags: ['Improvisation', 'Accessibilité'],
+        roles: ['Comédien'],
+        fromDate: '2018',
+        toDate: '2023',
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorces',
+            },
+            {
+                label: 'Distribution',
+                value: 'Pauline Granjon, Pierre Lemmel, Alice Rey',
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://www.theatredutemps.net/" target="_blank">Théâtre du Temps</a>  (Nancy)</li>
+                    <li><a href="https://www.theatredutemps.net/" target="_blank">Théâtre du Temps</a>  (Paris)</li>
+                </ul>`,
+            }
+        ]
+    },
 
+    LaConference: {
+        id: 'la-conference',
+        title: 'La conférence',
+        description: 'Vous avez les questions, il n\'a pas les réponses.',
+        fullDescription: 'Dans cette conférence d\'un genre particulier. un clown tente. avec plus ou moins de succès. d\'apporter des réponses aux questions que les humaines se posent.',
+        coverImage: '/img/theatre/conference/conference-gif.gif',
+        additionalImages: [
+            '/img/theatre/conference/conference-gif.gif',
+        ],
+        tags: ['Improvisation', 'Clown'],
+        roles: ['Comédien'],
+        fromDate: '2023',
+        toDate: '2023',
+    },
 
+    
     Frichti: {
         id: 'frichti',
         title: 'Frichti',
@@ -600,17 +659,6 @@ export const contentItems = {
 
     
 
-    LesMainsBavardes: {
-        id: 'les-mains-bavardes',
-        title: 'Les Mains Bavardes',
-        description: 'Spectacle bilingue LSF/Français accessible à tous, né de l\'intérêt de trois comédiens pour la Langue des Signes Française.',
-        fullDescription: "Les Mains Bavardes est une création de la compagnie Les Écorces née de l'intérêt partagé de trois comédiens pour la Langue des Signes Française (LSF). Le spectacle est conçu pour être accessible à tous — entendants ou non, signants ou non. Il privilégie le corps et l'expression visuelle pour transmettre les histoires. Le spectacle commence par une présentation bilingue LSF/Français, pour familiariser le public au langage et à la culture sourde.",
-        coverImage: '/img/theatre/les-mains-bavardes/les-mains-bavardes-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'LSF', 'Accessibilité'],
-        // TODO: Vérifier les dates et le rôle exact
-        // fromDate: 'TODO',
-        link: "https://www.les-ecorces.com/spectacles"
-    }
+    
 
 } satisfies Record<string, PortfolioItemData>;

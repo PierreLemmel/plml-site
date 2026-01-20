@@ -21,6 +21,7 @@ const { item: {
     link,
     additionalImages,
     additionalInfo,
+    pressKit,
 }, class: className } = Astro.props;
 ---
 
@@ -44,6 +45,7 @@ const { item: {
     data-item-link={link || ''}
     data-item-images={JSON.stringify(additionalImages || [])}
     data-item-additional-info={JSON.stringify(additionalInfo || [])}
+    data-item-press-kit={pressKit || ''}
 >
     <div
         class={cn(

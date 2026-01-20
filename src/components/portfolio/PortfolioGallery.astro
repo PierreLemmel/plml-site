@@ -36,6 +36,7 @@ const { title, class: className } = Astro.props;
         fromDate: string|null;
         toDate: string|null;
         link: string|null;
+        pressKit: string|null;
         tags: string[];
         roles: string[];
     }
@@ -58,6 +59,7 @@ const { title, class: className } = Astro.props;
             fromDate,
             toDate,
             link,
+            pressKit,
             tags,
             roles
         } = data;
@@ -72,6 +74,7 @@ const { title, class: className } = Astro.props;
         const overlayTags = overlay.querySelector('.overlay-tags')!;
         const overlayAdditionalInfo = overlay.querySelector('.overlay-additional-info')!;
         const overlayLink = overlay.querySelector('.overlay-link') as HTMLAnchorElement;
+        const overlayPressKit = overlay.querySelector('.overlay-press-kit') as HTMLAnchorElement;
 
         const carouselTrack = overlay.querySelector('.carousel-track') as HTMLElement;
         carouselTrack.innerHTML = images.map(image =>{
@@ -133,6 +136,14 @@ const { title, class: className } = Astro.props;
                 overlayLink.style.display = 'none';
             }
         }
+        if (overlayPressKit) {
+            if (pressKit) {
+                overlayPressKit.href = pressKit;
+                overlayPressKit.style.display = 'inline-flex';
+            } else {
+                overlayPressKit.style.display = 'none';
+            }
+        }
 
         overlay.classList.remove('pointer-events-none', 'opacity-0');
         overlay.classList.add('pointer-events-auto', 'opacity-100');
@@ -166,6 +177,7 @@ const { title, class: className } = Astro.props;
             const fromDate = portfolioItem.getAttribute('data-item-from-date');
             const toDate = portfolioItem.getAttribute('data-item-to-date');
             const link = portfolioItem.getAttribute('data-item-link');
+            const pressKit = portfolioItem.getAttribute('data-item-press-kit');
             const images = JSON.parse(portfolioItem.getAttribute('data-item-images') || '[]');
             const additionalInfo = JSON.parse(portfolioItem.getAttribute('data-item-additional-info') || '[]');
 
@@ -177,9 +189,10 @@ const { title, class: className } = Astro.props;
                 fromDate,
                 toDate,
                 link,
+                pressKit,
                 tags,
                 roles,
-                additionalInfo: JSON.parse(portfolioItem.getAttribute('data-item-additional-info') || '[]')
+                additionalInfo
             });
         } else {
             console.warn(`Portfolio item with id "${projectId}" not found`);
@@ -480,26 +493,49 @@ const { title, class: className } = Astro.props;
                 "flex flex-col gap-4 mb-6"
             )}></div>
 
-            <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                class={cn(
-                    "overlay-link",
-                    "inline-flex items-center gap-2",
-                    "text-white font-medium",
-                    "rounded-sm",
-                    "transition-colors duration-200",
-                    "w-fit",
-                    "text-white/80 hover:text-white",
-                    "underline underline-offset-2"
-                )}
-            >
-                En savoir plus
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-            </a>
+            <div class="flex flex-col gap-4">
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={cn(
+                        "overlay-link",
+                        "block items-center gap-2",
+                        "text-white font-medium",
+                        "rounded-sm",
+                        "transition-colors duration-200",
+                        "w-fit",
+                        "text-white/80 hover:text-white",
+                        "underline underline-offset-2"
+                    )}
+                >
+                    En savoir plus
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    class={cn(
+                        "overlay-press-kit",
+                        "block items-center gap-2",
+                        "text-white font-medium",
+                        "rounded-sm",
+                        "transition-colors duration-200",
+                        "w-fit",
+                        "text-white/80 hover:text-white",
+                        "underline underline-offset-2"
+                    )}
+                >
+                    Télécharger le dossier de presse
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </div>
 </div>
