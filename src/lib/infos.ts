@@ -4,6 +4,9 @@ export function getSiteInfos() {
         companyName: 'Tout est dans le titre',
         contactEmail: 'pierre.lemmel@gmail.com',
         instagram: '@p_lemmel',
-        phone: '06 48 03 16 10',
+        phone: {
+            number: '06 48 03 16 10',
+            link: 'tel:+33648031610'
+        },
     };
 }

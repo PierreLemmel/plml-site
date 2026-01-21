@@ -1,20 +1,30 @@
 ---
 import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
 import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
-import type { PortfolioItemData } from '../components/portfolio/PortfolioItem.astro';
-import { contentItems } from '../contents/content-items';
+import type { PortfolioItemData } from '../contents/content-types';
+import { theatreItems } from '../contents/content-theatre-items';
+import { descritionHtml } from '../lib/utils';
 
 const items: PortfolioItemData[] = [
-    contentItems.Aleas,
+    theatreItems.Aleas,
 ];
+
+const description = descritionHtml([
+    "J'ai découvert le code en parallèle de mes études et celui-ci m'a très vite amené à m'intéresser aux arts numériques et aux arts génératifs.",
+    "En particulier, j'aime fixer une règle du jeu et voir ce qu'il en ressort, voir le résultat évoluer, se transformer, contempler ses imprévus et ses imperfections.",
+    "J'aime également proposer des oeuvres avec lesquelles on puisse intergir pour permettre aux spectateurices de prendre part à l'oeuvre.",
+    "Aujourd'hui, je mélange mes savoirs faires en technique de scène, en réseau et en développement informatique pour créer des installations numériques immersives et interactives.",
+]);
 ---
 
 <PortfolioPage
     title="Plml - Arts Numériques"
-    description="Explorations à l'intersection de l'art et de la technologie - Installations interactives, art génératif et créations numériques par Pierre Lemmel."
+    description="Là où arts et technologies se rencontrent - Installations interactives, art génératif et créations numériques par Pierre Lemmel."
+    headerDescription={description}
     pageTitle="Arts Numériques"
-    subtitle="Explorations à l'intersection de l'art et de la technologie"
+    subtitle="Là où arts et technologies se rencontrent"
     backgroundImage="/img/bg-arts-numeriques.jpg"
+    backgroundClass="brightness-[0.4]"
 >
     {items.map(item => (
         <PortfolioItem item={item} />

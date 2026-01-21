@@ -1,35 +1,44 @@
 ---
 import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
 import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
-import { contentItems } from '../contents/content-items';
+import { theatreItems } from '../contents/content-theatre-items';
 import type { PortfolioItemData } from '../contents/content-types';
+import { descritionHtml } from '../lib/utils';
 
 const items: PortfolioItemData[] = [
-    contentItems.QuelqueChoseAChangeDansLAir,
-    contentItems.Aleas,
-    contentItems.PleinLaGueule,
-    contentItems.TresChairCorps,
-    contentItems.SavantMelange,
-    contentItems.Ensemble,
-    contentItems.CaNeSImprovisePas,
-    contentItems.Terrarium,
-    contentItems.LesSonsDeMaVie,
-    contentItems.Accoudes,
-    contentItems.SystemeExploitation,
-    contentItems.LireUnePageBlanche,
-    contentItems.Madeleine,
-    contentItems.LaSeance,
-    contentItems.NSFW,
-    contentItems.LaConference,
-    contentItems.Zermos,
-    contentItems.LesMainsBavardes,
-    contentItems.Fluide,
+    theatreItems.QuelqueChoseAChangeDansLAir,
+    theatreItems.Aleas,
+    theatreItems.PleinLaGueule,
+    theatreItems.TresChairCorps,
+    theatreItems.SavantMelange,
+    theatreItems.Ensemble,
+    theatreItems.CaNeSImprovisePas,
+    theatreItems.ImproEnSeine,
+    theatreItems.Terrarium,
+    theatreItems.LesSonsDeMaVie,
+    theatreItems.Accoudes,
+    theatreItems.SystemeExploitation,
+    theatreItems.LireUnePageBlanche,
+    theatreItems.Madeleine,
+    theatreItems.LaSeance,
+    theatreItems.NSFW,
+    theatreItems.LaConference,
+    theatreItems.Zermos,
+    theatreItems.LesMainsBavardes,
+    theatreItems.Fluide,
 ];
+
+const description = descritionHtml([
+    "Je commence le théâtre en 2016 via l'improvisation. En 2018 je participe à la création de la Compagnie Les Ecorcés, puis en 2022 à celle de la compagnie Tout est dans le titre.",
+    "En parralèle, je travaille particulièrement la place de la régie son et lumière et à celle de dispositifs techniques en improvisation.",
+    "Passionné par la mise en scène, j’ai à coeur d’amener une vraie puissance d’image théâtrale dans mes créations.",
+])
 ---
 
 <PortfolioPage
     title="Plml - Théâtre"
     description="Improvisation, créations et mises en scène"
+    headerDescription={description}
     pageTitle="Théâtre"
     subtitle="Improvisation, créations et mises en scène"
     backgroundImage="/img/bg-theatre.jpg"

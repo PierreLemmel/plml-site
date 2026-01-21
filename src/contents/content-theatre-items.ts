@@ -1,7 +1,7 @@
 import { descritionHtml } from "../lib/utils";
 import type { PortfolioItemData } from "./content-types";
 
-export const contentItems = {
+export const theatreItems = {
 
     QuelqueChoseAChangeDansLAir: {
         id: 'qacda',
@@ -223,6 +223,24 @@ export const contentItems = {
             },
         ],
         pressKit: "/dossiers/theatre/Très chair corps - dossier global.pdf",
+    },
+
+    ImproEnSeine: {
+        id: 'impro-en-seine',
+        title: 'Impro en Seine',
+        description: "Directeur technique et régisseur général pour le festival d'improvisation Impro en Seine.",
+        fullDescription: descritionHtml([
+            "Régisseur général du festival Impro en Seine, le plus gros festival d’improvisation français avec 97 spectacles, s’enchainant avec 10 minutes entre chaque spectacle, répartis sur 3 salles en parallèle sur 4 jours.",
+            "Mon travail consiste à coordonner les compagnies et le théâtre, rechercher le matériel, recruter, former et coordonner une équipe d'une douzaine de bénévoles.",
+        ]),
+        coverImage: '/img/theatre/misc/improenseine-cover.jpg',
+        additionalImages: [
+            '/img/theatre/misc/improenseine-cover.jpg'
+        ],
+        fromDate: '2022',
+        tags: ['Improvisation', 'Festival', 'Régie'],
+        roles: ['Régisseur général', 'Directeur technique'],
+        link: "https://improenseine.com/",
     },
 
     Ensemble: {
@@ -653,68 +671,5 @@ export const contentItems = {
             },
         ],
     },
-
-    
-    Frichti: {
-        id: 'frichti',
-        title: 'Frichti',
-        description: 'Spectacle d\'improvisation interactive où les comédiens créent une pièce à partir de 50 ingrédients proposés par le public.',
-        fullDescription: "Les comédiens doivent créer de toutes pièces un spectacle en intégrant 50 « ingrédients » — des propositions données par le public. Comme un repas improvisé avec ce qu'on trouve dans le frigo, chaque représentation est unique et éphémère. Le public devient co-auteur de cette création spontanée.",
-        coverImage: '/img/theatre/frichti/frichti-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Interactif'],
-        roles: ['Réalisation technique'],
-        // fromDate: 'TODO',
-        link: "https://improvidence.fr/spectacles/43359-frichti/"
-    },
-
-
-
-    // TODO: Impro en Seine - Aucune information détaillée trouvée en ligne.
-    ImproEnSeine: {
-        id: 'impro-en-seine',
-        title: 'Impro en Seine',
-        description: 'TODO: Description courte à compléter - Festival d\'improvisation',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/impro-en-seine/impro-en-seine-cover.jpg',
-        additionalImages: [],
-        tags: ['Improvisation', 'Festival'],
-        roles: ['Régisseur général'],
-        // fromDate: 'TODO',
-    },
-
-
-
-    // TODO: La galerie des beaux gens - Aucune information trouvée en ligne. Bar immersif Lumiia.
-    GalerieDesBeauxGens: {
-        id: 'galerie-des-beaux-gens',
-        title: 'La galerie des beaux gens',
-        description: 'TODO: Description courte à compléter - Création pour le bar immersif Lumiia',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/galerie-des-beaux-gens/galerie-des-beaux-gens-cover.jpg',
-        additionalImages: [],
-        tags: ['Immersif'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur'],
-        // fromDate: 'TODO',
-        link: "https://www.lumiia.fr/"
-    },
-
-    // TODO: Saute moutons - Aucune information trouvée en ligne. Jeu pour le bar immersif Lumiia.
-    SauteMoutons: {
-        id: 'saute-moutons',
-        title: 'Saute moutons',
-        description: 'TODO: Description courte à compléter - Jeu créé pour le bar immersif Lumiia',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/saute-moutons/saute-moutons-cover.jpg',
-        additionalImages: [],
-        tags: ['Immersif', 'Jeu'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur'],
-        // fromDate: 'TODO',
-        link: "https://www.lumiia.fr/"
-    },
-
-    
-
-    
 
 } satisfies Record<string, PortfolioItemData>;

@@ -2,9 +2,12 @@
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import type { Props as SEOProps } from '../components/SEO.astro';
+import { cn } from '../lib/utils';
+import { getSiteInfos } from '../lib/infos';
 
 interface Props extends SEOProps {
     title?: string;
+    hideFooter?: boolean;
 }
 
 const {
@@ -13,8 +16,12 @@ const {
     image,
     canonical,
     type,
-    noindex
+    noindex,
+    hideFooter = false
 } = Astro.props;
+
+const { companyName } = getSiteInfos();
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -34,7 +41,24 @@ const {
             noindex={noindex}
         />
     </head>
-    <body class="w-screen h-screen overflow-x-hidden">
+    <body class="w-screen min-h-screen overflow-x-hidden">
         <slot />
+        {!hideFooter && (
+            <footer class={cn(
+                "w-full py-6 px-6",
+                "bg-neutral-950 text-white/60",
+                "font-barlow text-sm",
+                "flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4"
+            )}>
+                <span>©{currentYear} Pierre Lemmel</span>
+                <span class="hidden md:inline">•</span>
+                <a
+                    href="/mentions-legales"
+                    class="hover:text-white transition-colors duration-200 underline underline-offset-2"
+                >
+                    Mentions légales
+                </a>
+            </footer>
+        )}
     </body>
 </html>

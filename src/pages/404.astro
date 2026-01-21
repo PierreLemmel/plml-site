@@ -1,22 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { cn } from '../lib/utils';
 ---
 
-<Layout title="404 - Page non trouvée" noindex={true}>
-    <main class="min-h-screen w-full flex flex-col items-center justify-center bg-zinc-950 text-white font-barlow">
-        <h1 class="text-[12rem] md:text-[16rem] font-black leading-none text-accent1 opacity-20 select-none">
-            404
-        </h1>
-        <div class="flex flex-col items-center gap-4 -mt-16 md:-mt-20">
-            <h2 class="text-2xl md:text-4xl font-light tracking-wide">
-                Page non trouvée
+<Layout title="Plml - Page introuvable" noindex={true}>
+    <main class={cn(
+        "min-h-screen w-full flex flex-col items-center justify-center text-white font-barlow bg-black",
+        "relative"
+    )}>
+        <div class={cn(
+            "absolute inset-0 z-10",
+            "bg-center bg-cover bg-no-repeat bg-[url('/img/not-found.jpg')] bg-fixed",
+            "opacity-50"
+        )}></div>
+        <div class={cn(
+            "flex flex-col items-center gap-4 -mt-16 md:-mt-20 z-20",
+            "pt-30 md:pt-42 lg:pt-48 xl:pt-56"
+        )}>
+            <h2 class="text-2xl md:text-4xl font-light tracking-wide uppercase">
+                OUPS ! 
             </h2>
-            <p class="text-zinc-400 text-center max-w-md px-4">
+            <p class="text-white/80 text-lg text-center max-w-md px-4">
                 La page que vous recherchez n'existe pas ou a été déplacée.
             </p>
             <a
                 href="/"
-                class="mt-6 px-6 py-3 border border-accent1 text-accent1 hover:bg-accent1 hover:text-white transition-colors duration-300 tracking-wider uppercase text-sm"
+                class={cn(
+                    "mt-6 px-6 py-3 borde hover:text-white transition-colors duration-300 tracking-wider uppercase text-sm",
+                    "italic",
+                    "underline hover:no-underline underline-offset-2"
+                )}
             >
                 Retour à l'accueil
             </a>
