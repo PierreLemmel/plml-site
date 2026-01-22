@@ -18,6 +18,9 @@ export const techniqueItems = {
                 type: 'youtube',
                 id: 'CPSVpLJiB2A',
             },
+            '/img/technique/frichti/frichti-02.jpg',
+            '/img/technique/frichti/frichti-03.jpg',
+            '/img/technique/frichti/frichti-04.jpg',
             '/img/technique/frichti/frichti-cover.jpg'
         ],
         tags: ['Outils de régie', 'Improvisation', 'Développement web'],
