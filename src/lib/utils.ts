@@ -55,3 +55,7 @@ export function clamp(value: number, min: number, max: number): number {
 export function descriptionHtml(...paragraphs: string[]): string {
     return paragraphs.map(paragraph => `<div>${paragraph}</div>`).join('');
 }
+
+export function htmlList(...items: string[]): string {
+    return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+}

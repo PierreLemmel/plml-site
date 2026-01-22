@@ -1,10 +1,10 @@
-import { descriptionHtml } from "../lib/utils";
+import { descriptionHtml, htmlList } from "../lib/utils";
 import type { PortfolioItemData } from "./content-types";
 
 export const techniqueItems = {
     Frichti: {
         id: 'frichti',
-        title: 'Frichti',
+        title: 'Improvidence - Frichti',
         description: 'Spectacle d\'improvisation interactive où les comédiens créent une pièce à partir de 50 ingrédients proposés par le public.',
         fullDescription: descriptionHtml(
             "Le travail effectué consiste à la réalisation d'un outil d'affichage et d'une interface de configuration et de contrôle pour le spectacle Frichti.",
@@ -23,7 +23,7 @@ export const techniqueItems = {
             '/img/technique/frichti/frichti-04.jpg',
             '/img/technique/frichti/frichti-cover.jpg'
         ],
-        tags: ['Outils de régie', 'Improvisation', 'Développement web'],
+        tags: ['Outils de régie', 'Improvisation', 'Développement web', 'Prestation'],
         roles: ['Réalisation technique'],
         additionalInfo: [
             {
@@ -39,36 +39,114 @@ export const techniqueItems = {
         link: "https://improvidence.fr/spectacles/43359-frichti/"
     },
 
-
-    // TODO: La galerie des beaux gens - Aucune information trouvée en ligne. Bar immersif Lumiia.
-    GalerieDesBeauxGens: {
-        id: 'galerie-des-beaux-gens',
-        title: 'La galerie des beaux gens',
-        description: 'TODO: Description courte à compléter - Création pour le bar immersif Lumiia',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/galerie-des-beaux-gens/galerie-des-beaux-gens-cover.jpg',
-        additionalImages: [],
-        tags: ['Immersif'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur'],
-        date: {
-            status: "InCreation"
-        },
-        link: "https://www.lumiia.fr/"
-    },
-
-    // TODO: Saute moutons - Aucune information trouvée en ligne. Jeu pour le bar immersif Lumiia.
     SauteMoutons: {
         id: 'saute-moutons',
-        title: 'Saute moutons',
-        description: 'TODO: Description courte à compléter - Jeu créé pour le bar immersif Lumiia',
-        fullDescription: 'TODO: Description complète à compléter',
-        coverImage: '/img/theatre/saute-moutons/saute-moutons-cover.jpg',
-        additionalImages: [],
-        tags: ['Immersif', 'Jeu'], // TODO: À compléter avec les bons tags
-        roles: ['Créateur'],
+        title: 'Lumiia - Saute moutons',
+        description: 'Jeu par capture de mouvement',
+        fullDescription: descriptionHtml(
+            "Développement et intégration d'un jeu par capture de mouvement pour un public familial.",
+            "Dans ce jeu, les joueur·euse·s sont placé·e·s devant un fond vert et doivent sauter sur certains ennemis pour les éliminer, éviter des monstres.",
+        ),
+        coverImage: '/img/technique/saute-moutons/saute-moutons-cover.jpg',
+        additionalImages: [
+            '/img/technique/saute-moutons/saute-moutons-01.png',
+            {
+                type: 'video',
+                src: '/img/technique/saute-moutons/saute-moutons-video.mp4',
+                videoType: 'mp4',
+            },
+            '/img/technique/saute-moutons/saute-moutons-02.png',
+            '/img/technique/saute-moutons/saute-moutons-03.png',
+        ],
+        tags: [
+            'Immersif',
+            'Jeu',
+            'Développement web',
+            'Prestation',
+        ],
+        roles: ["Conception", "Réalisation technique"],
         date: {
-            status: "InCreation"
+            status: "Finished",
+            from: "2025",
+            to: "2025"
         },
-        link: "https://www.lumiia.fr/"
+        link: "https://www.lumiia.fr/",
+        additionalInfo: [
+            {
+                label: 'Outils utilisés',
+                value: htmlList(
+                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Chataigne</a>',
+                    "React.js",
+                    "Kinnect"
+                ),
+            },
+        ],
     },
+
+    Reed: {
+        id: 'reed',
+        title: 'Reed',
+        description: 'Système de synchronisation sons et lumières pour le groupe de musique Reed',
+        roles: ["Conception", "Réalisation technique"],
+        fullDescription: descriptionHtml(
+            "Développement d'un système de synchronisation sons et lumières pour le groupe de musique Reed.",
+            "Ce système permet de synchroniser plusieurs musiciens, une station de travail audionumérique et une installation de lumières."
+        ),
+        coverImage: "/img/technique/reed/reed-cover.jpg",
+        additionalImages: [
+            '/img/technique/reed/reed-cover.jpg',
+            {
+                type: 'video',
+                src: '/img/technique/reed/reed-video.mp4',
+                videoType: 'mp4',
+            }
+        ],
+        date: {
+            status: "Finished",
+            from: "2025",
+            to: "2025"
+        },
+        additionalInfo: [
+            {
+                label: 'Outils utilisés',
+                value: htmlList(
+                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Chataigne</a>',
+                ),
+            },
+        ],
+    },
+
+    BibiFish: {
+        id: 'fish',
+        title: 'Bibi - Fish',
+        description: "Randomisation d'un système de contrôle de lumières",
+        fullDescription: descriptionHtml(
+            "Aide à la réalisation technique d'un système de contrôle de lumières pour une oeuvre de l'artiste plasticien <a href='https://www.bibi.fr/' target='_blank'>Bibi</a>.",
+            "Création d'un module de randomisation du contrôle des lumières."
+        ),
+        roles: ["Aide à la réalisation technique"],
+        coverImage: "/img/technique/fish/bibi-fish-cover.jpg",
+        additionalImages: [
+            '/img/technique/fish/bibi-fish-01.jpg',
+        ],
+        additionalInfo: [
+            {
+                label: 'Artiste',
+                value: '<a href="https://www.instagram.com/bibi_artist/" target="_blank">Bibi</a>',
+            },
+            {
+                label: 'Outils utilisés',
+                value: htmlList(
+                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Chataigne</a>',
+                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Blux</a>',
+                ),
+            },
+        ],
+        date: {
+            status: "Finished",
+            from: "2025",
+            to: "2025"
+        },
+        link: "https://www.bibi.fr/poissons/",
+    }
 } satisfies Record<string, PortfolioItemData>;
