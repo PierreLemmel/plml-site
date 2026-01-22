@@ -16,8 +16,7 @@ const { item: {
     coverImage,
     tags,
     roles,
-    fromDate,
-    toDate,
+    date,
     link,
     additionalImages,
     additionalInfo,
@@ -40,8 +39,7 @@ const { item: {
     data-item-cover={coverImage}
     data-item-tags={tags?.join(',') || ''}
     data-item-roles={roles?.join(',') || ''}
-    data-item-from-date={fromDate}
-    data-item-to-date={toDate}
+    data-item-date={JSON.stringify(date)}
     data-item-link={link || ''}
     data-item-images={JSON.stringify(additionalImages || [])}
     data-item-additional-info={JSON.stringify(additionalInfo || [])}
@@ -72,12 +70,12 @@ const { item: {
         <div class={cn(
             
         )}>
-            {fromDate && (
+            {date && (
                 <span class={cn(
                     "text-xs font-medium tracking-wider uppercase",
                     "text-white/80 mb-1 block"
                 )}>
-                    {dateText(fromDate, toDate)}
+                    {dateText(date)}
                 </span>
             )}
             <h3 class={cn(

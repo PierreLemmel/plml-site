@@ -10,6 +10,17 @@ export type PortfolioItemImageData = string | {
     id: string;
 }
 
+export type ItemDate = {
+    status: "OnGoing";
+    from: string;
+} | {
+    status: "Finished";
+    from: string;
+    to: string;
+} | {
+    status: "InCreation"
+}
+
 export type PortfolioItemData = {
     id: string;
     title: string;
@@ -24,8 +35,7 @@ export type PortfolioItemData = {
     fullDescription?: string;
     tags?: string[];
     roles?: string[];
-    fromDate?: string;
-    toDate?: string;
+    date: ItemDate;
     link?: string;
     pressKit?: string;
 };

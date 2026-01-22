@@ -12,7 +12,7 @@ const { title, class: className } = Astro.props;
 <script>
     import { animate } from 'motion';
     import { dateText, mergeRoles } from '../../lib/utils';
-    import type { PortfolioItemImageData } from '../../contents/content-types';
+    import type { PortfolioItemImageData, ItemDate } from '../../contents/content-types';
 
     const overlay = document.getElementById('portfolio-overlay')!;
     const closeBtn = document.getElementById('overlay-close')!;
@@ -33,8 +33,7 @@ const { title, class: className } = Astro.props;
             label: string;
             value: string;
         }[];
-        fromDate: string|null;
-        toDate: string|null;
+        date: ItemDate | null;
         link: string|null;
         pressKit: string|null;
         tags: string[];
@@ -56,8 +55,7 @@ const { title, class: className } = Astro.props;
             cover,
             images,
             additionalInfo,
-            fromDate,
-            toDate,
+            date,
             link,
             pressKit,
             tags,
@@ -101,7 +99,7 @@ const { title, class: className } = Astro.props;
         if (overlayTitle) overlayTitle.textContent = title;
         if (overlayDescription) overlayDescription.innerHTML = description;
         if (overlayImage) overlayImage.style.backgroundImage = `url('${cover}')`;
-        if (overlayDate) overlayDate.textContent = dateText(fromDate, toDate);
+        if (overlayDate) overlayDate.textContent = dateText(date);
 
         if (tags && tags.length > 0) {
             overlayTags.classList.remove('hidden');
@@ -174,8 +172,8 @@ const { title, class: className } = Astro.props;
             const cover = portfolioItem.getAttribute('data-item-cover') || '';
             const tags = portfolioItem.getAttribute('data-item-tags')?.split(',').filter(Boolean) || [];
             const roles = portfolioItem.getAttribute('data-item-roles')?.split(',').filter(Boolean) || [];
-            const fromDate = portfolioItem.getAttribute('data-item-from-date');
-            const toDate = portfolioItem.getAttribute('data-item-to-date');
+            const dateAttr = portfolioItem.getAttribute('data-item-date');
+            const date = dateAttr ? JSON.parse(dateAttr) as ItemDate : null;
             const link = portfolioItem.getAttribute('data-item-link');
             const pressKit = portfolioItem.getAttribute('data-item-press-kit');
             const images = JSON.parse(portfolioItem.getAttribute('data-item-images') || '[]');
@@ -186,8 +184,7 @@ const { title, class: className } = Astro.props;
                 description,
                 cover,
                 images,
-                fromDate,
-                toDate,
+                date,
                 link,
                 pressKit,
                 tags,
@@ -214,7 +211,7 @@ const { title, class: className } = Astro.props;
         });
     }
 
-    function goToSlide(index: number) {
+    function stopContent() {
         const youtubeContent = overlay.querySelectorAll('.overlay-youtube-content');
         youtubeContent.forEach(content => {
             (content as HTMLIFrameElement).contentWindow?.postMessage(
@@ -227,6 +224,10 @@ const { title, class: className } = Astro.props;
         videoContent.forEach(content => {
             (content as HTMLVideoElement).pause();
         });
+    }
+
+    function goToSlide(index: number) {
+        stopContent();
 
         if (index < 0) index = totalSlides - 1;
         if (index >= totalSlides) index = 0;
@@ -264,6 +265,8 @@ const { title, class: className } = Astro.props;
 
     function closeOverlay() {
         if (overlay) {
+            stopContent();
+
             overlay.classList.add('pointer-events-none', 'opacity-0');
             overlay.classList.remove('pointer-events-auto', 'opacity-100');
             document.body.style.overflow = '';

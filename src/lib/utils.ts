@@ -14,18 +14,22 @@ export function getZIndex(cardIndex: number, cardCount: number): number {
     return (cardCount - cardIndex) * 100;
 }
 
-export function dateText(fromDate?: string|null, toDate?: string|null): string {
-    if (fromDate && toDate) {
-        if (fromDate === toDate) {
-            return fromDate;
-        }
-        else {
-            return `${fromDate} - ${toDate}`;
-        }
-    } else if (fromDate) {
-        return `Depuis ${fromDate}`;
+import type { ItemDate } from '../contents/content-types';
+
+export function dateText(date?: ItemDate | null): string {
+    if (!date) return '';
+
+    switch (date.status) {
+        case 'Finished':
+            if (date.from === date.to) {
+                return date.from;
+            }
+            return `${date.from} - ${date.to}`;
+        case 'OnGoing':
+            return `Depuis ${date.from}`;
+        case 'InCreation':
+            return 'En cours de création';
     }
-    return '';
 }
 
 export function mergeRoles(roles: string[]): string {
@@ -48,6 +52,6 @@ export function clamp(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(value, max));
 }
 
-export function descritionHtml(paragraphs: string[]): string {
+export function descriptionHtml(...paragraphs: string[]): string {
     return paragraphs.map(paragraph => `<div>${paragraph}</div>`).join('');
 }

@@ -1,73 +1,25 @@
 ---
 import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
 import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
-import type { PortfolioItemData } from '../components/portfolio/PortfolioItem.astro';
+import type { PortfolioItemData } from '../contents/content-types';
+import { techniqueItems } from '../contents/content-technique-items';
 
 const items: PortfolioItemData[] = [
-    {
-        id: 'other-1',
-        title: 'Atelier de Création',
-        description: 'Animation d\'ateliers artistiques pour tous publics.',
-        fullDescription: 'Conception et animation d\'ateliers de création artistique destinés à divers publics : scolaires, entreprises, associations. L\'objectif est de démocratiser l\'accès à la pratique artistique et de stimuler la créativité collective.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Médiation', 'Atelier', 'Pédagogie'],
-        fromDate: '2024'
-    },
-    {
-        id: 'other-2',
-        title: 'Direction Artistique',
-        description: 'Direction artistique pour événements culturels.',
-        fullDescription: 'Conception et direction artistique d\'événements culturels : festivals, expositions, soirées thématiques. Un travail qui allie vision créative et gestion de projet pour créer des expériences mémorables.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Direction', 'Événement', 'Culture'],
-        fromDate: '2023'
-    },
-    {
-        id: 'other-3',
-        title: 'Collaboration Musicale',
-        description: 'Création de visuels pour concerts et albums.',
-        fullDescription: 'Collaboration avec des musiciens et groupes pour la création d\'identités visuelles, de pochettes d\'albums et de visuels de concert. Un dialogue entre image et son pour enrichir l\'expérience musicale.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Musique', 'Visuel', 'Collaboration'],
-        fromDate: '2023'
-    },
-    {
-        id: 'other-4',
-        title: 'Résidence Artistique',
-        description: 'Projet développé lors d\'une résidence en milieu rural.',
-        fullDescription: 'Pendant trois mois, immersion dans un village pour créer une œuvre en dialogue avec les habitants et le territoire. Un projet de recherche-création qui interroge le lien entre art et communauté.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Résidence', 'Territoire', 'Recherche'],
-        fromDate: '2022'
-    },
-    {
-        id: 'other-5',
-        title: 'Publication',
-        description: 'Contribution à des revues et ouvrages collectifs.',
-        fullDescription: 'Rédaction d\'articles et contributions à des publications sur l\'art contemporain, les nouvelles pratiques artistiques et les enjeux de la création numérique. Un travail de réflexion et de transmission.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Écriture', 'Recherche', 'Publication'],
-        fromDate: '2021'
-    },
-    {
-        id: 'other-6',
-        title: 'Scénographie',
-        description: 'Conception d\'espaces pour expositions et événements.',
-        fullDescription: 'Travail de scénographie pour des expositions, des salons et des événements. L\'espace devient un médium à part entière, guidant le visiteur dans une expérience sensorielle et narrative.',
-        coverImage: '/img/bg-other.jpg',
-        tags: ['Scénographie', 'Espace', 'Design'],
-        fromDate: '2020'
-    }
+    techniqueItems.Frichti,
 ];
+
+const description = "Réalisations techniques diverses, prestations pour différents clients ou développements personnels d'outils pour le spectacle vivant, des installations immersives ou encore de la muséographie."
 ---
 
 <PortfolioPage
     title="Plml - Technique"
-    description="Technicien son et lumière - Pierre Lemmel - Régie technique, sonorisation et éclairage pour spectacles et événements."
+    description={description}
+    headerDescription={description}
     pageTitle="Technique"
     subtitle="Ateliers, collaborations et projets transversaux"
     backgroundImage="/img/bg-other.jpg"
     backgroundPosition="25% 50%"
+    backgroundClass="brightness-[0.7]"
 >
     {items.map(item => (
         <PortfolioItem item={item} />

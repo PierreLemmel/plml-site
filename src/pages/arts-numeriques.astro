@@ -2,19 +2,23 @@
 import PortfolioPage from '../components/portfolio/PortfolioPage.astro';
 import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
 import type { PortfolioItemData } from '../contents/content-types';
-import { theatreItems } from '../contents/content-theatre-items';
-import { descritionHtml } from '../lib/utils';
+import { descriptionHtml } from '../lib/utils';
+import { artsNumeriquesItems } from '../contents/content-arts-numeriques-items';
 
 const items: PortfolioItemData[] = [
-    theatreItems.Aleas,
+    artsNumeriquesItems.DanceWithLightness,
+    artsNumeriquesItems.Aleas,
+    artsNumeriquesItems.MesangesCharbonneuses,
+    artsNumeriquesItems.VideoMappings,
+    artsNumeriquesItems.LightAndMotion,
 ];
 
-const description = descritionHtml([
+const description = descriptionHtml(
     "J'ai découvert le code en parallèle de mes études et celui-ci m'a très vite amené à m'intéresser aux arts numériques et aux arts génératifs.",
     "En particulier, j'aime fixer une règle du jeu et voir ce qu'il en ressort, voir le résultat évoluer, se transformer, contempler ses imprévus et ses imperfections.",
     "J'aime également proposer des oeuvres avec lesquelles on puisse intergir pour permettre aux spectateurices de prendre part à l'oeuvre.",
     "Aujourd'hui, je mélange mes savoirs faires en technique de scène, en réseau et en développement informatique pour créer des installations numériques immersives et interactives.",
-]);
+);
 ---
 
 <PortfolioPage

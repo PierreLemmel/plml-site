@@ -1,4 +1,4 @@
-import { descritionHtml } from "../lib/utils";
+import { descriptionHtml } from "../lib/utils";
 import type { PortfolioItemData } from "./content-types";
 
 export const theatreItems = {
@@ -59,7 +59,10 @@ export const theatreItems = {
         ],
         tags: ['Danse', 'Théâtre', 'Improvisation'],
         roles: ['Comédien', 'Assisant mise en scène'],
-        fromDate: '2023',
+        date: {
+            status: "OnGoing",
+            from: "2023"
+        },
         link: "https://www.les-ecorces.com/spectacles",
         pressKit: "/dossiers/theatre/Dossier diffusion - QACDA.pdf",
     },
@@ -80,8 +83,11 @@ export const theatreItems = {
         ],
         tags: ['Improvisation', 'Aléatoire', 'Arts numériques'],
         roles: ['Directeur artistique', 'Directeur technique', 'Comédien'],
-        fromDate: '2022',
-        toDate: '2025',
+        date: {
+            status: "Finished",
+            from: "2022",
+            to: "2025"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -163,7 +169,10 @@ export const theatreItems = {
                 `,
             },
         ],
-        fromDate: '2021',
+        date: {
+            status: "OnGoing",
+            from: "2021"
+        },
     },
 
     NSFW: {
@@ -177,8 +186,11 @@ export const theatreItems = {
         ],
         tags: ['Improvisation', 'Théâtre contemporain', 'Spectacle pour adultes'],
         roles: ['Comédien'],
-        fromDate: '2021',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2021",
+            to: "2023"
+        },
         additionalInfo: [
             {
                 label: 'Mise en scène',
@@ -206,7 +218,10 @@ export const theatreItems = {
             '/img/theatre/tcc/tcc-05.jpg',
         ],
         tags: ['Improvisation', 'Seule en scène', 'Théâtre contemporain'],
-        fromDate: '2025',
+        date: {
+            status: "OnGoing",
+            from: "2025"
+        },
         link: "https://www.tres-chair-corps.fr/",
         additionalInfo: [
             {
@@ -229,15 +244,18 @@ export const theatreItems = {
         id: 'impro-en-seine',
         title: 'Impro en Seine',
         description: "Directeur technique et régisseur général pour le festival d'improvisation Impro en Seine.",
-        fullDescription: descritionHtml([
+        fullDescription: descriptionHtml(
             "Régisseur général du festival Impro en Seine, le plus gros festival d’improvisation français avec 97 spectacles, s’enchainant avec 10 minutes entre chaque spectacle, répartis sur 3 salles en parallèle sur 4 jours.",
             "Mon travail consiste à coordonner les compagnies et le théâtre, rechercher le matériel, recruter, former et coordonner une équipe d'une douzaine de bénévoles.",
-        ]),
+        ),
         coverImage: '/img/theatre/misc/improenseine-cover.jpg',
         additionalImages: [
             '/img/theatre/misc/improenseine-cover.jpg'
         ],
-        fromDate: '2022',
+        date: {
+            status: "OnGoing",
+            from: "2022"
+        },
         tags: ['Improvisation', 'Festival', 'Régie'],
         roles: ['Régisseur général', 'Directeur technique'],
         link: "https://improenseine.com/",
@@ -277,17 +295,20 @@ export const theatreItems = {
         tags: ['Musique', 'Orchestre'],
         roles: ['Création lumière'],
         link: "https://locg.ch/fr/calendrier/ensemble",
-        fromDate: '2025',
+        date: {
+            status: "OnGoing",
+            from: "2025"
+        },
     },
 
     SavantMelange: {
         id: 'savant-melange',
         title: 'Savant mélange',
         description: 'Quand science et impro se rencontrent.',
-        fullDescription: descritionHtml([
+        fullDescription: descriptionHtml(
             "Savant Mélange est une compagnie fondée en 2025 autour d’une envie commune : faire dialoguer la scène et la science ! Nous proposons des spectacles de théâtre improvisé, pour transmettre la science de manière vivante, sensible et ludique.",
             "L’improvisation théâtrale est une discipline artistique qui demande aux comédien-nes d’inventer des histoires en temps réel sans texte ni mise en scène préétablie. Depuis quelques années, elle s’invite dans les fêtes de la science, les festivals de vulgarisation scientifique et les universités. Elle constitue un outil original et pertinent à la médiation scientifique.",
-        ]),
+        ),
         coverImage: '/img/theatre/savant-melange/savant-melange-cover.jpg',
         additionalImages: [
             '/img/theatre/savant-melange/savant-melange-01.jpg',
@@ -302,6 +323,9 @@ export const theatreItems = {
         ],
         link: "https://savantmelange.fr/",
         pressKit: "/dossiers/theatre/Dossier diffusion - Savant Mélange.pdf",
+        date: {
+            status: "InCreation"
+        },
     },
 
     Terrarium: {
@@ -320,8 +344,11 @@ export const theatreItems = {
         ],
         tags: ['Improvisation', 'Huis Clos'],
         roles: ['Mise en scène', 'Comédien'],
-        fromDate: '2022',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2022",
+            to: "2023"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -358,8 +385,11 @@ export const theatreItems = {
         roles: [
             'Comédien',
         ],
-        fromDate: '2023',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2023",
+            to: "2023"
+        },
         additionalInfo: [
             {
                 label: 'Mise en scène',
@@ -402,8 +432,11 @@ export const theatreItems = {
                 value: 'Sarah Zetiou',
             },
         ],
-        fromDate: '2022',
-        toDate: '2024',
+        date: {
+            status: "Finished",
+            from: "2022",
+            to: "2024"
+        },
     },
 
     LesSonsDeMaVie: {
@@ -422,7 +455,10 @@ export const theatreItems = {
         tags: [
             'Improvisation'
         ],
-        fromDate: '2019',
+        date: {
+            status: "OnGoing",
+            from: "2019"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -450,8 +486,11 @@ export const theatreItems = {
             'Seul en scène',
         ],
         roles: ['Création', 'Jeu'],
-        fromDate: '2024',
-        toDate: '2024',
+        date: {
+            status: "Finished",
+            from: "2024",
+            to: "2024"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -473,8 +512,11 @@ export const theatreItems = {
             'Seul en scène'
         ],
         roles: ['Créateur', 'Comédien'],
-        fromDate: '2022',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2022",
+            to: "2023"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -511,7 +553,10 @@ export const theatreItems = {
                 value: 'Le 13eme cri',
             },
         ],
-        fromDate: '2019',
+        date: {
+            status: "OnGoing",
+            from: "2019"
+        },
         link: "https://le13emecri.com/"
     },
 
@@ -519,10 +564,10 @@ export const theatreItems = {
         id: 'madeleine',
         title: 'Madeleine',
         description: 'Un personnage créé sur l\'instant, son passé, ses rêves et cauchemars, ses envolées et ses fantasmes…',
-        fullDescription: descritionHtml([
+        fullDescription: descriptionHtml(
             'Embarquez pour un voyage introspectif, intime et onirique, une conversation avec ses souvenirs présents, passés et futurs.',
             'Venez expérimenter un moment suspendu qui va diluer le temps du spectacle et tisser les fils d\'une histoire aussi drôle que chaotique où une seconde devient infini, l’ordinaire extraordinaire.',
-        ]),
+        ),
         roles: ['Comédien'],
         coverImage: '/img/theatre/madeleine/madeleine-cover.jpg',
         additionalImages: [
@@ -534,7 +579,10 @@ export const theatreItems = {
             '/img/theatre/madeleine/madeleine-05.jpg',
         ],
         tags: ['Improvisation','Théâtre contemporain'],
-        fromDate: '2021',
+        date: {
+            status: "OnGoing",
+            from: "2021"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -555,10 +603,10 @@ export const theatreItems = {
         id: 'la-seance',
         title: 'La séance',
         description: "Une patiente inédite prend vie sous vos yeux, façonnée par les suggestions du public.",
-        fullDescription: descritionHtml([
+        fullDescription: descriptionHtml(
             "Ce spectacle aborde la santé mentale avec justesse et humanité, en mêlant profondeur et légèreté. À travers différentes techniques d'impro (expression corporelle, danse, voix off, multi-personnages), les interprètes donnent vie aux émotions et aux réalités intérieures, dans une exploration à la fois sensible et légère.",
             "L’humour devient alors un outil puissant pour susciter l’empathie, libérer la parole et rendre ces enjeux accessibles au plus grand nombre. Appuyé sur des apports scientifiques issus de la psychologie, ce spectacle propose une expérience à la fois touchante, drôle et résolument actuelle.",
-        ]),
+        ),
         coverImage: '/img/theatre/la-seance/la-seance-cover.jpg',
         additionalImages: [
             '/img/theatre/la-seance/la-seance-01.jpg',
@@ -570,7 +618,10 @@ export const theatreItems = {
         ],
         tags: ['Improvisation'],
         roles: ['Metteur en scène', 'Comédien'],
-        fromDate: '2024',
+        date: {
+            status: "OnGoing",
+            from: "2024"
+        },
         additionalInfo: [
             {
                 label: 'Mise en scène',
@@ -604,8 +655,11 @@ export const theatreItems = {
         ],
         tags: ['Improvisation', 'Accessibilité'],
         roles: ['Comédien'],
-        fromDate: '2018',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2018",
+            to: "2023"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
@@ -636,18 +690,21 @@ export const theatreItems = {
         ],
         tags: ['Improvisation', 'Clown'],
         roles: ['Comédien'],
-        fromDate: '2023',
-        toDate: '2023',
+        date: {
+            status: "Finished",
+            from: "2023",
+            to: "2023"
+        },
     },
 
     Fluide: {
         id: 'fluide',
         title: 'Fluide',
         description: 'Un geste, un mot, un regard et les voilà embarqués dans un nouvel univers.',
-        fullDescription: descritionHtml([
+        fullDescription: descriptionHtml(
             "A chaque instant, n’importe quel artiste peut s’emparer d’un élément du spectacle afin d’initier une transition vers une nouvelle scène. Cela peut être par exemple un mot repris pour commencer un nouveau monologue, un son inopiné qui devient une mélodie pour un chant improvisé ou encore un geste anodin qui se transforme en une chorégraphie de groupe…",
             "Les scènes s'enchaînent, comiques, dramatiques, corporelles, poétiques ou autres... Rien n’est interdit, au contraire ! Une seule règle : être à l’écoute de l’énergie de l’instant, de ses envies et de ses partenaires.",
-        ]),
+        ),
         coverImage: '/img/theatre/fluide/fluide-cover.jpg',
         additionalImages: [
             '/img/theatre/fluide/fluide-01.jpg',
@@ -662,8 +719,11 @@ export const theatreItems = {
             'Comédien',
             'Directeur artistique',
         ],
-        fromDate: '2018',
-        toDate: '2020',
+        date: {
+            status: "Finished",
+            from: "2018",
+            to: "2020"
+        },
         additionalInfo: [
             {
                 label: 'Compagnie',
