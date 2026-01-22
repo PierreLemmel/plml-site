@@ -148,5 +148,26 @@ export const techniqueItems = {
             to: "2025"
         },
         link: "https://www.bibi.fr/poissons/",
+    },
+
+    MuseeGuerreEtPaix: {
+        id: 'mgp',
+        title: 'Musée de la Guerre et de la Paix',
+        roles: ["Maintenance technique"],
+        description: "Maintenance technique pour le musée Guerre et Paix de Novion-Porcien",
+        fullDescription: descriptionHtml(
+            "Maintenance technique pour le musée Guerre et Paix de Novion-Porcien.",
+            "Diagnostic et remise en fonctionnement du parc matériel du musée (ordinateurs, lecteurs sons, vidéo-projecteurs, etc.).",
+        ),
+        coverImage: "/img/technique/mgp/mgp-cover.jpg",
+        additionalImages: [
+            '/img/technique/mgp/mgp-01.jpg',
+            '/img/technique/mgp/mgp-02.jpg',
+        ],
+        link: "https://www.guerreetpaix.fr/",
+        date: {
+            status: "OnGoing",
+            from: "2025"
+        },
     }
 } satisfies Record<string, PortfolioItemData>;
