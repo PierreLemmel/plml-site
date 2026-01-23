@@ -134,13 +134,6 @@ export const techniqueItems = {
                 label: 'Artiste',
                 value: '<a href="https://www.instagram.com/bibi_artist/" target="_blank">Bibi</a>',
             },
-            {
-                label: 'Outils utilisés',
-                value: htmlList(
-                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Chataigne</a>',
-                    '<a href="https://benjamin.kuperberg.fr/chataigne/fr" target="_blank">Blux</a>',
-                ),
-            },
         ],
         date: {
             status: "Finished",

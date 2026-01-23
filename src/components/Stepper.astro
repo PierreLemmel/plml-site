@@ -1,0 +1,231 @@
+---
+import { cn } from '../lib/utils';
+
+type Props = {
+    class?: string;
+    labels: string[];
+}
+
+const {
+    class: className,
+    labels
+} = Astro.props;
+
+const cardCount = labels.length;
+const lineAnimationDuration = 0.4;
+const introAnimationDuration = 0.5;
+const introStepDelay = 0.25;
+const introDotToTextDelay = 0.12;
+const introTextToLineDelay = 0.15;
+const introStartDelay = 1.5;
+---
+
+<script define:vars={{ lineAnimationDuration, introAnimationDuration, introStepDelay, introDotToTextDelay, introTextToLineDelay, introStartDelay }}>
+    window.stepperLineAnimationDuration = lineAnimationDuration;
+    window.stepperIntroAnimationDuration = introAnimationDuration;
+    window.stepperIntroStepDelay = introStepDelay;
+    window.stepperIntroDotToTextDelay = introDotToTextDelay;
+    window.stepperIntroTextToLineDelay = introTextToLineDelay;
+    window.stepperIntroStartDelay = introStartDelay;
+</script>
+
+<script>
+    import { animate } from 'motion';
+
+    const stepper = document.getElementById('stepper-container')!;
+    const stepElements = stepper.querySelectorAll('.stepper-step');
+    const lineElements = stepper.querySelectorAll('.stepper-line');
+    const lineFillElements = stepper.querySelectorAll('.stepper-line-fill');
+    const cardCount = stepElements.length;
+    
+    const lineDuration = (window as any).stepperLineAnimationDuration || 0.4;
+    const introDuration = (window as any).stepperIntroAnimationDuration || 0.5;
+    const introStepDelay = (window as any).stepperIntroStepDelay || 0.25;
+    const introDotToTextDelay = (window as any).stepperIntroDotToTextDelay || 0.12;
+    const introTextToLineDelay = (window as any).stepperIntroTextToLineDelay || 0.15;
+    const introStartDelay = (window as any).stepperIntroStartDelay || 1.5;
+
+    let currentIndex = 0;
+    let isNavigating = false;
+    let targetIndex = 0;
+
+    function playIntroAnimation() {
+        stepElements.forEach((step, i) => {
+            const dot = step.querySelector('.stepper-dot') as HTMLElement;
+            const label = step.querySelector('.stepper-label') as HTMLElement;
+            const line = lineElements[i] as HTMLElement | undefined;
+
+            const stepBaseDelay = introStartDelay + i * introStepDelay;
+            const dotDelay = stepBaseDelay;
+            const textDelay = stepBaseDelay + introDotToTextDelay;
+            const lineDelay = stepBaseDelay + introDotToTextDelay + introTextToLineDelay;
+
+            if (dot) {
+                animate(dot, {
+                    opacity: [0, 1],
+                    transform: [`scale(0)`, `scale(1)`]
+                }, {
+                    duration: introDuration,
+                    delay: dotDelay,
+                    ease: 'easeOut'
+                });
+            }
+
+            if (label) {
+                animate(label, {
+                    opacity: [0, 1],
+                    transform: ['translateY(-10px)', 'translateY(0)']
+                }, {
+                    duration: introDuration,
+                    delay: textDelay,
+                    ease: 'easeOut'
+                });
+            }
+
+            if (line) {
+                animate(line, {
+                    opacity: [0, 1]
+                }, {
+                    duration: introDuration,
+                    delay: lineDelay,
+                    ease: 'easeOut'
+                });
+            }
+        });
+    }
+
+    function updateActiveStep(index: number, previousIndex: number) {
+        stepElements.forEach((step, i) => {
+            const dot = step.querySelector('.stepper-dot');
+            const label = step.querySelector('.stepper-label');
+
+            dot?.classList.remove('bg-white', 'bg-white/70', 'bg-white/40', 'scale-125');
+            label?.classList.remove('text-white', 'text-white/70', 'text-white/50');
+
+            if (i === index) {
+                dot?.classList.add('bg-white', 'scale-125');
+                label?.classList.add('text-white');
+            } else if (i < index) {
+                dot?.classList.add('bg-white/70');
+                label?.classList.add('text-white/70');
+            } else {
+                dot?.classList.add('bg-white/40');
+                label?.classList.add('text-white/50');
+            }
+        });
+
+        const goingForward = index > previousIndex;
+
+        if (goingForward && previousIndex >= 0 && previousIndex < lineFillElements.length) {
+            const line = lineFillElements[previousIndex] as HTMLElement;
+            animate(line, { width: '100%' }, { duration: lineDuration, ease: 'easeInOut' });
+        } else if (!goingForward && index >= 0 && index < lineFillElements.length) {
+            const line = lineFillElements[index] as HTMLElement;
+            animate(line, { width: '0%' }, { duration: lineDuration, ease: 'easeInOut' });
+        }
+    }
+
+    function navigateToCard(index: number) {
+        if (isNavigating || index === currentIndex) return;
+        if (index < 0 || index >= cardCount) return;
+
+        targetIndex = index;
+        isNavigating = true;
+        stepTowards();
+    }
+
+    function stepTowards() {
+        if (currentIndex === targetIndex) {
+            isNavigating = false;
+            return;
+        }
+
+        if (currentIndex < targetIndex) {
+            window.goToNextCard();
+        } else {
+            window.goToPrevCard();
+        }
+    }
+
+    window.addEventListener('cardchanged', (event: CustomEvent) => {
+        const previousIndex = currentIndex;
+        currentIndex = event.detail.index;
+        updateActiveStep(currentIndex, previousIndex);
+
+        if (isNavigating && currentIndex !== targetIndex) {
+            setTimeout(stepTowards, 50);
+        } else {
+            isNavigating = false;
+        }
+    });
+
+    stepElements.forEach((step, index) => {
+        step.addEventListener('click', () => {
+            navigateToCard(index);
+        });
+    });
+
+    updateActiveStep(0, -1);
+    playIntroAnimation();
+</script>
+
+<div
+    id="stepper-container"
+    data-card-count={cardCount}
+    class={cn(
+        "fixed",
+        "z-9999",
+        "top-6 md:top-6 lg:top-8 left-1/2 -translate-x-1/2",
+        "w-[90%] lg:w-[85%] xl:w-[80%]",
+        "flex items-center justify-between",
+        "text-sm md:text-base",
+        className
+    )}
+>
+    {labels.map((label, index) => (
+        <>
+            <button
+                class={cn(
+                    "stepper-step",
+                    "group",
+                    "flex flex-col items-center gap-3",
+                    "cursor-pointer"
+                )}
+                data-index={index}
+                aria-label={`Aller à ${label}`}
+            >
+                <span
+                    class={cn(
+                        "stepper-dot",
+                        "size-2.5 md:size-3 xl:size-4",
+                        "rounded-full",
+                        "transition-all duration-500",
+                        "bg-white/40",
+                        "group-hover:scale-125"
+                    )}
+                    style="opacity: 0; transform: scale(0);"
+                />
+                <span
+                    class={cn(
+                        "stepper-label",
+                        "font-light uppercase tracking-wider",
+                        "group-hover:text-white",
+                        "transition-all duration-500",
+                        "text-white/50"
+                    )}
+                    style="opacity: 0; transform: translateY(-10px);"
+                >
+                    {label}
+                </span>
+            </button>
+            {index < labels.length - 1 && (
+                <div 
+                    class="stepper-line flex-1 h-0.5 bg-white/20 relative self-start mt-[5px] md:mt-1.5 -mx-5 -lg:mx-4"
+                    style="opacity: 0;"
+                >
+                    <div class="stepper-line-fill absolute inset-y-0 left-0 bg-white/60 w-0" />
+                </div>
+            )}
+        </>
+    ))}
+</div>

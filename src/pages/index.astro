@@ -6,6 +6,7 @@ import Card1 from '../components/cards/Card1.astro';
 import Card2 from '../components/cards/Card2.astro';
 import Card3 from '../components/cards/Card3.astro';
 import Card4 from '../components/cards/Card4.astro';
+import Stepper from '../components/Stepper.astro';
 
 const cardCount = 4;
 let cardIndex = 0;
@@ -182,7 +183,7 @@ let cardIndex = 0;
 	description="Pierre Lemmel - Comédien, metteur en scène et artiste numérique. Découvrez mes créations."
 	hideFooter={true}
 >
-    <main
+	<main
 		id="main-container"
 		class={cn(
 			"text-white font-barlow",
@@ -194,5 +195,6 @@ let cardIndex = 0;
 		<Card2 cardIndex={cardIndex++} cardCount={cardCount} />
 		<Card3 cardIndex={cardIndex++} cardCount={cardCount} />
 		<Card4 cardIndex={cardIndex++} cardCount={cardCount} />
+		<Stepper labels={['Accueil', 'À\u00A0propos', 'Portfolio', 'Contact']} />
     </main>
 </Layout>
