@@ -33,7 +33,7 @@ const zindex = getZIndex(cardIndex, cardCount);
 
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
 
-    function beforeToDuring(initialDelay: number = 1.55) {
+    function animateIn(initialDelay: number) {
         cardContainer.classList.remove('hidden');
 
         const baseDelay = initialDelay;
@@ -71,7 +71,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         });
 
         animate('#card-1-container', {
-            '--gradient-color-1': '#000000'
+            '--card-1-gradient-color-1': '#000000'
         }, {
             duration: 2.5 * animDuration,
             delay: baseDelay + 0.8 * animDelay,
@@ -79,7 +79,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         });
 
         animate('#card-1-container', {
-            '--gradient-color-2': '#000000'
+            '--card-1-gradient-color-2': '#000000'
         }, {
             duration: 2.5 * animDuration,
             delay: baseDelay + 0 * animDelay,
@@ -108,7 +108,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         });
     }
 
-    function duringToBefore() {
+    function animateOut() {
         scrollArrow.classList.add('pointer-events-none');
 
         animate('#svg-letter-p', {
@@ -145,7 +145,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         })
 
         animate('#card-1-container', {
-            '--gradient-color-1': 'rgba(0, 0, 0, 0)'
+            '--card-1-gradient-color-1': 'rgba(0, 0, 0, 0)'
         }, {
             duration: 2.5 * animDuration,
             delay: 0.8 * animDelay,
@@ -153,7 +153,7 @@ const zindex = getZIndex(cardIndex, cardCount);
         });
 
         animate('#card-1-container', {
-            '--gradient-color-2': 'rgba(0, 0, 0, 0)'
+            '--card-1-gradient-color-2': 'rgba(0, 0, 0, 0)'
         }, {
             duration: 2.5 * animDuration,
             delay: 2.2 * animDelay,
@@ -177,10 +177,28 @@ const zindex = getZIndex(cardIndex, cardCount);
         });
     }
 
-    window.registerCard(cardIndex, {
-        beforeToDuring: () => beforeToDuring(0),
-        duringToBefore
-    });
+    function hide() {
+        cardContainer.classList.add('hidden');
+    }
+
+    function show() {
+        cardContainer.classList.remove('hidden');
+    }
+
+    window.registerCard(
+        cardIndex,
+        [
+            "menu"
+        ],
+        {
+            beforeToDuring: () => animateIn(0),
+            duringToBefore: () => animateOut(),
+            duringToAfter: () => animateOut(),
+            afterToDuring: () => animateIn(1.55),
+            hide,
+            show
+        }
+    );
 
     function syncTaglineScale() {
         const svgWidth = document.getElementById("card-1-svg")?.clientWidth;
@@ -317,8 +335,8 @@ const zindex = getZIndex(cardIndex, cardCount);
 
 <style>
     .card-1-gradient {
-        --gradient-color-1: rgba(0, 0, 0, 1);
-        --gradient-color-2: rgba(0, 0, 0, 1);
-        background: linear-gradient(to top right, var(--gradient-color-1), var(--gradient-color-2));
+        --card-1-gradient-color-1: rgba(0, 0, 0, 1);
+        --card-1-gradient-color-2: rgba(0, 0, 0, 1);
+        background: linear-gradient(to top right, var(--card-1-gradient-color-1), var(--card-1-gradient-color-2));
     }
 </style>

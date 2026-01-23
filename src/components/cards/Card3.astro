@@ -61,6 +61,9 @@ const zindex = getZIndex(cardIndex, cardCount);
         const baseDelay = 2.5;
         const titleStartDelay = baseDelay + animDuration;
 
+        cardContainer.style.setProperty('--card-3-gradient-color-1', 'rgba(0, 0, 0, 1)');
+        cardContainer.style.setProperty('--card-3-gradient-color-2', 'rgba(0, 0, 0, 1)');
+
         for (let i = 0; i < 3; i++) {
             animate(`#card-3-col-${i}`, {
                 transform: getEnterTransform(i, true),
@@ -177,15 +180,34 @@ const zindex = getZIndex(cardIndex, cardCount);
         animate(".card3-see-more-button", {
             opacity: [1, 0],
         }, {
-            duration: titleAnimDuration,
+            duration: 1.0,
             delay: 0,
             ease: 'easeOut'
+        });
+
+        animate(cardContainer, {
+            '--card-3-gradient-color-1': 'rgba(0, 0, 0, 0)',
+        }, {
+            duration: 0.8,
+            delay: 1.5,
+            ease: 'easeInOut'
+        });
+
+        animate(cardContainer, {
+            '--card-3-gradient-color-2': 'rgba(0, 0, 0, 0)',
+        }, {
+            duration: 0.8,
+            delay: 2.15,
+            ease: 'easeInOut'
         });
     }
 
     function afterToDuring() {
         const useSimpleAnim = window.isSmallScreen();
         const titleStartDelay = animDuration;
+
+        cardContainer.style.setProperty('--card-3-gradient-color-1', 'rgba(0, 0, 0, 1)');
+        cardContainer.style.setProperty('--card-3-gradient-color-2', 'rgba(0, 0, 0, 1)');
 
         for (let i = 0; i < 3; i++) {
             if (useSimpleAnim) {
@@ -237,20 +259,51 @@ const zindex = getZIndex(cardIndex, cardCount);
             scrollArrow.classList.remove('pointer-events-none');
             window.unlockCardsAnimation();
         });
+
+        animate(cardContainer, {
+            '--card-3-gradient-color-1': 'rgba(0, 0, 0, 1)'
+        }, {
+            duration: 0.8,
+            delay: 0.65,
+            ease: 'easeInOut'
+        });
+
+        animate(cardContainer, {
+            '--card-3-gradient-color-2': 'rgba(0, 0, 0, 1)'
+        }, {
+            duration: 0.8,
+            delay: 0,
+            ease: 'easeInOut'
+        });
     }
 
-    window.registerCard(cardIndex, {
-        beforeToDuring,
-        duringToBefore,
-        duringToAfter,
-        afterToDuring
-    });
+    function hide() {
+        cardContainer.classList.add('hidden');
+    }
+
+    function show() {
+        cardContainer.classList.remove('hidden');
+    }
+
+    window.registerCard(cardIndex,
+        [
+            "portfolio"
+        ],
+        {
+            beforeToDuring,
+            duringToBefore,
+            duringToAfter,
+            afterToDuring,
+            hide,
+            show
+        }
+    );
 </script>
 
 <div
     class={cn(
         "fixed w-screen h-screen",
-        "bg-neutral-900",
+        "card-3-gradient",
         className
     )}
     style={`z-index: ${zindex};`}
@@ -264,7 +317,6 @@ const zindex = getZIndex(cardIndex, cardCount);
         "grid-rows-3 md:grid-rows-1",
         "md:grid-cols-3",
         "gap-1",
-        "bg-black"
     )}>
         <div
             id="card-3-col-0"
@@ -422,5 +474,13 @@ const zindex = getZIndex(cardIndex, cardCount);
             id="card-3-scroll-arrow"
             visible={false}
         />
-    </div>
+    </div>  
 </div>
+
+<style>
+    .card-3-gradient {
+        --card-3-gradient-color-1: rgba(0, 0, 0, 1);
+        --card-3-gradient-color-2: rgba(0, 0, 0, 1);
+        background: linear-gradient(to top left, var(--card-3-gradient-color-1), var(--card-3-gradient-color-2));
+    }
+</style>

@@ -12,25 +12,9 @@ const {
 } = Astro.props;
 
 const cardCount = labels.length;
-const lineAnimationDuration = 0.4;
-const introAnimationDuration = 0.5;
-const introStepDelay = 0.25;
-const introDotToTextDelay = 0.12;
-const introTextToLineDelay = 0.15;
-const introStartDelay = 1.5;
 ---
-
-<script define:vars={{ lineAnimationDuration, introAnimationDuration, introStepDelay, introDotToTextDelay, introTextToLineDelay, introStartDelay }}>
-    window.stepperLineAnimationDuration = lineAnimationDuration;
-    window.stepperIntroAnimationDuration = introAnimationDuration;
-    window.stepperIntroStepDelay = introStepDelay;
-    window.stepperIntroDotToTextDelay = introDotToTextDelay;
-    window.stepperIntroTextToLineDelay = introTextToLineDelay;
-    window.stepperIntroStartDelay = introStartDelay;
-</script>
-
 <script>
-    import { animate } from 'motion';
+    import { animate, type Easing } from 'motion';
 
     const stepper = document.getElementById('stepper-container')!;
     const stepElements = stepper.querySelectorAll('.stepper-step');
@@ -38,16 +22,14 @@ const introStartDelay = 1.5;
     const lineFillElements = stepper.querySelectorAll('.stepper-line-fill');
     const cardCount = stepElements.length;
     
-    const lineDuration = (window as any).stepperLineAnimationDuration || 0.4;
-    const introDuration = (window as any).stepperIntroAnimationDuration || 0.5;
-    const introStepDelay = (window as any).stepperIntroStepDelay || 0.25;
-    const introDotToTextDelay = (window as any).stepperIntroDotToTextDelay || 0.12;
-    const introTextToLineDelay = (window as any).stepperIntroTextToLineDelay || 0.15;
-    const introStartDelay = (window as any).stepperIntroStartDelay || 1.5;
+    const lineDuration = 0.4;
+    const introDuration = 0.5;
+    const introStepDelay = 0.25;
+    const introDotToTextDelay = 0.12;
+    const introTextToLineDelay = 0.15;
+    const introStartDelay = 1.5;
 
     let currentIndex = 0;
-    let isNavigating = false;
-    let targetIndex = 0;
 
     function playIntroAnimation() {
         stepElements.forEach((step, i) => {
@@ -94,6 +76,53 @@ const introStartDelay = 1.5;
         });
     }
 
+    function playOutroAnimation() {
+        stepElements.forEach((step, i) => {
+
+            const index = cardCount - 1 - i;
+            const dot = step.querySelector('.stepper-dot') as HTMLElement;
+            const label = step.querySelector('.stepper-label') as HTMLElement;
+            const line = lineElements[i] as HTMLElement | undefined;
+
+            const stepBaseDelay = introStartDelay + index * introStepDelay;
+            const dotDelay = stepBaseDelay;
+            const textDelay = stepBaseDelay + introDotToTextDelay;
+            const lineDelay = stepBaseDelay + introDotToTextDelay + introTextToLineDelay;
+
+            if (dot) {
+                animate(dot, {
+                    opacity: [1, 0],
+                    transform: [`scale(1)`, `scale(0)`]
+                }, {
+                    duration: introDuration,
+                    delay: dotDelay,
+                    ease: 'easeOut'
+                });
+            }
+
+            if (label) {
+                animate(label, {
+                    opacity: [1, 0],
+                    transform: ['translateY(0)', 'translateY(-10px)']
+                }, {
+                    duration: introDuration,
+                    delay: textDelay,
+                    ease: 'easeOut'
+                });
+            }
+
+            if (line) {
+                animate(line, {
+                    opacity: [1, 0]
+                }, {
+                    duration: introDuration,
+                    delay: lineDelay,
+                    ease: 'easeOut'
+                });
+            }
+        });
+    }
+
     function updateActiveStep(index: number, previousIndex: number) {
         stepElements.forEach((step, i) => {
             const dot = step.querySelector('.stepper-dot');
@@ -116,46 +145,121 @@ const introStartDelay = 1.5;
 
         const goingForward = index > previousIndex;
 
-        if (goingForward && previousIndex >= 0 && previousIndex < lineFillElements.length) {
-            const line = lineFillElements[previousIndex] as HTMLElement;
-            animate(line, { width: '100%' }, { duration: lineDuration, ease: 'easeInOut' });
-        } else if (!goingForward && index >= 0 && index < lineFillElements.length) {
-            const line = lineFillElements[index] as HTMLElement;
-            animate(line, { width: '0%' }, { duration: lineDuration, ease: 'easeInOut' });
+        if (goingForward) {
+            let delayIndex = 0;
+            for (let i = previousIndex; i < index; i++) {
+                if (i >= 0 && i < lineFillElements.length) {
+                    const line = lineFillElements[i] as HTMLElement;
+                    const delay = delayIndex * lineDuration;
+
+                    let ease: Easing;
+                    if (i === previousIndex) {
+                        ease = 'easeIn';
+                    } else if (i === (index - 1)) {
+                        ease = 'easeOut';
+                    } else {
+                        ease = 'linear';
+                    }
+                    animate(
+                        line,
+                        { width: '100%' },
+                        {
+                            duration: lineDuration,
+                            delay,
+                            ease
+                        }
+                    );
+                    delayIndex++;
+                }
+            }
+        } else {
+            let delayIndex = 0;
+            for (let i = previousIndex - 1; i >= index; i--) {
+                if (i >= 0 && i < lineFillElements.length) {
+                    const line = lineFillElements[i] as HTMLElement;
+                    const delay = delayIndex * lineDuration;
+
+                    let ease: Easing;
+                    if (i === previousIndex - 1) {
+                        ease = 'easeIn';
+                    } else if (i === index) {
+                        ease = 'easeOut';
+                    } else {
+                        ease = 'linear';
+                    }
+                    animate(
+                        line,
+                        { width: '0%' }, {
+                            duration: lineDuration,
+                            delay,
+                            ease
+                        }
+                    );
+                    delayIndex++;
+                }
+            }
         }
     }
 
     function navigateToCard(index: number) {
-        if (isNavigating || index === currentIndex) return;
+        if (index === currentIndex) return;
         if (index < 0 || index >= cardCount) return;
 
-        targetIndex = index;
-        isNavigating = true;
-        stepTowards();
+        window.goToCard(index);
     }
 
-    function stepTowards() {
-        if (currentIndex === targetIndex) {
-            isNavigating = false;
-            return;
+    let visible = false;
+
+    function initializeStepperState(initialIndex: number) {
+        currentIndex = initialIndex;
+        
+        for (let i = 0; i < initialIndex; i++) {
+            if (i < lineFillElements.length) {
+                const line = lineFillElements[i] as HTMLElement;
+                line.style.width = '100%';
+            }
         }
 
-        if (currentIndex < targetIndex) {
-            window.goToNextCard();
-        } else {
-            window.goToPrevCard();
-        }
+        stepElements.forEach((step, i) => {
+            const dot = step.querySelector('.stepper-dot');
+            const label = step.querySelector('.stepper-label');
+
+            dot?.classList.remove('bg-white', 'bg-white/70', 'bg-white/40', 'scale-125');
+            label?.classList.remove('text-white', 'text-white/70', 'text-white/50');
+
+            if (i === initialIndex) {
+                dot?.classList.add('bg-white', 'scale-125');
+                label?.classList.add('text-white');
+            } else if (i < initialIndex) {
+                dot?.classList.add('bg-white/70');
+                label?.classList.add('text-white/70');
+            } else {
+                dot?.classList.add('bg-white/40');
+                label?.classList.add('text-white/50');
+            }
+        });
     }
 
     window.addEventListener('cardchanged', (event: CustomEvent) => {
-        const previousIndex = currentIndex;
-        currentIndex = event.detail.index;
-        updateActiveStep(currentIndex, previousIndex);
-
-        if (isNavigating && currentIndex !== targetIndex) {
-            setTimeout(stepTowards, 50);
+        const newIndex = event.detail.index;
+        
+        if (!visible) {
+            if (newIndex > 0) {
+                visible = true;
+                initializeStepperState(newIndex);
+                playIntroAnimation();
+            } else {
+                visible = false;
+            }
         } else {
-            isNavigating = false;
+            const previousIndex = currentIndex;
+            currentIndex = newIndex;
+            if (currentIndex > 0) {
+                updateActiveStep(currentIndex, previousIndex);
+            } else {
+                playOutroAnimation();
+                visible = false;
+            }
         }
     });
 
@@ -164,9 +268,6 @@ const introStartDelay = 1.5;
             navigateToCard(index);
         });
     });
-
-    updateActiveStep(0, -1);
-    playIntroAnimation();
 </script>
 
 <div
@@ -175,8 +276,9 @@ const introStartDelay = 1.5;
     class={cn(
         "fixed",
         "z-9999",
-        "top-6 md:top-6 lg:top-8 left-1/2 -translate-x-1/2",
+        "top-0 left-1/2 -translate-x-1/2",
         "w-[90%] lg:w-[85%] xl:w-[80%]",
+        "pt-6 md:pt-6 lg:pt-8 pb-4",
         "flex items-center justify-between",
         "text-sm md:text-base",
         className

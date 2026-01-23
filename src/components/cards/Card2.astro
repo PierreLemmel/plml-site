@@ -51,7 +51,11 @@ const zindex = getZIndex(cardIndex, cardCount);
         const intensityTarget = { intensity: 1 };
         const scaleTarget = { scale: 1.15 };
 
+        canvasContainer.style.opacity = '1';
+        
         canvas.shaderUniforms!.fIntensity.value = 1;
+        canvas.shaderUniforms!.fOpacity.value = 1;
+        canvas.shaderUniforms!.fThreshold.value = -0.1;
         canvas.style.opacity = '1';
 
         animate(
@@ -92,7 +96,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'easeInOut'
         });
 
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 4; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
             }, {
@@ -134,12 +138,12 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         });
 
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 4; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(0)', 'translateY(-100%)'],
             }, {
                 duration: textAnimDuration,
-                delay: (3 - i) * textAnimDelay,
+                delay: (4 - i) * textAnimDelay,
                 ease: 'easeInOut'
             });
         }
@@ -151,7 +155,9 @@ const zindex = getZIndex(cardIndex, cardCount);
             delay: 3 * textAnimDelay,
             ease: 'easeInOut'
         }).then(() => {
-            makeContainerInvisible();
+            setTimeout(() => {
+                makeContainerInvisible();
+            }, 2000);
         });
 
         
@@ -207,12 +213,12 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         });
 
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 4; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(0)', 'translateY(-100%)'],
             }, {
                 duration: textAnimDuration,
-                delay: (3 - i) * textAnimDelay,
+                delay: (4 - i) * textAnimDelay,
                 ease: 'easeInOut'
             });
         }
@@ -262,7 +268,7 @@ const zindex = getZIndex(cardIndex, cardCount);
 
         makeContainerVisible();
 
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 4; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
             }, {
@@ -286,7 +292,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             transform: ['scale(0)', 'scale(1)'],
         }, {
             duration: textAnimDuration,
-            delay: baseDelay + 3 * textAnimDelay,
+            delay: baseDelay + 4 * textAnimDelay,
             ease: 'linear'
         });
 
@@ -319,12 +325,29 @@ const zindex = getZIndex(cardIndex, cardCount);
         );
     }
 
-    window.registerCard(cardIndex, {
-        beforeToDuring,
-        duringToBefore,
-        duringToAfter,
-        afterToDuring
-    });
+    function hide() {
+        cardContainer.classList.add('hidden');
+    }
+
+    function show() {
+        cardContainer.classList.remove('hidden');
+    }
+
+    window.registerCard(
+        cardIndex,
+        [
+            "a-propos",
+            "about"
+        ],
+        {
+            beforeToDuring,
+            duringToBefore,
+            duringToAfter,
+            afterToDuring,
+            hide,
+            show
+        }
+    );
 </script>
 
 <div
@@ -391,7 +414,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 )}
             />
             <div class={cn(
-                "flex flex-col items-center justify-start md:justify-center",
+                "flex flex-col items-stretch justify-start md:justify-center",
                 "max-h-full",
                 "md:text-lg",
                 "gap-2 sm:gap-3 md:gap-4",
@@ -399,30 +422,23 @@ const zindex = getZIndex(cardIndex, cardCount);
                 "min-h-0"
             )}>
                 <div class="overflow-hidden">
-                    <div
-                    id="card-2-text-1"
-                    class={cn(
-                    )}
-                    >
+                    <div id="card-2-text-1">
                         Je m&apos;appelle Pierre Lemmel, je suis artiste numérique, comédien, metteur-en-scène et technicien lumière.
                     </div>
                 </div>
                 <div class="overflow-hidden">
-                    <div
-                    id="card-2-text-2"
-                    class={cn(
-                    )}
-                    >
+                    <div id="card-2-text-2">
                         Après une première carrière en tant que développeur informatique, je me tourne en 2016 vers le théâtre improvisé. Celui-ci m&apos;amène vers la technique de scène, celle-ci vers les arts numériques et ceux-ci me ramène au développement informatique. La boucle est bouclée.
                     </div>
                 </div>
                 <div class="overflow-hidden">
-                    <div
-                        id="card-2-text-3"
-                        class={cn(
-                        )}
-                    >
-                        Dans ce site, je vous propose de découvrir mes différentes créations, passées en cours et à venir.
+                    <div id="card-2-text-3">
+                        Dans ce site, je vous propose de découvrir mes différentes créations, passées, en cours et à venir.
+                    </div>
+                </div>
+                <div class="overflow-hidden">
+                    <div id="card-2-text-4">
+                        <a href="/a-propos" class="hover:text-accent1 text-white underline transition-colors duration-500">En savoir plus</a>
                     </div>
                 </div>
             </div>

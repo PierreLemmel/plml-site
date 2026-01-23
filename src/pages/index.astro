@@ -20,16 +20,19 @@ let cardIndex = 0;
 	type CardTransitions = {
 		beforeToDuring: () => void;
 		duringToBefore: () => void;
-		duringToAfter?: () => void;
-		afterToDuring?: () => void;
+		duringToAfter: () => void;
+		afterToDuring: () => void;
+		hide: () => void;
+		show: () => void;
 	};
 
 	declare global {
 		interface Window {
-			registerCard: (index: number, transitions: CardTransitions) => void;
+			registerCard: (index: number, ids: string[], transitions: CardTransitions) => void;
 
 			goToNextCard: () => void;
 			goToPrevCard: () => void;
+			goToCard: (targetIndex: number) => void;
 			unlockCardsAnimation: () => void;
 
 			isSmallScreen: () => boolean;
@@ -38,13 +41,25 @@ let cardIndex = 0;
 
 	const cardCount = parseNumberWithDefault(document.getElementById('main-container')?.dataset.cardCount, 2);
 	
-	let currentCardIndex = 0;
+	const cardIds: Map<number, string[]> = new Map();
+	const slugToIndex: Map<string, number> = new Map();
+
+	let currentCardIndex = -1;
 	let isAnimating = false;
 	const cardStates: Map<number, CardState> = new Map();
 	const cardTransitions: Map<number, CardTransitions> = new Map();
 
 	for (let i = 0; i < cardCount; i++) {
-		cardStates.set(i, i === 0 ? 'during' : 'before');
+		cardStates.set(i, 'before');
+	}
+
+	function getCardIndexFromUrl(): number | null {
+		const params = new URLSearchParams(window.location.search);
+		const cardParam = params.get('card');
+		if (cardParam && slugToIndex.has(cardParam)) {
+			return slugToIndex.get(cardParam)!;
+		}
+		return null;
 	}
 
 	function dispatchCardChanged(index: number) {
@@ -60,25 +75,36 @@ let cardIndex = 0;
 		isAnimating = false;
 	};
 
-	window.registerCard = (index: number, transitions: CardTransitions) => {
+	window.registerCard = (index: number, ids: string[], transitions: CardTransitions) => {
 		cardTransitions.set(index, transitions);
+		cardIds.set(index, ids);
+		ids.forEach(id => slugToIndex.set(id, index));
 	};
 
 	function canTransitionTo(targetIndex: number): boolean {
 		return !isAnimating && 
-			Math.abs(targetIndex - currentCardIndex) === 1 && 
+			targetIndex !== currentCardIndex &&
 			targetIndex >= 0 && 
 			targetIndex < cardCount;
 	}
 
 	function transitionToCard(targetIndex: number) {
 		if (!canTransitionTo(targetIndex)) return;
-
+		
 		lockAnimation();
 
 		const goingForward = targetIndex > currentCardIndex;
+		const previousIndex = currentCardIndex;
 		const currentTransitions = cardTransitions.get(currentCardIndex);
 		const targetTransitions = cardTransitions.get(targetIndex);
+
+		cardTransitions.forEach((transition, index) => {
+			if (index === currentCardIndex || index === targetIndex) {
+				transition.show();
+			} else {
+				transition.hide();
+			}
+		});
 
 		if (goingForward) {
 			const currentState = cardStates.get(currentCardIndex);
@@ -88,6 +114,10 @@ let cardIndex = 0;
 			} else if (currentState === 'during') {
 				cardStates.set(currentCardIndex, 'before');
 				currentTransitions?.duringToBefore();
+			}
+
+			for (let i = previousIndex + 1; i < targetIndex; i++) {
+				cardStates.set(i, 'after');
 			}
 
 			if (targetTransitions) {
@@ -105,6 +135,10 @@ let cardIndex = 0;
 			if (currentState === 'during') {
 				cardStates.set(currentCardIndex, 'before');
 				currentTransitions?.duringToBefore();
+			}
+
+			for (let i = previousIndex - 1; i > targetIndex; i--) {
+				cardStates.set(i, 'before');
 			}
 
 			if (targetTransitions) {
@@ -128,6 +162,10 @@ let cardIndex = 0;
 
 	window.goToPrevCard = () => {
 		transitionToCard(currentCardIndex - 1);
+	};
+
+	window.goToCard = (targetIndex: number) => {
+		transitionToCard(targetIndex);
 	};
 
 	window.addEventListener('wheel', (event) => {
@@ -169,10 +207,18 @@ let cardIndex = 0;
 	document.body.style.overflow = 'hidden';
 
 	const startInterval = setInterval(() => {
+		if (cardTransitions.size < cardCount) return;
+
 		const card0 = cardTransitions.get(0);
 		if (card0) {
-			lockAnimation();
-			card0.beforeToDuring();
+			const initialCardIndex = getCardIndexFromUrl() ?? 0;
+
+			for (let i = 0; i < initialCardIndex; i++) {
+				cardStates.set(i, 'after');
+			}
+			
+			transitionToCard(initialCardIndex);
+
 			clearInterval(startInterval);
 		}
 	}, 10);
@@ -187,7 +233,8 @@ let cardIndex = 0;
 		id="main-container"
 		class={cn(
 			"text-white font-barlow",
-			"h-screen w-screen overflow-hidden"
+			"h-screen w-screen overflow-hidden",
+			"bg-black"
 		)}
 		data-card-count={cardCount}
 	>

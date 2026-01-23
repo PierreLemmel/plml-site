@@ -134,10 +134,25 @@ const currentYear = new Date().getFullYear();
         });
     }
 
-    window.registerCard(cardIndex, {
-        beforeToDuring,
-        duringToBefore
-    });
+    function hide() {
+        makeContainerInvisible();
+    }
+
+    function show() {
+        makeContainerVisible();
+    }
+
+    window.registerCard(cardIndex,
+        [
+            "contact"
+        ],
+        {
+            beforeToDuring,
+            duringToBefore,
+            hide,
+            show
+        }
+    );
 </script>
 
 <div
@@ -244,4 +259,3 @@ const currentYear = new Date().getFullYear();
         </footer>
     </div>
 </div>
-
