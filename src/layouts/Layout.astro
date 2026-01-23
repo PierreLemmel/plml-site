@@ -8,6 +8,7 @@ import { getSiteInfos } from '../lib/infos';
 interface Props extends SEOProps {
     title?: string;
     hideFooter?: boolean;
+    class?: string;
 }
 
 const {
@@ -17,7 +18,8 @@ const {
     canonical,
     type,
     noindex,
-    hideFooter = false
+    hideFooter = false,
+    class: className
 } = Astro.props;
 
 const { companyName } = getSiteInfos();
@@ -46,7 +48,7 @@ const currentYear = new Date().getFullYear();
         {!hideFooter && (
             <footer class={cn(
                 "w-full py-6 px-6",
-                "bg-neutral-950 text-white/60",
+                "bg-black text-white/60",
                 "font-barlow text-sm",
                 "flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4"
             )}>

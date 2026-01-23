@@ -1,10 +1,205 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { cn } from "../lib/utils";
+
+return Astro.redirect("/404");
+
+const letterThickness = 2;
+const lettersSpacing = 3;
 ---
+
+<script>
+    import { animate } from 'motion';
+
+    const animDuration = 0.7;
+    const animDelay = 0.45;
+
+    const cardContainer = document.getElementById('about-container')!;
+
+    function animateIn() {
+        cardContainer.classList.remove('hidden');
+
+        const baseDelay = 0.1;
+
+        animate('#svg-letter-p', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            delay: baseDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l1', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            delay: baseDelay + animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-m', {
+            strokeDashoffset: 0,
+        }, {
+            duration: 1.4 * animDuration,
+            delay: baseDelay + 2 * animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#svg-letter-l2', {
+            strokeDashoffset: 0,
+        }, {
+            duration: animDuration,
+            delay: baseDelay + 3 * animDelay,
+            ease: 'easeInOut'
+        });
+
+        animate('#about-tagline', {
+            transform: ['translateY(-100%)', 'translateY(0)'],
+        }, {
+            duration: 1.5 * animDuration,
+            delay: baseDelay + 3.5 * animDelay,
+            ease: 'easeIn'
+        })
+    }
+
+    function syncTaglineScale() {
+        const svgWidth = document.getElementById("about-svg")?.clientWidth;
+        const tagline = document.getElementById("about-tagline-container");
+        if (svgWidth && tagline) {
+            tagline.style.transform = 'scale(1)';
+            const textWidth = tagline.clientWidth;
+            const scale = (svgWidth + 30) / textWidth;
+            tagline.style.transform = `scale(${scale})`;
+        }
+    }
+
+    syncTaglineScale();
+    animateIn();
+
+    const resizeObserver = new ResizeObserver(() => {
+        syncTaglineScale();
+    });
+
+    const container = document.getElementById("about-container");
+    if (container) {
+        resizeObserver.observe(container);
+    }
+</script>
 
 <Layout
 	title="Plml - Pierre Lemmel"
 	description="Pierre Lemmel - Comédien, metteur en scène et artiste numérique. Découvrez mes créations."
+    class="bg-black"
 >
-COUCOU
+    <main class={cn(
+        "bg-black",
+        "text-white",
+        "font-barlow",
+        "flex flex-col items-stretch space-y-6",
+        "min-h-screen w-screen h-full",
+        "overflow-x-hidden",
+        "px-4 md:px-8 lg:px-12 xl:px-16",
+        "pb-12"
+    )}>
+  
+        <div
+            class={cn(
+                "flex flex-col items-center justify-center gap-10",
+                "pt-10",
+                "px-4 md:px-8 lg:px-12 xl:px-16"
+            )}
+            id="about-container"
+        >
+            <svg
+                class={cn(
+                    "overflow-visible"
+                )}
+                id="about-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="10 10 230 80"
+                fill="none"
+                stroke="currentColor"
+                stroke-width={letterThickness}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style={{
+                    paddingLeft: `${lettersSpacing}px`,
+                    paddingRight: `${lettersSpacing}px`,
+                }}
+            >
+                <!-- P -->
+                <path
+                    id="svg-letter-p"
+                    style={{
+                        transform:`translateX(${-2 * lettersSpacing}px)`
+                    }}
+                    d="M10 90 L10 10 L35 10 C55 10 55 45 35 45 L10 45"
+                    pathLength="99"
+                    stroke-dasharray="100"
+                    stroke-dashoffset="100"
+                />
+                
+                <!-- L -->
+                <path
+                    id="svg-letter-l1"
+                    style={{
+                        transform:`translateX(${-lettersSpacing}px)`
+                    }}
+                    d="M70 10 L70 90 L110 90"
+                    pathLength="99"
+                    stroke-dasharray="100"
+                    stroke-dashoffset="100"
+                />
+                
+                <!-- M -->
+                <path
+                    id="svg-letter-m"
+                    style={{
+                        transform:`translateX(${lettersSpacing}px)`
+                    }}
+                    d="M125 90 L125 10 L155 50 L185 10 L185 90"
+                    pathLength="99"
+                    stroke-dasharray="100"
+                    stroke-dashoffset="100"
+                />
+                
+                <!-- L -->
+                <path
+                    id="svg-letter-l2"
+                    style={{
+                        transform:`translateX(${2 * lettersSpacing}px)`
+                    }}
+                    d="M200 10 L200 90 L240 90"
+                    pathLength="99"
+                    stroke-dasharray="100"
+                    stroke-dashoffset="-100"
+                />
+            </svg>
+            <div 
+                id="about-tagline-container"
+                class={cn(
+                    "flex flex-col items-center",
+                    "overflow-hidden"
+                )}
+            >
+                <div
+                    id="about-tagline"
+                    class={cn(
+                        "text-center",
+                        "text-white/70",
+                        "font-barlow",
+                        "font-thin",
+                        "uppercase",
+                        "italic"
+                    )}
+                    style={{
+                        transform: 'translateY(-100%)',
+                    }}
+                >
+                    Arts numériques, théâtre et autres trucs...
+                </div>
+            </div>
+            
+        </div>
+    </main>
 </Layout>

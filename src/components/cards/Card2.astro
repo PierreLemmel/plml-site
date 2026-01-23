@@ -17,6 +17,9 @@ const {
 } = Astro.props;
 
 const zindex = getZIndex(cardIndex, cardCount);
+
+const hasLinkToAbout = false;
+
 ---
 
 <script>
@@ -27,6 +30,7 @@ const zindex = getZIndex(cardIndex, cardCount);
     const scrollArrow = document.getElementById('card-2-scroll-arrow')!;
 
     const cardIndex = parseNumberWithDefault(cardContainer.dataset.cardIndex, 0);
+    const hasLinkToAbout = cardContainer.dataset.hasLinkToAbout === 'true';
 
     const canvas = document.getElementById('card2-background') as HTMLCanvasElement;
     const canvasContainer = document.getElementById('card2-background-container')!;
@@ -34,6 +38,8 @@ const zindex = getZIndex(cardIndex, cardCount);
     const textAnimDuration = 0.7;
     const textAnimDelay = 0.34;
     const backgroundAnimDuration = 1.6;
+
+    const paragraphCount = hasLinkToAbout ? 4 : 3;
 
     const makeContainerVisible = () => {
         cardContainer.classList.remove('hidden');
@@ -96,7 +102,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'easeInOut'
         });
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= paragraphCount; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
             }, {
@@ -138,7 +144,7 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         });
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= paragraphCount; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(0)', 'translateY(-100%)'],
             }, {
@@ -213,12 +219,12 @@ const zindex = getZIndex(cardIndex, cardCount);
             ease: 'linear'
         });
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= paragraphCount; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(0)', 'translateY(-100%)'],
             }, {
                 duration: textAnimDuration,
-                delay: (4 - i) * textAnimDelay,
+                delay: (paragraphCount - i) * textAnimDelay,
                 ease: 'easeInOut'
             });
         }
@@ -268,7 +274,7 @@ const zindex = getZIndex(cardIndex, cardCount);
 
         makeContainerVisible();
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= paragraphCount; i++) {
             animate(`#card-2-text-${i}`, {
                 transform: ['translateY(-100%)', 'translateY(0)'],
             }, {
@@ -352,6 +358,7 @@ const zindex = getZIndex(cardIndex, cardCount);
 
 <div
     id="card-2-container"
+    data-has-link-to-about={hasLinkToAbout}
     data-card-index={cardIndex}
     data-card-count={cardCount}
     class={cn(
@@ -436,11 +443,12 @@ const zindex = getZIndex(cardIndex, cardCount);
                         Dans ce site, je vous propose de découvrir mes différentes créations, passées, en cours et à venir.
                     </div>
                 </div>
-                <div class="overflow-hidden">
+                {hasLinkToAbout && (
+                    <div class="overflow-hidden">
                     <div id="card-2-text-4">
                         <a href="/a-propos" class="hover:text-accent1 text-white underline transition-colors duration-500">En savoir plus</a>
                     </div>
-                </div>
+                </div>)}
             </div>
         </div>
         <WiggleArrow
