@@ -170,4 +170,9 @@ export const techniqueItems = {
             from: "2025"
         },
     }
+
+    // @TODO:
+    // - Kastanien Strudel
+    // - IA agent control
+    // - remote control
 } satisfies Record<string, PortfolioItemData>;
