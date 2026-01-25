@@ -117,17 +117,17 @@ export const techniqueItems = {
     },
 
     BibiFish: {
-        id: 'fish',
-        title: 'Bibi - Fish',
+        id: 'echo',
+        title: 'Bibi - Echo',
         description: "Randomisation d'un système de contrôle de lumières",
         fullDescription: descriptionHtml(
             "Aide à la réalisation technique d'un système de contrôle de lumières pour une oeuvre de l'artiste plasticien <a href='https://www.bibi.fr/' target='_blank'>Bibi</a>.",
             "Création d'un module de randomisation du contrôle des lumières."
         ),
         roles: ["Aide à la réalisation technique"],
-        coverImage: "/img/technique/fish/bibi-fish-cover.jpg",
+        coverImage: "/img/technique/echo/bibi-echo-cover.jpg",
         additionalImages: [
-            '/img/technique/fish/bibi-fish-01.jpg',
+            '/img/technique/echo/bibi-echo-01.jpg',
         ],
         additionalInfo: [
             {
@@ -163,9 +163,4 @@ export const techniqueItems = {
             from: "2025"
         },
     }
-
-    // @TODO:
-    // - Kastanien Strudel
-    // - IA agent control
-    // - remote control
 } satisfies Record<string, PortfolioItemData>;

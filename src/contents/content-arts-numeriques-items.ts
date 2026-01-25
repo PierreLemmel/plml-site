@@ -8,9 +8,9 @@ export const artsNumeriquesItems = {
         description: 'Spectacle à la croisée des arts numériques et de la danse.',
         fullDescription: descriptionHtml(
             "Le projet Dance with Lightness est né d’une volonté de voir se rencontrer les arts numériques et la danse. À la croisée de ces disciplines, il existe un point de convergence : celui de donner à voir la musique.",
-            "Sur scène, trois danseur·euse·s évoluent devant une surface de projection,sans musique pré-enregistrée. Le plateau est équipé d'un système de tracking vidéo (reconnaissance de squelette). Ce programme de reconnaissance d'image en temps réel va suivre les positions de différents points du corps : poignets, coudes, bassins, yeux etc. et analyser les mouvements afin de les associer d'une part à une image, via un logiciel de rendu graphique, d’autre part à des sons, via un logiciel de synthèse audio.",
+            "Sur scène, trois danseur·euse·s évoluent devant une surface de projection sans musique pré-enregistrée. Le plateau est équipé d'un système de tracking vidéo (reconnaissance de squelette). Ce programme de reconnaissance d'image en temps réel va suivre les positions de différents points du corps : poignets, coudes, bassins, yeux etc. et analyser les mouvements afin de les associer d'une part à une image, via un logiciel de rendu graphique, d’autre part à des sons, via un logiciel de synthèse audio.",
             "Le cœur du projet repose sur la transformation de la donnée physique en émotion sensorielle. Tout d’abord, le programme extrait des informations précises (vitesses de rotation, positions dans l'espace, accélérations des mouvements, distances entre différents points du corps etc.). Ces valeurs sont ensuite traitées puis transmises à un moteur de rendu graphique pour créer des projections paramétriques évolutives. Les données sont envoyées simultanément vers un logiciel de synthèse audio numérique. Ce dernier génère une musique vivante, organique, qui n'existe que par et pour le mouvement présent.",
-            "Chaque interprète est assigné à des paramètres spécifiques. Ainsi, le mouvement du premier danseur ne générera pas le même son ni le même effet visuel que celui du second. La superposition de leurs trajectoires crée la symphonie finale.",
+            "À chaque interprète sont assignés des paramètres spécifiques. Ainsi, le mouvement du premier danseur ne générera pas le même son ni le même effet visuel que celui du second. La superposition de leurs trajectoires crée la symphonie finale.",
             "Les artistes sont pensés comme des instruments composant un orchestre tant visuel que sonore.",
         ),
         coverImage: '/img/arts-numeriques/dwl/dwl-cover.png',
@@ -41,7 +41,7 @@ export const artsNumeriquesItems = {
         id: 'aleas',
         title: 'Aleas',
         description: "Spectacle aléatoire et improvisé.",
-        fullDescription: "Dans ce spectacle, la lumière, les musiques, les vidéo-projections et même la durée de chaque scène, sont controlés aléatoirement par un ordinateur. Charge aux artistes de transformer ces hasardeuses propositions en moments de plaisir, de magie ou de tout autre chose.",
+        fullDescription: "Dans ce spectacle, la lumière, les musiques, les vidéo-projections et même la durée de chaque scène, sont controlées aléatoirement par un ordinateur. Charge aux artistes de transformer ces hasardeuses propositions en moments de plaisir, de magie ou de tout autre chose.",
         coverImage: '/img/theatre/aleas/aleas-cover.jpg',
         additionalImages: [
             '/img/theatre/aleas/aleas-01.jpg',
@@ -100,7 +100,7 @@ export const artsNumeriquesItems = {
         title: 'Les mésanges Charbonneuses',
         description: 'Duo sons et lumières',
         fullDescription: descriptionHtml(
-            'Lionel Boucharlat - alias <a href="https://soundcloud.com/lyonnais-bouchon" target="_blank">Lyonais Bouchon</a> - et Pierre Lemmel se sont rencontrés sur le spectacle <a href="/theatre?id=qacda" target="_blank">Quelque Chose a changé dans l’air</a>. Tous deux à la fois artistes, geeks et passionnés d’ornithologie, ils ont décidé de s’associer dans leur recherche artistique, afin de voir comment son et lumière se répondent.',
+            'Lionel Boucharlat - alias <a href="https://soundcloud.com/lyonnais-bouchon" target="_blank">Lyonnais Bouchon</a> - et Pierre Lemmel se sont rencontrés sur le spectacle <a href="/theatre?id=qacda" target="_blank">Quelque Chose a changé dans l’air</a>. Tous deux à la fois artistes, geeks et passionnés d’ornithologie, ils ont décidé de s’associer dans leur recherche artistique, afin de voir comment son et lumière se répondent.',
             'C’est ainsi que sont néees « Les mésanges Charbonneuses », depuis 2025, nos deux petites mésanges sont au travail pour proposer des créations originales et percutantes.'
         ),
         coverImage: '/img/arts-numeriques/msg-chb/msg-chb-cover.jpg',

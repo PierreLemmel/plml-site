@@ -58,6 +58,8 @@ const zindex = getZIndex(cardIndex, cardCount);
     }
 
     function beforeToDuring() {
+
+        show();
         const baseDelay = 2.5;
         const titleStartDelay = baseDelay + animDuration;
 
@@ -126,7 +128,7 @@ const zindex = getZIndex(cardIndex, cardCount);
                 ease: 'easeIn'
             });
 
-            animate(`#card-3-col-${i}`, {
+            const animation = animate(`#card-3-col-${i}`, {
                 transform: getEnterTransform(i, false),
                 opacity: [1, 0],
             }, {
@@ -134,15 +136,13 @@ const zindex = getZIndex(cardIndex, cardCount);
                 delay: colStartDelay,
                 ease: 'easeIn'
             });
-        }
 
-        animate(".card3-see-more-button", {
-            opacity: [1, 0],
-        }, {
-            duration: titleAnimDuration,
-            delay: 0,
-            ease: 'easeOut'
-        });
+            if (i === 2) {
+                animation.then(() => {
+                    hide();
+                });
+            }
+        }
     }
 
     function duringToAfter() {
@@ -199,10 +199,16 @@ const zindex = getZIndex(cardIndex, cardCount);
             duration: 0.8,
             delay: 2.15,
             ease: 'easeInOut'
+        }).then(() => {
+            hide();
         });
+
+        
     }
 
     function afterToDuring() {
+        show();
+
         const useSimpleAnim = window.isSmallScreen();
         const titleStartDelay = animDuration;
 

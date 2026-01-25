@@ -11,7 +11,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: '<a href="https://www.les-ecorces.com" target="_blank">Les Écorces</a>',
+                value: '<a href="https://www.les-ecorces.com" target="_blank">Les Écorcés</a>',
             },
             {
                 label: 'Mise en scène',
@@ -46,11 +46,6 @@ export const theatreItems = {
                 type: 'youtube',
                 id: 'jfNCNQVzyCw',
             },
-            {
-                type: 'video',
-                src: '/img/arts-numeriques/dwl/dwl-poc-mapping.mp4',
-                videoType: 'mp4',
-            },
             '/img/theatre/qacda/qacda-01.jpg',
             '/img/theatre/qacda/qacda-02.jpg',
             '/img/theatre/qacda/qacda-03.jpg',
@@ -71,7 +66,7 @@ export const theatreItems = {
         id: 'aleas',
         title: 'Aleas',
         description: "Spectacle aléatoire et improvisé.",
-        fullDescription: "Dans ce spectacle, la lumière, les musiques, les vidéo-projections et même la durée de chaque scène, sont controlés aléatoirement par un ordinateur. Charge aux artistes de transformer ces hasardeuses propositions en moments de plaisir, de magie ou de tout autre chose.",
+        fullDescription: "Dans ce spectacle, la lumière, les musiques, les vidéo-projections et même la durée de chaque scène, sont controlées aléatoirement par un ordinateur. Charge aux artistes de transformer ces hasardeuses propositions en moments de plaisir, de magie ou de tout autre chose.",
         coverImage: '/img/theatre/aleas/aleas-cover.jpg',
         additionalImages: [
             '/img/theatre/aleas/aleas-01.jpg',
@@ -352,7 +347,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: 'Les Écorces',
+                value: 'Les Écorcés',
             },
             {
                 label: 'Mise en scène',
@@ -462,7 +457,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: 'Les Écorces',
+                value: 'Les Écorcés',
             },
         ],
         link: "https://www.les-ecorces.com/spectacles"
@@ -506,7 +501,9 @@ export const theatreItems = {
         description: "Pourquoi apprendre un texte quand on peut lire une page blanche ?",
         fullDescription: "Dans ce spectacle, Pierre Lemmel nous propose un monologue improvisé d'une heure. Seul sur scène, il se livre, il laisse à lire en lui comme en un livre ouvert. Venez assister à un texte qui s'écrit devant le spectateur, devant le comédien, une pensée pudique et impudique qui se découvre au fil des mots.",
         coverImage: '/img/theatre/misc/page-blanche.jpg',
-        additionalImages: [],
+        additionalImages: [
+            '/img/theatre/misc/page-blanche.jpg'
+        ],
         tags: [
             'Improvisation',
             'Seul en scène'
@@ -586,7 +583,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: 'Les Écorces',
+                value: 'Les Écorcés',
             },
             {
                 label: 'Mise en scène',
@@ -638,7 +635,7 @@ export const theatreItems = {
         id: 'les-mains-bavardes',
         title: 'Les Mains Bavardes',
         description: 'Spectacle bilingue LSF/Français accessible à toustes, né de l\'intérêt de trois comédiens pour la Langue des Signes Française.',
-        fullDescription: "Les Mains Bavardes est une création de la compagnie Les Écorces née de l'intérêt partagé de trois comédiens pour la Langue des Signes Française (LSF). Le spectacle est conçu pour être accessible à tous — entendants ou non, signants ou non. Il privilégie le corps et l'expression visuelle pour transmettre les histoires.",
+        fullDescription: "Les Mains Bavardes est une création de la compagnie Les Écorcés née de l'intérêt partagé de trois comédiens pour la Langue des Signes Française (LSF). Le spectacle est conçu pour être accessible à tous — entendants ou non, signants ou non. Il privilégie le corps et l'expression visuelle pour transmettre les histoires.",
         coverImage: '/img/theatre/lmb/lmb-cover.jpg',
         additionalImages: [
             '/img/theatre/lmb/lmb-01.jpg',
@@ -663,7 +660,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: 'Les Écorces',
+                value: 'Les Écorcés',
             },
             {
                 label: 'Distribution',
@@ -683,7 +680,7 @@ export const theatreItems = {
         id: 'la-conference',
         title: 'La conférence',
         description: 'Vous avez les questions, il n\'a pas les réponses.',
-        fullDescription: 'Dans cette conférence d\'un genre particulier. un clown tente. avec plus ou moins de succès. d\'apporter des réponses aux questions que les humaines se posent.',
+        fullDescription: 'Dans cette conférence d\'un genre particulier, un clown tente - avec plus ou moins de succès - d\'apporter des réponses aux questions que les humains se posent.',
         coverImage: '/img/theatre/conference/conference-gif.gif',
         additionalImages: [
             '/img/theatre/conference/conference-gif.gif',
@@ -727,7 +724,7 @@ export const theatreItems = {
         additionalInfo: [
             {
                 label: 'Compagnie',
-                value: 'Les Écorces',
+                value: 'Les Écorcés',
             },
         ],
     },
