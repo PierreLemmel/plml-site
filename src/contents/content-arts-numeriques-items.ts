@@ -1,6 +1,8 @@
 import type { PortfolioItemData } from "./content-types";
 import { descriptionHtml } from "../lib/utils";
 
+const unJourUnProjetDescription = "<i>Un jour, un projet</i> est une série de créations numériques personnelles réalisées en moins de 24 heures."
+
 export const artsNumeriquesItems = {
     DanceWithLightness: {
         id: 'dance-with-lightness',
@@ -93,6 +95,38 @@ export const artsNumeriquesItems = {
         ],
         link: "https://www.billetreduc.com/spectacle/aleas-330517/avis",
         pressKit: "/dossiers/theatre/Dossier Aléas.pdf",
+    },
+
+    FlowerEater: {
+        id: 'flower-eater',
+        title: 'Flower Eater',
+        date: {
+            status: "Finished",
+            from: "2026",
+            to: "2026",
+        },
+        description: "Et si notre bouche était une fleur, qu'aurait-elle à dire ?",
+        fullDescription: descriptionHtml(
+            "Et si notre bouche était une fleur, qu'aurait-elle à dire ?",
+            "Vidéo et synthèse sonore contrôléees par détection de mouvement.",
+            unJourUnProjetDescription,
+        ),
+        coverImage: '/img/arts-numeriques/flower-eater/flower-eater-cover.png',
+        additionalImages: [
+            {
+                type: 'video',
+                src: '/img/arts-numeriques/flower-eater/flower-eater-video.mp4',
+                videoType: 'mp4',
+            }
+        ],
+        additionalInfo: [
+            {
+                label: 'Code source',
+                value: '<a href="https://github.com/pierrelemmel/un-jour-un-truc" target="_blank">GitHub</a>',
+            },
+        ],
+        tags: ['Arts numériques', 'Un jour, un projet'],
+        link: "https://flower-eater.plml.fr/",
     },
 
     MesangesCharbonneuses: {
