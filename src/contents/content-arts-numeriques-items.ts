@@ -108,7 +108,7 @@ export const artsNumeriquesItems = {
         description: "Et si notre bouche était une fleur, qu'aurait-elle à dire ?",
         fullDescription: descriptionHtml(
             "Et si notre bouche était une fleur, qu'aurait-elle à dire ?",
-            "Vidéo et synthèse sonore contrôléees par détection de mouvement.",
+            "Vidéo et synthèse sonore contrôlées par détection de mouvement.",
             unJourUnProjetDescription,
         ),
         coverImage: '/img/arts-numeriques/flower-eater/flower-eater-cover.png',

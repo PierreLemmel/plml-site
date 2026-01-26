@@ -43,12 +43,15 @@ const currentYear = new Date().getFullYear();
             noindex={noindex}
         />
     </head>
-    <body class="w-screen min-h-screen overflow-x-hidden">
+    <body class={cn(
+        "w-screen min-h-screen overflow-x-hidden",
+        className
+    )}>
         <slot />
         {!hideFooter && (
             <footer class={cn(
                 "w-full py-6 px-6",
-                "bg-black text-white/60",
+                "text-white/60",
                 "font-barlow text-sm",
                 "flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4"
             )}>
