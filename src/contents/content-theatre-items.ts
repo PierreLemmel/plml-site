@@ -310,7 +310,6 @@ export const theatreItems = {
             '/img/theatre/savant-melange/savant-melange-02.jpg',
             '/img/theatre/savant-melange/savant-melange-03.jpg',
             '/img/theatre/savant-melange/savant-melange-04.jpg',
-            '/img/theatre/savant-melange/savant-melange-05.jpg',
         ],
         tags: [
             'Improvisation',
@@ -319,7 +318,8 @@ export const theatreItems = {
         link: "https://savantmelange.fr/",
         pressKit: "/dossiers/theatre/Dossier diffusion - Savant Mélange.pdf",
         date: {
-            status: "InCreation"
+            status: "OnGoing",
+            from: "2025"
         },
     },
 
