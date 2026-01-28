@@ -175,8 +175,16 @@ export const artsNumeriquesItems = {
         ),
         coverImage: '/img/arts-numeriques/videomapping/videomapping-cover.jpg',
         additionalImages: [
-            '/img/arts-numeriques/video-mappings/videomapping-01.jpg',
-            '/img/arts-numeriques/video-mappings/videomapping-02.jpg',
+            {
+                type: 'video',
+                src: '/img/arts-numeriques/videomapping/videomapping-01.mp4',
+                videoType: 'mp4',
+            },
+            {
+                type: 'video',
+                src: '/img/arts-numeriques/videomapping/videomapping-02.mp4',
+                videoType: 'mp4',
+            },
         ],
         tags: ['Arts numériques'],
         roles: ['Arts numériques'],
