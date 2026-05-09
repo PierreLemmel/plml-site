@@ -165,8 +165,9 @@ export const theatreItems = {
             },
         ],
         date: {
-            status: "OnGoing",
-            from: "2021"
+            status: "Finished",
+            from: "2021",
+            to: "2026"
         },
     },
 
@@ -248,8 +249,9 @@ export const theatreItems = {
             '/img/theatre/misc/improenseine-cover.jpg'
         ],
         date: {
-            status: "OnGoing",
-            from: "2022"
+            status: "Finished",
+            from: "2022",
+            to: "2025"
         },
         tags: ['Improvisation', 'Festival', 'Régie'],
         roles: ['Régisseur général', 'Directeur technique'],
