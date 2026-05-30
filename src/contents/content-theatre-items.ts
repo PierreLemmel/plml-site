@@ -731,4 +731,54 @@ export const theatreItems = {
         ],
     },
 
+    JQAR: {
+        id: 'jqar',
+        title: "Journal de ce qu'on a retenu",
+        tags: ['Théâtre', 'Contemporain', 'Création émergente'],
+        description: 'Une récréation qui grince des dents entre actus troubles et rage créative.',
+        fullDescription: descriptionHtml(
+            'Une satyre déjantée en roue libre : comme un Sarko libéré, comme un éclat de rage contre celles tombées trop tôt, et comme un big up à celleux qui se lèvent, se barrent et se battent pour qu’il ne soit pas trop tard !',
+            'Tout a commencé quand Nicolas Sarkozy est allé en prison puis en est sorti 20 jours après pour ensuite publier son livre « Journal d’un prisonnier » le 10 décembre 2025, top 1 des ventes Amazon. En est sorti un éclat théâtral, dansé et chanté, comme une soupape pour encaisser le coup. Journal de ce qu’on a retenu, c’est des fragments d’actualités sourcés, des personnages qui partent dans tout les sens et une ambiance goût pile électrique pour ouvrir un espace de rage et de joie.'
+        ),
+        roles: [
+            'Création lumières',
+            'Création vidéo'
+        ],
+        coverImage: '/img/theatre/jqar/jqar-cover.jpg',
+        additionalImages: [
+            '/img/theatre/jqar/jqar-01.jpeg',
+            '/img/theatre/jqar/jqar-02.jpeg',
+            '/img/theatre/jqar/jqar-03.jpeg',
+            '/img/theatre/jqar/jqar-04.jpeg',
+            '/img/theatre/jqar/jqar-05.jpeg',
+        ],
+        date: {
+            status: "OnGoing",
+            from: "2026"
+        },
+        link: 'https://lavoirpublic.com/journal-de-ce-quon-a-retenu',
+
+        additionalInfo: [
+            {
+                label: 'Compagnie',
+                value: 'Les Écorcés',
+            },
+            {
+                label: 'Mise en scène',
+                value: 'Alice Rey',
+            },
+            {
+                label: 'Distribution',
+                value: 'Kenan Philbert-Zehani, Luana Dumartheray, Constanza Aliste, Benoît Decorse, Thomas Saraiva'
+            },
+            {
+                label: 'Lieux de représentation',
+                value: `<ul>
+                    <li><a href="https://lavoirpublic.com/" target="_blank">Le Lavoir Public</a> (Lyon)</li>
+                </ul>
+                `,
+            }
+        ],
+    }
+
 } satisfies Record<string, PortfolioItemData>;
