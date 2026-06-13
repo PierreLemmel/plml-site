@@ -2,6 +2,28 @@ import { descriptionHtml, htmlList } from "../lib/utils";
 import type { PortfolioItemData } from "./content-types";
 
 export const techniqueItems = {
+    Elab: {
+        id: 'elab',
+        title: 'Cité des Sciences - e-LAB',
+        description: "Mise en place d projet e-LAB de la Cité des Sciences.",
+        fullDescription: descriptionHtml(
+            "Conception et réalisation d'une installation de jeux en libre accès pour le public de la Cité des Sciences.",
+            "L'installation est composée d'écrans tactiles sur lesquels jouer à des jeux en temps limité.",
+            "Le système mis en place permet de contrôler l'installation à distance, de diffuser les flux vidéo en direct et de réinitialiser les jeux lorsque les visiteurs s'arrêtent de jouer.",
+        ),
+        coverImage: '/img/technique/elab/elab-cover.jpg',
+        additionalImages: [
+            '/img/technique/elab/elab-cover.jpg'
+        ],
+        tags: ['Muéséographie', 'Prestation', 'Développement'],
+        roles: ['Conception technique', 'Réalisation technique'],
+        date: {
+            status: 'Finished',
+            from: "2026",
+            to: "2026"
+        },
+        link: "https://www.cite-sciences.fr/fr/au-programme/expos-permanentes/les-expositions/e-lab-espace-jeu-video"
+    },
     Frichti: {
         id: 'frichti',
         title: 'Improvidence - Frichti',
